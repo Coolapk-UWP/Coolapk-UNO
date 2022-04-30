@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">iPhoneSimulator</Platform>
-    <ProjectGuid>32cf33bd-f381-430c-a861-65b598f79975</ProjectGuid>
+    <ProjectGuid>{32CF33BD-F381-430C-A861-65B598F79975}</ProjectGuid>
     <ProjectTypeGuids>{A3F8F2AB-B479-4A4A-A458-A89E7DC349F1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Exe</OutputType>
     <RootNamespace>CoolapkUNO.macOS</RootNamespace>
@@ -72,8 +72,8 @@
     <PackageReference Include="Uno.UI" Version="4.2.6" />
     <PackageReference Include="Uno.UI.RemoteControl" Version="4.2.6" Condition="'$(Configuration)'=='Debug'" />
     <PackageReference Include="Uno.UI.Adapter.Microsoft.Extensions.Logging" Version="4.2.6" />
-    <PackageReference Include="Microsoft.Extensions.Logging" Version="5.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="6.0.0" />
   </ItemGroup>
   <Import Project="..\CoolapkUNO.Shared\CoolapkUNO.Shared.projitems" Label="Shared" />
   <ItemGroup>
@@ -92,11 +92,7 @@
     <ImageAsset Include="Assets.xcassets\unologo.imageset\Contents.json" />
     <ImageAsset Include="Assets.xcassets\unologo.imageset\unoplatform.jpg" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Resources\" />
-    <Folder Include="Resources\Fonts\" />
-    <Folder Include="Assets.xcassets\unologo.imageset\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="Info.plist" />
     <None Include="Entitlements.plist" />
