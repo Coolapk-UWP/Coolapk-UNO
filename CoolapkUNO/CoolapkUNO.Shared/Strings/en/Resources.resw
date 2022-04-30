@@ -120,4 +120,12 @@
   <data name="ApplicationName" xml:space="preserve">
     <value>CoolapkUNO</value>
   </data>
+  <data name="NavigationBackButtonName" xml:space="preserve">
+    <value>Back</value>
+    <comment>Automation name for the nav view provided back button</comment>
+  </data>
+  <data name="NavigationBackButtonToolTip" xml:space="preserve">
+    <value>Back</value>
+    <comment>ToolTip caption for the back button</comment>
+  </data>
 </root>

@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using CoolapkUNO.Helpers;
+using CoolapkUNO.Pages;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -47,6 +49,8 @@ namespace CoolapkUNO
         /// <param name="args">Details about the launch request and process.</param>
         protected override void OnLaunched(LaunchActivatedEventArgs args)
         {
+            UIHelper.ExtendView();
+            UIHelper.CheckTheme();
 #if DEBUG
             if (System.Diagnostics.Debugger.IsAttached)
             {
