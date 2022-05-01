@@ -258,7 +258,11 @@ namespace CoolapkUNO.Controls
 					var rightColumn = m_rightPaddingColumn;
 					if (rightColumn != null)
 					{
+#if HAS_UNO_SKIA_WPF
+						rightColumn.Width = new GridLength(188);
+#else
 						rightColumn.Width = new GridLength(coreTitleBar.SystemOverlayRightInset);
+#endif
 					}
 				}
 			}

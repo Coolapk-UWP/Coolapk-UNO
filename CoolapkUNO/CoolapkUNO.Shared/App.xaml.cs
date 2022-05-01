@@ -40,6 +40,10 @@ namespace CoolapkUNO
 #if HAS_UNO || NETFX_CORE
             this.Suspending += OnSuspending;
 #endif
+
+#if !WINDOWS_UWP
+            Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri("ms-appx:///Themes/Generic.xaml") });
+#endif
         }
 
         /// <summary>

@@ -26,5 +26,19 @@ namespace CoolapkUNO.WPF.Host
 
             root.Content = new global::Uno.UI.Skia.Platform.WpfHost(Dispatcher, () => new CoolapkUNO.App());
         }
+
+        private void Border_SizeChanged(object sender, SizeChangedEventArgs args)
+        {
+            Border Border = sender as Border;
+            double TitleHeight = WindowState == WindowState.Maximized ? 36 : 30;
+            GeometryGroup GeometryGroup = new GeometryGroup();
+            RectangleGeometry RectangleGeometry1 = new RectangleGeometry();
+            RectangleGeometry1.Rect = new Rect(0, 0, args.NewSize.Width - 188, args.NewSize.Height);
+            RectangleGeometry RectangleGeometry2 = new RectangleGeometry();
+            RectangleGeometry2.Rect = new Rect(args.NewSize.Width - 188, TitleHeight, 188, args.NewSize.Height - TitleHeight);
+            GeometryGroup.Children.Add(RectangleGeometry1);
+            GeometryGroup.Children.Add(RectangleGeometry2);
+            Border.Clip = GeometryGroup;
+        }
     }
 }
