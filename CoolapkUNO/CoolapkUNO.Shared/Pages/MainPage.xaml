@@ -21,10 +21,14 @@
             <AutoSuggestBox
                 Width="260"
                 Height="32"
+                Margin="0,0,48,0"
                 HorizontalAlignment="Center"
                 PlaceholderText="Search"
                 QueryIcon="Find" />
-            <muxc:PersonPicture Height="32" HorizontalAlignment="Right" />
+            <muxc:PersonPicture
+                Height="32"
+                Margin="8"
+                HorizontalAlignment="Right" />
         </Grid>
     </controls:TitleBar>
 </Page>

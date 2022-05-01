@@ -48,14 +48,14 @@
                                 Grid.Column="1"
                                 MaxWidth="16"
                                 MaxHeight="16"
-                                Margin="4,0,0,0"
+                                Margin="4,0,16,0"
                                 VerticalAlignment="Center"
                                 Child="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.IconElement}" />
 
                             <TextBlock
                                 x:Name="TitleText"
                                 Grid.Column="2"
-                                Margin="16,0,16,2"
+                                Margin="0,0,16,2"
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
                                 Foreground="{ThemeResource TitleBarForegroundBrush}"
@@ -93,7 +93,7 @@
                                 <VisualState x:Name="BackButtonCollapsed">
                                     <VisualState.Setters>
                                         <Setter Target="BackButton.Visibility" Value="Collapsed" />
-                                        <Setter Target="Icon.Margin" Value="16,0,0,0" />
+                                        <Setter Target="Icon.Margin" Value="16,0" />
                                     </VisualState.Setters>
                                 </VisualState>
                             </VisualStateGroup>

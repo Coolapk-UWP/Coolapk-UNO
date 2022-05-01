@@ -30,6 +30,7 @@ namespace CoolapkUNO.Controls
 	[TemplatePart(Name = "CustomContentPresenter", Type = typeof(FrameworkElement))]
 	[TemplatePart(Name = "DragRegion", Type = typeof(Grid))]
 	[TemplatePart(Name = "BackButton", Type = typeof(Button))]
+	[TemplatePart(Name = "Icon", Type = typeof(Viewbox))]
 	public partial class TitleBar : Control
 	{
 		private ColumnDefinition m_leftPaddingColumn;
@@ -37,8 +38,13 @@ namespace CoolapkUNO.Controls
 		private Grid m_layoutRoot;
 		private TextBlock m_titleTextBlock;
 		private FrameworkElement m_customArea;
+		private Viewbox m_icon;
 
 		private bool m_isTitleSquished = false;
+		private bool m_isIconSquished = false;
+
+		private double m_titleWidth;
+		private double m_iconWidth;
 
 		public TitleBar()
 		{
@@ -82,6 +88,7 @@ namespace CoolapkUNO.Controls
 			m_leftPaddingColumn = (ColumnDefinition)GetTemplateChild("LeftPaddingColumn");
 			m_rightPaddingColumn = (ColumnDefinition)GetTemplateChild("RightPaddingColumn");
 
+			m_icon = (Viewbox)GetTemplateChild("Icon");
 			m_titleTextBlock = (TextBlock)GetTemplateChild("TitleText");
 			m_customArea = (FrameworkElement)GetTemplateChild("CustomContentPresenter");
 
@@ -158,29 +165,59 @@ namespace CoolapkUNO.Controls
 		{
 			var titleTextBlock = m_titleTextBlock;
 			var customArea = m_customArea;
-			if (titleTextBlock != null && customArea != null)
+			if (titleTextBlock != null && !string.IsNullOrEmpty(titleTextBlock.Text) && customArea != null)
 			{
-				var templateSettings = TemplateSettings;
-
 				if (m_isTitleSquished)
 				{
-					// If the title column has * sizing but it's not trimmed anymore, then give the extra space back to the custom area.
-					if (!titleTextBlock.IsTextTrimmed)
+					var icon = m_icon;
+					var source = IconSource;
+					if (icon != null && source != null)
 					{
-						templateSettings.TitleColumnGridLength = new GridLength(1, GridUnitType.Auto);
-						templateSettings.CustomColumnGridLength = new GridLength(1, GridUnitType.Star);
+						if (m_isIconSquished)
+						{
+							if (customArea.DesiredSize.Width + m_iconWidth + 16 < customArea.ActualWidth)
+							{
+								VisualStateManager.GoToState(this, "IconVisible", true);
+								m_isIconSquished = false;
 
-						m_isTitleSquished = false;
+								if (customArea.DesiredSize.Width + m_iconWidth + m_titleWidth + 32 < customArea.ActualWidth)
+								{
+									VisualStateManager.GoToState(this, "TitleTextVisible", true);
+									m_isTitleSquished = false;
+								}
+							}
+						}
+						else
+						{
+							if (customArea.DesiredSize.Width + m_titleWidth + 16 < customArea.ActualWidth)
+							{
+								VisualStateManager.GoToState(this, "TitleTextVisible", true);
+								m_isTitleSquished = false;
+							}
+
+							if (!m_isIconSquished && customArea.DesiredSize.Width >= customArea.ActualWidth)
+							{
+								VisualStateManager.GoToState(this, "IconCollapsed", true);
+								m_iconWidth = titleTextBlock.ActualWidth;
+								m_isIconSquished = true;
+							}
+						}
+					}
+					else
+					{
+						if (customArea.DesiredSize.Width + m_titleWidth + 16 < customArea.ActualWidth)
+						{
+							VisualStateManager.GoToState(this, "TitleTextVisible", true);
+							m_isTitleSquished = false;
+						}
 					}
 				}
 				else
 				{
-					// If the custom area is at its minimum width, switch the title column to be * sized so it squishes instead.
 					if (!m_isTitleSquished && customArea.DesiredSize.Width >= customArea.ActualWidth)
 					{
-						templateSettings.TitleColumnGridLength = new GridLength(1, GridUnitType.Star);
-						templateSettings.CustomColumnGridLength = new GridLength(1, GridUnitType.Auto);
-
+						VisualStateManager.GoToState(this, "TitleTextCollapsed", true);
+						m_titleWidth = titleTextBlock.ActualWidth;
 						m_isTitleSquished = true;
 					}
 				}

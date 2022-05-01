@@ -13,17 +13,17 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoolapkUNO.iOS", "CoolapkUN
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoolapkUNO.UWP", "CoolapkUNO\CoolapkUNO.UWP\CoolapkUNO.UWP.csproj", "{432080AA-7FB7-422A-B066-885372800272}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoolapkUNO.Wasm", "CoolapkUNO\CoolapkUNO.Wasm\CoolapkUNO.Wasm.csproj", "{18A5D8E5-0ABB-496D-975F-007B4CFC9A25}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoolapkUNO.Wasm", "CoolapkUNO\CoolapkUNO.Wasm\CoolapkUNO.Wasm.csproj", "{18A5D8E5-0ABB-496D-975F-007B4CFC9A25}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoolapkUNO.macOS", "CoolapkUNO\CoolapkUNO.macOS\CoolapkUNO.macOS.csproj", "{32CF33BD-F381-430C-A861-65B598F79975}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoolapkUNO.Skia.Wpf.Host", "CoolapkUNO\CoolapkUNO.Skia.Wpf.Host\CoolapkUNO.Skia.Wpf.Host.csproj", "{A0075F25-1F77-42DD-9A76-6F9346F98C4E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoolapkUNO.Skia.Wpf.Host", "CoolapkUNO\CoolapkUNO.Skia.Wpf.Host\CoolapkUNO.Skia.Wpf.Host.csproj", "{A0075F25-1F77-42DD-9A76-6F9346F98C4E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoolapkUNO.Skia.Wpf", "CoolapkUNO\CoolapkUNO.Skia.Wpf\CoolapkUNO.Skia.Wpf.csproj", "{49C65BC3-BB59-4E7A-B34B-AB26F6B12238}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoolapkUNO.Skia.Wpf", "CoolapkUNO\CoolapkUNO.Skia.Wpf\CoolapkUNO.Skia.Wpf.csproj", "{49C65BC3-BB59-4E7A-B34B-AB26F6B12238}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoolapkUNO.Skia.Gtk", "CoolapkUNO\CoolapkUNO.Skia.Gtk\CoolapkUNO.Skia.Gtk.csproj", "{11AC9B63-1450-4B66-84C7-D7E646ECC41C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoolapkUNO.Skia.Gtk", "CoolapkUNO\CoolapkUNO.Skia.Gtk\CoolapkUNO.Skia.Gtk.csproj", "{11AC9B63-1450-4B66-84C7-D7E646ECC41C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoolapkUNO.Skia.Tizen", "CoolapkUNO\CoolapkUNO.Skia.Tizen\CoolapkUNO.Skia.Tizen.csproj", "{48A1152D-D439-4E71-9943-959195E5AD67}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoolapkUNO.Skia.Tizen", "CoolapkUNO\CoolapkUNO.Skia.Tizen\CoolapkUNO.Skia.Tizen.csproj", "{48A1152D-D439-4E71-9943-959195E5AD67}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
