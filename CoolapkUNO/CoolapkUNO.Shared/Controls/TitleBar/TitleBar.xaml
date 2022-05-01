@@ -41,7 +41,13 @@
                                 Grid.Column="0"
                                 IsEnabled="{TemplateBinding IsBackEnabled}"
                                 Style="{ThemeResource TitleBarBackButtonStyle}"
-                                ToolTipService.ToolTip="Back" />
+                                ToolTipService.ToolTip="Back" >
+                                <Button.Transitions>
+                                    <TransitionCollection>
+                                        <RepositionThemeTransition />
+                                    </TransitionCollection>
+                                </Button.Transitions>
+                            </Button>
 
                             <Viewbox
                                 x:Name="Icon"
@@ -50,7 +56,13 @@
                                 MaxHeight="16"
                                 Margin="4,0,16,0"
                                 VerticalAlignment="Center"
-                                Child="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.IconElement}" />
+                                Child="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.IconElement}" >
+                                <Viewbox.Transitions>
+                                    <TransitionCollection>
+                                        <RepositionThemeTransition />
+                                    </TransitionCollection>
+                                </Viewbox.Transitions>
+                            </Viewbox>
 
                             <TextBlock
                                 x:Name="TitleText"
@@ -62,7 +74,13 @@
                                 Style="{StaticResource CaptionTextBlockStyle}"
                                 Text="{TemplateBinding Title}"
                                 TextTrimming="CharacterEllipsis"
-                                TextWrapping="NoWrap" />
+                                TextWrapping="NoWrap" >
+                                <TextBlock.Transitions>
+                                    <TransitionCollection>
+                                        <RepositionThemeTransition />
+                                    </TransitionCollection>
+                                </TextBlock.Transitions>
+                            </TextBlock>
 
                             <Grid
                                 x:Name="DragRegion"
@@ -73,7 +91,13 @@
                             <ContentPresenter
                                 x:Name="CustomContentPresenter"
                                 Grid.Column="3"
-                                Content="{TemplateBinding CustomContent}" />
+                                Content="{TemplateBinding CustomContent}" >
+                                <ContentPresenter.Transitions>
+                                    <TransitionCollection>
+                                        <RepositionThemeTransition />
+                                    </TransitionCollection>
+                                </ContentPresenter.Transitions>
+                            </ContentPresenter>
 
                         </Grid>
                         <VisualStateManager.VisualStateGroups>
@@ -122,6 +146,24 @@
                             </VisualStateGroup>
 
                             <VisualStateGroup x:Name="HeightGroup">
+                                <VisualStateGroup.Transitions>
+                                    <VisualTransition From="CompactHeight" To="ExpandedHeight">
+                                        <Storyboard>
+                                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="LayoutRoot" Storyboard.TargetProperty="Height">
+                                                <LinearDoubleKeyFrame KeyTime="0" Value="{ThemeResource TitleBarCompactHeight}"/>
+                                                <LinearDoubleKeyFrame KeyTime="0:0:0.1" Value="{ThemeResource TitleBarExpandedHeight}"/>
+                                            </DoubleAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualTransition>
+                                    <VisualTransition From="ExpandedHeight" To="CompactHeight">
+                                        <Storyboard>
+                                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="LayoutRoot" Storyboard.TargetProperty="Height">
+                                                <LinearDoubleKeyFrame KeyTime="0" Value="{ThemeResource TitleBarExpandedHeight}"/>
+                                                <LinearDoubleKeyFrame KeyTime="0:0:0.1" Value="{ThemeResource TitleBarCompactHeight}"/>
+                                            </DoubleAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualTransition>
+                                </VisualStateGroup.Transitions>
                                 <VisualState x:Name="CompactHeight" />
                                 <VisualState x:Name="ExpandedHeight">
                                     <VisualState.Setters>

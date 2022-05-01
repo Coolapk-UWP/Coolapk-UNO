@@ -7,28 +7,31 @@
     xmlns:local="using:CoolapkUNO.Pages"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
+    xmlns:toolkit="using:Uno.UI.Toolkit"
     muxc:BackdropMaterial.ApplyToRootOrPageBackground="True"
     mc:Ignorable="d">
-    <controls:TitleBar
-        Title="Coolapk"
-        VerticalAlignment="Top"
-        IsBackButtonVisible="True"
-        IsBackEnabled="True">
-        <controls:TitleBar.IconSource>
-            <muxc:ImageIconSource ImageSource="ms-appx:///Assets/StoreLogo.scale-400.png" />
-        </controls:TitleBar.IconSource>
-        <Grid>
-            <AutoSuggestBox
-                Width="260"
-                Height="32"
-                Margin="0,0,48,0"
-                HorizontalAlignment="Center"
-                PlaceholderText="Search"
-                QueryIcon="Find" />
-            <muxc:PersonPicture
-                Height="32"
-                Margin="8"
-                HorizontalAlignment="Right" />
-        </Grid>
-    </controls:TitleBar>
+    <Grid toolkit:VisibleBoundsPadding.PaddingMask="All">
+        <controls:TitleBar
+            Title="Coolapk"
+            VerticalAlignment="Top"
+            IsBackButtonVisible="True"
+            IsBackEnabled="True">
+            <controls:TitleBar.IconSource>
+                <muxc:ImageIconSource ImageSource="../Assets/StoreLogo.scale-400.png" />
+            </controls:TitleBar.IconSource>
+            <Grid>
+                <AutoSuggestBox
+                    Width="260"
+                    Height="32"
+                    Margin="0,0,48,0"
+                    HorizontalAlignment="Center"
+                    PlaceholderText="Search"
+                    QueryIcon="Find" />
+                <muxc:PersonPicture
+                    Height="32"
+                    Margin="8"
+                    HorizontalAlignment="Right" />
+            </Grid>
+        </controls:TitleBar>
+    </Grid>
 </Page>
