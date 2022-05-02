@@ -24,8 +24,6 @@ namespace CoolapkUNO.Controls
 {
 	[ContentProperty(Name = "CustomContent")]
 	[TemplatePart(Name = "LayoutRoot", Type = typeof(Grid))]
-	[TemplatePart(Name = "LeftPaddingColumn", Type = typeof(ColumnDefinition))]
-	[TemplatePart(Name = "RightPaddingColumn", Type = typeof(ColumnDefinition))]
 	[TemplatePart(Name = "TitleText", Type = typeof(TextBlock))]
 	[TemplatePart(Name = "CustomContentPresenter", Type = typeof(FrameworkElement))]
 	[TemplatePart(Name = "DragRegion", Type = typeof(Grid))]
@@ -33,8 +31,6 @@ namespace CoolapkUNO.Controls
 	[TemplatePart(Name = "Icon", Type = typeof(Viewbox))]
 	public partial class TitleBar : Control
 	{
-		private ColumnDefinition m_leftPaddingColumn;
-		private ColumnDefinition m_rightPaddingColumn;
 		private Grid m_layoutRoot;
 		private TextBlock m_titleTextBlock;
 		private FrameworkElement m_customArea;
@@ -85,8 +81,6 @@ namespace CoolapkUNO.Controls
 			}
 
 			m_layoutRoot = (Grid)GetTemplateChild("LayoutRoot");
-			m_leftPaddingColumn = (ColumnDefinition)GetTemplateChild("LeftPaddingColumn");
-			m_rightPaddingColumn = (ColumnDefinition)GetTemplateChild("RightPaddingColumn");
 
 			m_icon = (Viewbox)GetTemplateChild("Icon");
 			m_titleTextBlock = (TextBlock)GetTemplateChild("TitleText");
@@ -163,65 +157,79 @@ namespace CoolapkUNO.Controls
 
 		public void OnSizeChanged(object sender, SizeChangedEventArgs args)
 		{
-			var titleTextBlock = m_titleTextBlock;
-			var customArea = m_customArea;
-			if (titleTextBlock != null && !string.IsNullOrEmpty(titleTextBlock.Text) && customArea != null)
+#if !WINDOWS_UWP
+			if (ActualWidth > 1007)
 			{
-				if (m_isTitleSquished)
-				{
-					var icon = m_icon;
-					var source = IconSource;
-					if (icon != null && source != null)
-					{
-						if (m_isIconSquished)
-						{
-							if (customArea.DesiredSize.Width + m_iconWidth + 16 < customArea.ActualWidth)
-							{
-								VisualStateManager.GoToState(this, "IconVisible", true);
-								m_isIconSquished = false;
-
-								if (customArea.DesiredSize.Width + m_iconWidth + m_titleWidth + 32 < customArea.ActualWidth)
-								{
-									VisualStateManager.GoToState(this, "TitleTextVisible", true);
-									m_isTitleSquished = false;
-								}
-							}
-						}
-						else
-						{
-							if (customArea.DesiredSize.Width + m_titleWidth + 16 < customArea.ActualWidth)
-							{
-								VisualStateManager.GoToState(this, "TitleTextVisible", true);
-								m_isTitleSquished = false;
-							}
-
-							if (!m_isIconSquished && customArea.DesiredSize.Width >= customArea.ActualWidth)
-							{
-								VisualStateManager.GoToState(this, "IconCollapsed", true);
-								m_iconWidth = titleTextBlock.ActualWidth;
-								m_isIconSquished = true;
-							}
-						}
-					}
-					else
-					{
-						if (customArea.DesiredSize.Width + m_titleWidth + 16 < customArea.ActualWidth)
-						{
-							VisualStateManager.GoToState(this, "TitleTextVisible", true);
-							m_isTitleSquished = false;
-						}
-					}
-				}
-				else
-				{
-					if (!m_isTitleSquished && customArea.DesiredSize.Width >= customArea.ActualWidth)
-					{
-						VisualStateManager.GoToState(this, "TitleTextCollapsed", true);
-						m_titleWidth = titleTextBlock.ActualWidth;
-						m_isTitleSquished = true;
-					}
-				}
+				VisualStateManager.GoToState(this, "MaxWindow", true);
 			}
+			else if (ActualWidth > 640)
+			{
+				VisualStateManager.GoToState(this, "MidWindow", true);
+			}
+			else
+			{
+				VisualStateManager.GoToState(this, "MinWindow", true);
+			}
+#endif
+			//var titleTextBlock = m_titleTextBlock;
+			//var customArea = m_customArea;
+			//if (titleTextBlock != null && !string.IsNullOrEmpty(titleTextBlock.Text) && customArea != null)
+			//{
+			//	if (m_isTitleSquished)
+			//	{
+			//		var icon = m_icon;
+			//		var source = IconSource;
+			//		if (icon != null && source != null)
+			//		{
+			//			if (m_isIconSquished)
+			//			{
+			//				if (customArea.DesiredSize.Width + m_iconWidth + 16 < customArea.ActualWidth)
+			//				{
+			//					VisualStateManager.GoToState(this, "IconVisible", true);
+			//					m_isIconSquished = false;
+
+			//					if (customArea.DesiredSize.Width + m_iconWidth + m_titleWidth + 32 < customArea.ActualWidth)
+			//					{
+			//						VisualStateManager.GoToState(this, "TitleTextVisible", true);
+			//						m_isTitleSquished = false;
+			//					}
+			//				}
+			//			}
+			//			else
+			//			{
+			//				if (customArea.DesiredSize.Width + m_titleWidth + 16 < customArea.ActualWidth)
+			//				{
+			//					VisualStateManager.GoToState(this, "TitleTextVisible", true);
+			//					m_isTitleSquished = false;
+			//				}
+
+			//				if (!m_isIconSquished && customArea.DesiredSize.Width >= customArea.ActualWidth)
+			//				{
+			//					VisualStateManager.GoToState(this, "IconCollapsed", true);
+			//					m_iconWidth = titleTextBlock.ActualWidth;
+			//					m_isIconSquished = true;
+			//				}
+			//			}
+			//		}
+			//		else
+			//		{
+			//			if (customArea.DesiredSize.Width + m_titleWidth + 16 < customArea.ActualWidth)
+			//			{
+			//				VisualStateManager.GoToState(this, "TitleTextVisible", true);
+			//				m_isTitleSquished = false;
+			//			}
+			//		}
+			//	}
+			//	else
+			//	{
+			//		if (!m_isTitleSquished && customArea.DesiredSize.Width >= customArea.ActualWidth)
+			//		{
+			//			VisualStateManager.GoToState(this, "TitleTextCollapsed", true);
+			//			m_titleWidth = titleTextBlock.ActualWidth;
+			//			m_isTitleSquished = true;
+			//		}
+			//	}
+			//}
 		}
 
 		public void OnWindowActivated(object sender, WindowActivatedEventArgs args)
@@ -275,32 +283,24 @@ namespace CoolapkUNO.Controls
 
 		public void UpdateHeight()
 		{
-			VisualStateManager.GoToState(this, (CustomContent == null) ? "CompactHeight" : "ExpandedHeight", false);
+			VisualStateManager.GoToState(this, (CustomContent == null && AutoSuggestBox == null && PaneFooter == null) ? "CompactHeight" : "ExpandedHeight", false);
 		}
 
 		public void UpdatePadding()
 		{
+			var templateSettings = TemplateSettings;
 			var currentView = CoreApplication.GetCurrentView();
 			if (currentView != null)
 			{
 				var coreTitleBar = currentView.TitleBar;
 				if (coreTitleBar != null)
 				{
-					var leftColumn = m_leftPaddingColumn;
-					if (m_leftPaddingColumn != null)
-					{
-						leftColumn.Width = new GridLength(coreTitleBar.SystemOverlayLeftInset);
-					}
-
-					var rightColumn = m_rightPaddingColumn;
-					if (rightColumn != null)
-					{
+					templateSettings.LeftPaddingColumnGridLength = new GridLength(coreTitleBar.SystemOverlayLeftInset);
 #if HAS_UNO_SKIA_WPF
-						rightColumn.Width = new GridLength(188);
+					templateSettings.RightPaddingColumnGridLength = new GridLength(188);
 #else
-						rightColumn.Width = new GridLength(coreTitleBar.SystemOverlayRightInset);
+					templateSettings.RightPaddingColumnGridLength = new GridLength(coreTitleBar.SystemOverlayRightInset);
 #endif
-					}
 				}
 			}
 		}

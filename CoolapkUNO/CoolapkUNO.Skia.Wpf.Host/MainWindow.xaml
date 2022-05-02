@@ -6,8 +6,8 @@
     xmlns:local="clr-namespace:CoolapkUNO.WPF.Host"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="MainWindow"
-    Width="800"
-    Height="450"
+    Width="1024"
+    Height="800"
     mc:Ignorable="d">
     <WindowChrome.WindowChrome>
         <WindowChrome GlassFrameThickness="0 64 0 0" NonClientFrameEdges="Left,Bottom,Right" />

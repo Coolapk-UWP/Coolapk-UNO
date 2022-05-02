@@ -11,6 +11,10 @@
     muxc:BackdropMaterial.ApplyToRootOrPageBackground="True"
     mc:Ignorable="d">
     <Grid toolkit:VisibleBoundsPadding.PaddingMask="All">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
         <controls:TitleBar
             Title="Coolapk"
             VerticalAlignment="Top"
@@ -19,19 +23,30 @@
             <controls:TitleBar.IconSource>
                 <muxc:ImageIconSource ImageSource="../Assets/StoreLogo.scale-400.png" />
             </controls:TitleBar.IconSource>
-            <Grid>
+            <controls:TitleBar.AutoSuggestBox>
                 <AutoSuggestBox
-                    Width="260"
+                    x:Name="AutoSuggestBox"
                     Height="32"
-                    Margin="0,0,48,0"
-                    HorizontalAlignment="Center"
+                    HorizontalAlignment="Stretch"
                     PlaceholderText="Search"
                     QueryIcon="Find" />
-                <muxc:PersonPicture
-                    Height="32"
-                    Margin="8"
-                    HorizontalAlignment="Right" />
-            </Grid>
+            </controls:TitleBar.AutoSuggestBox>
+            <controls:TitleBar.PaneFooter>
+                <muxc:PersonPicture Height="32" Margin="8" />
+            </controls:TitleBar.PaneFooter>
         </controls:TitleBar>
+        <Grid Grid.Row="1" />
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="WindowSizeGroup">
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="640" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="AutoSuggestBox.MaxWidth" Value="260" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
     </Grid>
 </Page>

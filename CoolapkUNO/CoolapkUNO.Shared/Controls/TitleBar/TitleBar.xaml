@@ -13,94 +13,140 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="local:TitleBar">
-
                     <Grid
                         x:Name="LayoutRoot"
                         Height="{ThemeResource TitleBarCompactHeight}"
                         Background="Transparent">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition x:Name="LeftPaddingColumn" Width="0" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition x:Name="RightPaddingColumn" Width="0" />
-                        </Grid.ColumnDefinitions>
-
-                        <Grid Grid.Column="1">
+                        <Grid x:Name="TitleRoot">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
-                                <!--  0: back button  -->
-                                <ColumnDefinition Width="Auto" />
-                                <!--  1: icon  -->
-                                <ColumnDefinition Width="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.TitleColumnGridLength}" />
-                                <!--  2: title  -->
-                                <ColumnDefinition Width="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.CustomColumnGridLength}" />
-                                <!--  3: custom content  -->
+                                <ColumnDefinition Width="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.LeftPaddingColumnGridLength}" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.RightPaddingColumnGridLength}" />
                             </Grid.ColumnDefinitions>
 
-                            <Button
-                                x:Name="BackButton"
-                                Grid.Column="0"
-                                IsEnabled="{TemplateBinding IsBackEnabled}"
-                                Style="{ThemeResource TitleBarBackButtonStyle}"
-                                ToolTipService.ToolTip="Back" >
-                                <Button.Transitions>
-                                    <TransitionCollection>
-                                        <RepositionThemeTransition />
-                                    </TransitionCollection>
-                                </Button.Transitions>
-                            </Button>
+                            <Grid Grid.Column="1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <!--  0: back button  -->
+                                    <ColumnDefinition Width="Auto" />
+                                    <!--  1: icon  -->
+                                    <ColumnDefinition Width="Auto" />
+                                    <!--  2: title  -->
+                                    <ColumnDefinition Width="*" />
+                                    <!--  3: custom content  -->
+                                </Grid.ColumnDefinitions>
 
-                            <Viewbox
-                                x:Name="Icon"
-                                Grid.Column="1"
-                                MaxWidth="16"
-                                MaxHeight="16"
-                                Margin="4,0,16,0"
-                                VerticalAlignment="Center"
-                                Child="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.IconElement}" >
-                                <Viewbox.Transitions>
-                                    <TransitionCollection>
-                                        <RepositionThemeTransition />
-                                    </TransitionCollection>
-                                </Viewbox.Transitions>
-                            </Viewbox>
+                                <Button
+                                    x:Name="BackButton"
+                                    Grid.Column="0"
+                                    IsEnabled="{TemplateBinding IsBackEnabled}"
+                                    Style="{ThemeResource TitleBarBackButtonStyle}"
+                                    ToolTipService.ToolTip="Back">
+                                    <Button.Transitions>
+                                        <TransitionCollection>
+                                            <RepositionThemeTransition />
+                                        </TransitionCollection>
+                                    </Button.Transitions>
+                                </Button>
 
-                            <TextBlock
-                                x:Name="TitleText"
-                                Grid.Column="2"
-                                Margin="0,0,16,2"
-                                HorizontalAlignment="Left"
-                                VerticalAlignment="Center"
-                                Foreground="{ThemeResource TitleBarForegroundBrush}"
-                                Style="{StaticResource CaptionTextBlockStyle}"
-                                Text="{TemplateBinding Title}"
-                                TextTrimming="CharacterEllipsis"
-                                TextWrapping="NoWrap" >
-                                <TextBlock.Transitions>
-                                    <TransitionCollection>
-                                        <RepositionThemeTransition />
-                                    </TransitionCollection>
-                                </TextBlock.Transitions>
-                            </TextBlock>
+                                <Viewbox
+                                    x:Name="Icon"
+                                    Grid.Column="1"
+                                    MaxWidth="16"
+                                    MaxHeight="16"
+                                    Margin="4,0,16,0"
+                                    VerticalAlignment="Center"
+                                    Child="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.IconElement}">
+                                    <Viewbox.Transitions>
+                                        <TransitionCollection>
+                                            <RepositionThemeTransition />
+                                        </TransitionCollection>
+                                    </Viewbox.Transitions>
+                                </Viewbox>
 
-                            <Grid
-                                x:Name="DragRegion"
-                                Grid.Column="1"
-                                Grid.ColumnSpan="3"
-                                Background="Transparent" />
+                                <TextBlock
+                                    x:Name="TitleText"
+                                    Grid.Column="2"
+                                    Margin="0,0,16,2"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Center"
+                                    Foreground="{ThemeResource TitleBarForegroundBrush}"
+                                    Style="{StaticResource CaptionTextBlockStyle}"
+                                    Text="{TemplateBinding Title}"
+                                    TextTrimming="CharacterEllipsis"
+                                    TextWrapping="NoWrap">
+                                    <TextBlock.Transitions>
+                                        <TransitionCollection>
+                                            <RepositionThemeTransition />
+                                        </TransitionCollection>
+                                    </TextBlock.Transitions>
+                                </TextBlock>
 
-                            <ContentPresenter
-                                x:Name="CustomContentPresenter"
-                                Grid.Column="3"
-                                Content="{TemplateBinding CustomContent}" >
-                                <ContentPresenter.Transitions>
-                                    <TransitionCollection>
-                                        <RepositionThemeTransition />
-                                    </TransitionCollection>
-                                </ContentPresenter.Transitions>
-                            </ContentPresenter>
+                                <Grid
+                                    x:Name="DragRegion"
+                                    Grid.Column="1"
+                                    Grid.ColumnSpan="3"
+                                    Background="Transparent" />
 
+                                <Grid
+                                    x:Name="ContentGrid"
+                                    Grid.Column="3"
+                                    HorizontalAlignment="Stretch">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.Transitions>
+                                        <TransitionCollection>
+                                            <RepositionThemeTransition />
+                                        </TransitionCollection>
+                                    </Grid.Transitions>
+                                    <ContentPresenter
+                                        x:Name="CustomContentPresenter"
+                                        Grid.Column="0"
+                                        HorizontalAlignment="Stretch"
+                                        Content="{TemplateBinding CustomContent}" />
+                                    <ContentPresenter
+                                        x:Name="AutoSuggestBoxPresenter"
+                                        Grid.Column="1"
+                                        HorizontalAlignment="Stretch"
+                                        Content="{TemplateBinding AutoSuggestBox}" />
+                                    <ContentPresenter
+                                        x:Name="PaneFooterPresenter"
+                                        Grid.Column="2"
+                                        HorizontalAlignment="Right"
+                                        Content="{TemplateBinding PaneFooter}" />
+                                </Grid>
+                            </Grid>
                         </Grid>
+
                         <VisualStateManager.VisualStateGroups>
+
+                            <VisualStateGroup x:Name="WindowSizeGroup">
+                                <VisualState x:Name="MinWindow">
+                                    <VisualState.StateTriggers>
+                                        <AdaptiveTrigger MinWindowWidth="0" />
+                                    </VisualState.StateTriggers>
+                                    <VisualState.Setters>
+                                        <Setter Target="Icon.Visibility" Value="Collapsed" />
+                                        <Setter Target="TitleText.Visibility" Value="Collapsed" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                                <VisualState x:Name="MidWindow">
+                                    <VisualState.StateTriggers>
+                                        <AdaptiveTrigger MinWindowWidth="640" />
+                                    </VisualState.StateTriggers>
+                                    <VisualState.Setters>
+                                        <Setter Target="TitleText.Visibility" Value="Collapsed" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                                <VisualState x:Name="MaxWindow">
+                                    <VisualState.StateTriggers>
+                                        <AdaptiveTrigger MinWindowWidth="1007" />
+                                    </VisualState.StateTriggers>
+                                </VisualState>
+                            </VisualStateGroup>
 
                             <VisualStateGroup x:Name="ActivationStateGroup">
                                 <VisualState x:Name="Activated" />
@@ -150,16 +196,16 @@
                                     <VisualTransition From="CompactHeight" To="ExpandedHeight">
                                         <Storyboard>
                                             <DoubleAnimationUsingKeyFrames Storyboard.TargetName="LayoutRoot" Storyboard.TargetProperty="Height">
-                                                <LinearDoubleKeyFrame KeyTime="0" Value="{ThemeResource TitleBarCompactHeight}"/>
-                                                <LinearDoubleKeyFrame KeyTime="0:0:0.1" Value="{ThemeResource TitleBarExpandedHeight}"/>
+                                                <LinearDoubleKeyFrame KeyTime="0" Value="{ThemeResource TitleBarCompactHeight}" />
+                                                <LinearDoubleKeyFrame KeyTime="0:0:0.1" Value="{ThemeResource TitleBarExpandedHeight}" />
                                             </DoubleAnimationUsingKeyFrames>
                                         </Storyboard>
                                     </VisualTransition>
                                     <VisualTransition From="ExpandedHeight" To="CompactHeight">
                                         <Storyboard>
                                             <DoubleAnimationUsingKeyFrames Storyboard.TargetName="LayoutRoot" Storyboard.TargetProperty="Height">
-                                                <LinearDoubleKeyFrame KeyTime="0" Value="{ThemeResource TitleBarExpandedHeight}"/>
-                                                <LinearDoubleKeyFrame KeyTime="0:0:0.1" Value="{ThemeResource TitleBarCompactHeight}"/>
+                                                <LinearDoubleKeyFrame KeyTime="0" Value="{ThemeResource TitleBarExpandedHeight}" />
+                                                <LinearDoubleKeyFrame KeyTime="0:0:0.1" Value="{ThemeResource TitleBarCompactHeight}" />
                                             </DoubleAnimationUsingKeyFrames>
                                         </Storyboard>
                                     </VisualTransition>

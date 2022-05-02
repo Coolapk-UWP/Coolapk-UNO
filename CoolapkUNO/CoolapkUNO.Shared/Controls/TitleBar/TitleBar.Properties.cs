@@ -4,6 +4,8 @@ using System.Text;
 using Windows.UI.Xaml;
 using Windows.Foundation;
 using Microsoft.UI.Xaml.Controls;
+using Windows.UI.Xaml.Controls;
+using IconSource = Microsoft.UI.Xaml.Controls.IconSource;
 
 namespace CoolapkUNO.Controls
 {
@@ -13,7 +15,19 @@ namespace CoolapkUNO.Controls
            "CustomContent",
            typeof(object),
            typeof(TitleBar),
-           new PropertyMetadata(default(object), OnCustomContentPropertyChanged));
+           new PropertyMetadata(default, OnCustomContentPropertyChanged));
+
+        public static readonly DependencyProperty AutoSuggestBoxProperty = DependencyProperty.Register(
+           "AutoSuggestBox",
+           typeof(AutoSuggestBox),
+           typeof(TitleBar),
+           new PropertyMetadata(default, OnCustomContentPropertyChanged));
+
+        public static readonly DependencyProperty PaneFooterProperty = DependencyProperty.Register(
+           "PaneFooter",
+           typeof(object),
+           typeof(TitleBar),
+           new PropertyMetadata(default, OnCustomContentPropertyChanged));
 
         public static readonly DependencyProperty IconSourceProperty = DependencyProperty.Register(
            "IconSource",
@@ -49,6 +63,18 @@ namespace CoolapkUNO.Controls
         {
             get => GetValue(CustomContentProperty);
             set => SetValue(CustomContentProperty, value);
+        }
+
+        public object AutoSuggestBox
+        {
+            get => (AutoSuggestBox)GetValue(AutoSuggestBoxProperty);
+            set => SetValue(AutoSuggestBoxProperty, value);
+        }
+
+        public object PaneFooter
+        {
+            get => GetValue(PaneFooterProperty);
+            set => SetValue(PaneFooterProperty, value);
         }
 
         public IconSource IconSource

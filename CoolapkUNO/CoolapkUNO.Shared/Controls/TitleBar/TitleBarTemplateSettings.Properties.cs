@@ -9,11 +9,11 @@ namespace CoolapkUNO.Controls
 {
     public partial class TitleBarTemplateSettings
     {
-        public static readonly DependencyProperty CustomColumnGridLengthProperty = DependencyProperty.Register(
-           "CustomColumnGridLength",
+        public static readonly DependencyProperty LeftPaddingColumnGridLengthProperty = DependencyProperty.Register(
+           "LeftPaddingColumnGridLength",
            typeof(GridLength),
            typeof(TitleBarTemplateSettings),
-           new PropertyMetadata(new GridLength(1, GridUnitType.Star)));
+           new PropertyMetadata(new GridLength(0)));
 
         public static readonly DependencyProperty IconElementProperty = DependencyProperty.Register(
            "IconElement",
@@ -21,16 +21,34 @@ namespace CoolapkUNO.Controls
            typeof(TitleBarTemplateSettings),
            new PropertyMetadata(default(IconSource)));
 
-        public static readonly DependencyProperty TitleColumnGridLengthProperty = DependencyProperty.Register(
-           "TitleColumnGridLength",
+        public static readonly DependencyProperty RightPaddingColumnGridLengthProperty = DependencyProperty.Register(
+           "RightPaddingColumnGridLength",
            typeof(GridLength),
            typeof(TitleBarTemplateSettings),
-           new PropertyMetadata(new GridLength(1, GridUnitType.Auto)));
+           new PropertyMetadata(new GridLength(0)));
 
-        public GridLength CustomColumnGridLength
+        public static readonly DependencyProperty CustomContentMarginProperty = DependencyProperty.Register(
+           "CustomContentMargin",
+           typeof(Thickness),
+           typeof(TitleBarTemplateSettings),
+           new PropertyMetadata(new Thickness(0)));
+
+        public static readonly DependencyProperty AutoSuggestBoxMarginProperty = DependencyProperty.Register(
+           "AutoSuggestBoxMargin",
+           typeof(Thickness),
+           typeof(TitleBarTemplateSettings),
+           new PropertyMetadata(new Thickness(0)));
+
+        public static readonly DependencyProperty PaneFooterMarginProperty = DependencyProperty.Register(
+           "PaneFooterMargin",
+           typeof(Thickness),
+           typeof(TitleBarTemplateSettings),
+           new PropertyMetadata(new Thickness(0)));
+
+        public GridLength LeftPaddingColumnGridLength
         {
-            get => (GridLength)GetValue(CustomColumnGridLengthProperty);
-            set => SetValue(CustomColumnGridLengthProperty, value);
+            get => (GridLength)GetValue(LeftPaddingColumnGridLengthProperty);
+            set => SetValue(LeftPaddingColumnGridLengthProperty, value);
         }
 
         public IconElement IconElement
@@ -39,11 +57,28 @@ namespace CoolapkUNO.Controls
             set => SetValue(IconElementProperty, value);
         }
 
-        public GridLength TitleColumnGridLength
+        public GridLength RightPaddingColumnGridLength
         {
-            get => (GridLength)GetValue(TitleColumnGridLengthProperty);
-            set => SetValue(TitleColumnGridLengthProperty, value);
+            get => (GridLength)GetValue(RightPaddingColumnGridLengthProperty);
+            set => SetValue(RightPaddingColumnGridLengthProperty, value);
         }
 
+        public Thickness CustomContentMargin
+        {
+            get => (Thickness)GetValue(CustomContentMarginProperty);
+            set => SetValue(CustomContentMarginProperty, value);
+        }
+
+        public Thickness AutoSuggestBoxMargin
+        {
+            get => (Thickness)GetValue(AutoSuggestBoxMarginProperty);
+            set => SetValue(AutoSuggestBoxMarginProperty, value);
+        }
+
+        public Thickness PaneFooterMargin
+        {
+            get => (Thickness)GetValue(PaneFooterMarginProperty);
+            set => SetValue(PaneFooterMarginProperty, value);
+        }
     }
 }
