@@ -2,6 +2,7 @@
   <PropertyGroup>
     <OutputType Condition="'$(Configuration)'=='Release'">WinExe</OutputType>
     <OutputType Condition="'$(Configuration)'=='Debug'">Exe</OutputType>
+	<LangVersion>preview</LangVersion>
     <TargetFramework>net5.0</TargetFramework>
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
@@ -16,6 +17,8 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="6.0.0" />
+    <PackageReference Include="Refit" Version="6.3.2" />
+    <PackageReference Include="Refit.Newtonsoft.Json" Version="6.3.2" />
     <PackageReference Include="Uno.Microsoft.Toolkit.Uwp" Version="7.1.11" />
     <PackageReference Include="Uno.UI.Skia.Gtk" Version="4.2.6" />
     <PackageReference Include="Uno.UI.RemoteControl" Version="4.2.6" Condition="'$(Configuration)'=='Debug'" />

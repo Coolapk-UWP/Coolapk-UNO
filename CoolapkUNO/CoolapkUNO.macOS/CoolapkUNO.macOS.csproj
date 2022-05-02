@@ -6,6 +6,7 @@
     <ProjectGuid>{32CF33BD-F381-430C-A861-65B598F79975}</ProjectGuid>
     <ProjectTypeGuids>{A3F8F2AB-B479-4A4A-A458-A89E7DC349F1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Exe</OutputType>
+    <LangVersion>preview</LangVersion>
     <RootNamespace>CoolapkUNO.macOS</RootNamespace>
     <AssemblyName>CoolapkUNO.macOS</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
@@ -69,6 +70,15 @@
     <Reference Include="System.Memory" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Refit">
+      <Version>6.3.2</Version>
+    </PackageReference>
+    <PackageReference Include="Refit.Newtonsoft.Json">
+      <Version>6.3.2</Version>
+    </PackageReference>
+    <PackageReference Include="System.Net.Http">
+      <Version>4.3.4</Version>
+    </PackageReference>
     <PackageReference Include="Uno.Microsoft.Toolkit.Uwp">
       <Version>7.1.11</Version>
     </PackageReference>

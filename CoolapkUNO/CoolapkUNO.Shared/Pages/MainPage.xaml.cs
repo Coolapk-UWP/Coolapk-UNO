@@ -1,4 +1,6 @@
 ﻿using CoolapkUNO.Helpers;
+using CoolapkUNO.Models;
+using CoolapkUNO.Networks;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -32,6 +34,13 @@ namespace CoolapkUNO.Pages
         public MainPage()
         {
             this.InitializeComponent();
+            Test();
+        }
+
+        private async void Test()
+        {
+            var a = await CoolapkAPIHelper.CoolapkAPI.GetMainInit();
+            TextBlock.Text = a.Data.Count.ToString();
         }
     }
 }

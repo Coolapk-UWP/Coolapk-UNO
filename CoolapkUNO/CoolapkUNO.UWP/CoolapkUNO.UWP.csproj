@@ -17,6 +17,12 @@
     <PackageReference Include="Newtonsoft.Json">
       <Version>13.0.1</Version>
     </PackageReference>
+    <PackageReference Include="Refit">
+      <Version>6.3.2</Version>
+    </PackageReference>
+    <PackageReference Include="Refit.Newtonsoft.Json">
+      <Version>6.3.2</Version>
+    </PackageReference>
     <PackageReference Include="Uno.UI" Version="4.2.6" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="6.0.0" />
@@ -31,6 +37,7 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProjectGuid>{432080AA-7FB7-422A-B066-885372800272}</ProjectGuid>
     <OutputType>AppContainerExe</OutputType>
+    <LangVersion>preview</LangVersion>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>CoolapkUNO</RootNamespace>
     <AssemblyName>CoolapkUNO</AssemblyName>

@@ -8,6 +8,7 @@
     <ProjectGuid>{F200CBE1-C500-4AF8-A8C2-F4E2E3337B59}</ProjectGuid>
     <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
+    <LangVersion>preview</LangVersion>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>CoolapkUNO.Droid</RootNamespace>
     <AssemblyName>CoolapkUNO.Droid</AssemblyName>
@@ -71,6 +72,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Refit">
+      <Version>6.3.2</Version>
+    </PackageReference>
+    <PackageReference Include="Refit.Newtonsoft.Json">
+      <Version>6.3.2</Version>
+    </PackageReference>
+    <PackageReference Include="System.Net.Http">
+      <Version>4.3.4</Version>
+    </PackageReference>
     <PackageReference Include="Uno.Microsoft.Toolkit.Uwp">
       <Version>7.1.11</Version>
     </PackageReference>

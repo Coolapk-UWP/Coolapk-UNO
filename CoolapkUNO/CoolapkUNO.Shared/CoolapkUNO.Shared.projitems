@@ -24,10 +24,19 @@
     <Compile Include="$(MSBuildThisFileDirectory)Controls\TitleBar\TitleBar.Properties.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controls\TitleBar\TitleBarTemplateSettings.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controls\TitleBar\TitleBarTemplateSettings.Properties.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\AppUtil.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\LanguageHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\SettingsHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\SharedHelpers.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\UIHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Entity.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Resp.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Networks\Converters\IntToBoolConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Networks\Converters\StringToIntConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Networks\CoolapkAPI.Main.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Networks\CoolapkAPI.Helper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Networks\Models\CoolapkHeader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Networks\TokenHeaderHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Pages\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>

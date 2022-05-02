@@ -6,6 +6,7 @@
     <ProjectGuid>{28FD541E-9EDE-4CF0-AFDE-0DB3D9490641}</ProjectGuid>
     <ProjectTypeGuids>{FEACFBD2-3405-455C-9665-78FE426C6842};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Exe</OutputType>
+    <LangVersion>preview</LangVersion>
     <RootNamespace>CoolapkUNO</RootNamespace>
     <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
     <AssemblyName>CoolapkUNO</AssemblyName>
@@ -113,6 +114,15 @@
     <BundleResource Include="Resources\Fonts\uno-fluentui-assets.ttf" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Refit">
+      <Version>6.3.2</Version>
+    </PackageReference>
+    <PackageReference Include="Refit.Newtonsoft.Json">
+      <Version>6.3.2</Version>
+    </PackageReference>
+    <PackageReference Include="System.Net.Http">
+      <Version>4.3.4</Version>
+    </PackageReference>
     <PackageReference Include="Uno.Microsoft.Toolkit.Uwp">
       <Version>7.1.11</Version>
     </PackageReference>

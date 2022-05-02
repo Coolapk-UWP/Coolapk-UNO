@@ -15,7 +15,11 @@
     <_Globbed_Compile Remove="Controls\TitleBar\TitleBar.Properties.cs" />
     <_Globbed_Compile Remove="Controls\TitleBar\TitleBarTemplateSettings.cs" />
     <_Globbed_Compile Remove="Controls\TitleBar\TitleBarTemplateSettings.Properties.cs" />
+    <_Globbed_Compile Remove="Helpers\AppUtil.cs" />
     <_Globbed_Compile Remove="Helpers\SharedHelpers.cs" />
+    <_Globbed_Compile Remove="Models\Entity.cs" />
+    <_Globbed_Compile Remove="Models\Resp.cs" />
+    <_Globbed_Compile Remove="Networks\TokenHeaderHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <_Globbed_Content Remove="Assets\BadgeLogo.scale-100.png" />
