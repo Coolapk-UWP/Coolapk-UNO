@@ -35,9 +35,9 @@
                 <muxc:PersonPicture Height="32" Margin="8" />
             </controls:TitleBar.PaneFooter>
         </controls:TitleBar>
-        <Grid Grid.Row="1" >
-            <TextBlock x:Name="TextBlock"/>
-        </Grid>
+        <ScrollViewer Grid.Row="1">
+            <TextBlock x:Name="TextBlock" />
+        </ScrollViewer>
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="WindowSizeGroup">
                 <VisualState>

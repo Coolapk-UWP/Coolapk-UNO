@@ -15,10 +15,16 @@
     <_Globbed_Compile Remove="Controls\TitleBar\TitleBar.Properties.cs" />
     <_Globbed_Compile Remove="Controls\TitleBar\TitleBarTemplateSettings.cs" />
     <_Globbed_Compile Remove="Controls\TitleBar\TitleBarTemplateSettings.Properties.cs" />
-    <_Globbed_Compile Remove="Helpers\AppUtil.cs" />
+    <_Globbed_Compile Remove="Exceptions\CoolapkMessageException.cs" />
+    <_Globbed_Compile Remove="Exceptions\ExceptionHandlingSynchronizationContext.cs" />
+    <_Globbed_Compile Remove="Exceptions\UserNameErrorException.cs" />
     <_Globbed_Compile Remove="Helpers\SharedHelpers.cs" />
     <_Globbed_Compile Remove="Models\Entity.cs" />
     <_Globbed_Compile Remove="Models\Resp.cs" />
+    <_Globbed_Compile Remove="Networks\CoolapkAPIs.cs" />
+    <_Globbed_Compile Remove="Networks\CoolapkGet.cs" />
+    <_Globbed_Compile Remove="Networks\CoolapkListProvider.cs" />
+    <_Globbed_Compile Remove="Networks\NetworkHelper.cs" />
     <_Globbed_Compile Remove="Networks\TokenHeaderHandler.cs" />
   </ItemGroup>
   <ItemGroup>

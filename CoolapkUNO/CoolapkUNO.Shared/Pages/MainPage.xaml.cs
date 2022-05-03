@@ -29,8 +29,6 @@ namespace CoolapkUNO.Pages
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        private CoreApplicationViewTitleBar CoreTitleBar;
-
         public MainPage()
         {
             this.InitializeComponent();
@@ -39,8 +37,8 @@ namespace CoolapkUNO.Pages
 
         private async void Test()
         {
-            var a = await CoolapkAPIHelper.CoolapkAPI.GetMainInit();
-            TextBlock.Text = a.Data.Count.ToString();
+            var a = await CoolapkGet.GetDataAsync(CoolapkAPIs.IndexTabs.GetUri(), false);
+            TextBlock.Text = a.result.ToString();
         }
     }
 }
