@@ -253,7 +253,7 @@ namespace CoolapkUNO.Controls
 			var source = IconSource;
 			if (source != null)
 			{
-				templateSettings.IconElement = SharedHelpers.MakeIconElementFrom(source);
+				templateSettings.IconElement = source.CreateIconElement();
 				VisualStateManager.GoToState(this, "IconVisible", false);
 			}
 			else

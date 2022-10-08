@@ -11,6 +11,11 @@
   <Import Project="CoolapkUNO.Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\CodeSharing\Microsoft.CodeSharing.CSharp.targets" />
   <ItemGroup>
+    <_Globbed_Compile Remove="Common\HtmlToText.cs" />
+    <_Globbed_Compile Remove="Common\TokenCreater.cs" />
+    <_Globbed_Compile Remove="Common\Utils.cs" />
+    <_Globbed_Compile Remove="Common\WeakEvent.cs" />
+    <_Globbed_Compile Remove="Controls\TextBlockEx\TextBlockEx.cs" />
     <_Globbed_Compile Remove="Controls\TitleBar\TitleBar.cs" />
     <_Globbed_Compile Remove="Controls\TitleBar\TitleBar.Properties.cs" />
     <_Globbed_Compile Remove="Controls\TitleBar\TitleBarTemplateSettings.cs" />
@@ -18,14 +23,29 @@
     <_Globbed_Compile Remove="Exceptions\CoolapkMessageException.cs" />
     <_Globbed_Compile Remove="Exceptions\ExceptionHandlingSynchronizationContext.cs" />
     <_Globbed_Compile Remove="Exceptions\UserNameErrorException.cs" />
+    <_Globbed_Compile Remove="Helpers\DataHelper.cs" />
+    <_Globbed_Compile Remove="Helpers\DateHelper.cs" />
+    <_Globbed_Compile Remove="Helpers\EmojiHelper.cs" />
+    <_Globbed_Compile Remove="Helpers\ImageCacheHelper.cs" />
+    <_Globbed_Compile Remove="Helpers\NetworkHelper.cs" />
+    <_Globbed_Compile Remove="Helpers\RequestHelper.cs" />
+    <_Globbed_Compile Remove="Helpers\SettingsHelper.cs" />
     <_Globbed_Compile Remove="Helpers\SharedHelpers.cs" />
+    <_Globbed_Compile Remove="Helpers\ThemeHelper.cs" />
+    <_Globbed_Compile Remove="Helpers\UIHelper.cs" />
+    <_Globbed_Compile Remove="Helpers\UriHelper.cs" />
     <_Globbed_Compile Remove="Models\Entity.cs" />
+    <_Globbed_Compile Remove="Models\IndexPageModel.cs" />
+    <_Globbed_Compile Remove="Models\Interfaces.cs" />
     <_Globbed_Compile Remove="Models\Resp.cs" />
     <_Globbed_Compile Remove="Networks\CoolapkAPIs.cs" />
     <_Globbed_Compile Remove="Networks\CoolapkGet.cs" />
     <_Globbed_Compile Remove="Networks\CoolapkListProvider.cs" />
     <_Globbed_Compile Remove="Networks\NetworkHelper.cs" />
     <_Globbed_Compile Remove="Networks\TokenHeaderHandler.cs" />
+    <_Globbed_Compile Remove="Pages\Interfaces.cs" />
+    <_Globbed_Compile Remove="ViewModels\FeedPages\IndexViewModel.cs" />
+    <_Globbed_Compile Remove="ViewModels\Interfaces.cs" />
   </ItemGroup>
   <ItemGroup>
     <_Globbed_Content Remove="Assets\BadgeLogo.scale-100.png" />

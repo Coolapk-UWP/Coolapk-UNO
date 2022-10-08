@@ -1,6 +1,6 @@
 ﻿using CoolapkUNO.Helpers;
 using CoolapkUNO.Models;
-using CoolapkUNO.Networks;
+using CoolapkUNO.ViewModels.FeedPages;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -37,8 +37,9 @@ namespace CoolapkUNO.Pages
 
         private async void Test()
         {
-            var a = await CoolapkGet.GetDataAsync(CoolapkAPIs.IndexTabs.GetUri(), false);
-            TextBlock.Text = a.result.ToString();
+            IndexViewModel entities = new IndexViewModel("/main/indexV8");
+            await entities.Refresh(true);
+            ListView.ItemsSource = entities;
         }
     }
 }

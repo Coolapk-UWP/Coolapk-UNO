@@ -8,6 +8,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     xmlns:toolkit="using:Uno.UI.Toolkit"
+    xmlns:ui="using:Microsoft.Toolkit.Uwp.UI"
     muxc:BackdropMaterial.ApplyToRootOrPageBackground="True"
     mc:Ignorable="d">
     <Grid toolkit:VisibleBoundsPadding.PaddingMask="All">
@@ -35,9 +36,12 @@
                 <muxc:PersonPicture Height="32" Margin="8" />
             </controls:TitleBar.PaneFooter>
         </controls:TitleBar>
-        <ScrollViewer Grid.Row="1">
-            <TextBlock x:Name="TextBlock" />
-        </ScrollViewer>
+        <ListView
+            Grid.Row="1"
+            ui:ListViewExtensions.ItemContainerStretchDirection="Horizontal"
+            SelectionMode="None"
+            x:Name="ListView"
+            ShowsScrollingPlaceholders="False" />
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="WindowSizeGroup">
                 <VisualState>

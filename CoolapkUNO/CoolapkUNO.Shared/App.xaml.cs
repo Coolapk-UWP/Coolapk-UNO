@@ -53,8 +53,6 @@ namespace CoolapkUNO
         /// <param name="args">Details about the launch request and process.</param>
         protected override void OnLaunched(LaunchActivatedEventArgs args)
         {
-            UIHelper.ExtendView();
-            UIHelper.CheckTheme();
 #if DEBUG
             if (System.Diagnostics.Debugger.IsAttached)
             {
@@ -66,7 +64,7 @@ namespace CoolapkUNO
             _window = new Window();
             _window.Activate();
 #else
-            _window = Windows.UI.Xaml.Window.Current;
+            _window = Window.Current;
 #endif
 
             var rootFrame = _window.Content as Frame;
