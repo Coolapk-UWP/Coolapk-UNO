@@ -22,6 +22,7 @@
     <RuntimeIdentifier Condition="'$(TargetFramework)' == 'net6.0-macos'">osx-x64</RuntimeIdentifier>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
     <PackageReference Include="MetroLog.Net6" Version="2.1.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Uno.Microsoft.Toolkit.Uwp.UI.Controls.Markdown" Version="7.1.11" />

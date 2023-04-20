@@ -17,6 +17,7 @@
     </AssemblyAttribute>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
     <PackageReference Include="MetroLog.Net6" Version="2.1.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="7.0.0" />
     <PackageReference Include="Microsoft.Windows.CsWin32" Version="0.2.206-beta">

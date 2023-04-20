@@ -11,6 +11,10 @@
     controls:WindowHelper.UseModernWindowStyle="True"
     mc:Ignorable="d">
     <Grid>
+        <TextBlock
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Text="Loading..." />
         <ContentControl x:Name="root" />
     </Grid>
 </Window>

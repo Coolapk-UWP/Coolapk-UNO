@@ -1,7 +1,11 @@
 ﻿using CoolapkUNO.Controls;
 using CoolapkUNO.Helpers;
+using CoolapkUNO.Pages.SettingsPages;
 using Microsoft.UI.Xaml.Controls;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.Core;
@@ -70,14 +74,14 @@ namespace CoolapkUNO.Pages
         //    }
         //}
 
-        //private readonly List<(string Tag, Type Page)> _pages = new List<(string Tag, Type Page)>
-        //{
-        //    ("Find", typeof(FindPage)),
-        //    ("Home", typeof(IndexPage)),
-        //    ("Circle", typeof(CirclePage)),
-        //    ("Settings", typeof(SettingsPage)),
-        //    ("Notifications", typeof(NotificationsPage))
-        //};
+        private readonly List<(string Tag, Type Page)> _pages = new List<(string Tag, Type Page)>
+        {
+            //("Find", typeof(FindPage)),
+            //("Home", typeof(IndexPage)),
+            //("Circle", typeof(CirclePage)),
+            ("Settings", typeof(SettingsPage)),
+            //("Notifications", typeof(NotificationsPage))
+        };
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -164,19 +168,19 @@ namespace CoolapkUNO.Pages
 
         private void NavigationView_Navigate(string NavItemTag, NavigationTransitionInfo TransitionInfo, object vs = null)
         {
-            //Type _page = null;
+            Type _page = null;
 
-            //(string Tag, Type Page) item = _pages.FirstOrDefault(p => p.Tag.Equals(NavItemTag, StringComparison.Ordinal));
-            //_page = item.Page;
-            //// Get the page type before navigation so you can prevent duplicate
-            //// entries in the backstack.
-            //Type PreNavPageType = NavigationViewFrame.CurrentSourcePageType;
+            (string Tag, Type Page) item = _pages.FirstOrDefault(p => p.Tag.Equals(NavItemTag, StringComparison.Ordinal));
+            _page = item.Page;
+            // Get the page type before navigation so you can prevent duplicate
+            // entries in the backstack.
+            Type PreNavPageType = NavigationViewFrame.CurrentSourcePageType;
 
-            //// Only navigate if the selected page isn't currently loaded.
-            //if (_page != null && !Equals(PreNavPageType, _page))
-            //{
-            //    _ = NavigationViewFrame.Navigate(_page, vs, TransitionInfo);
-            //}
+            // Only navigate if the selected page isn't currently loaded.
+            if (_page != null && !Equals(PreNavPageType, _page))
+            {
+                _ = NavigationViewFrame.Navigate(_page, vs, TransitionInfo);
+            }
         }
 
         private void NavigationView_BackRequested(muxc.NavigationView sender, muxc.NavigationViewBackRequestedEventArgs args) => _ = TryGoBack();
@@ -214,20 +218,20 @@ namespace CoolapkUNO.Pages
             NavigationView.IsBackButtonVisible = NavigationViewFrame.CanGoBack
                 ? muxc.NavigationViewBackButtonVisible.Visible
                 : muxc.NavigationViewBackButtonVisible.Collapsed;
-            //if (NavigationViewFrame.SourcePageType != null)
-            //{
-            //    (string Tag, Type Page) item = _pages.FirstOrDefault(p => p.Page == e.SourcePageType);
-            //    if (item.Tag != null)
-            //    {
-            //        muxc.NavigationViewItem SelectedItem = NavigationView.MenuItems
-            //            .OfType<muxc.NavigationViewItem>()
-            //            .FirstOrDefault(n => n.Tag.Equals(item.Tag))
-            //                ?? NavigationView.FooterMenuItems
-            //                    .OfType<muxc.NavigationViewItem>()
-            //                    .FirstOrDefault(n => n.Tag.Equals(item.Tag));
-            //        NavigationView.SelectedItem = SelectedItem;
-            //    }
-            //}
+            if (NavigationViewFrame.SourcePageType != null)
+            {
+                (string Tag, Type Page) item = _pages.FirstOrDefault(p => p.Page == e.SourcePageType);
+                if (item.Tag != null)
+                {
+                    muxc.NavigationViewItem SelectedItem = NavigationView.MenuItems
+                        .OfType<muxc.NavigationViewItem>()
+                        .FirstOrDefault(n => n.Tag.Equals(item.Tag))
+                            ?? NavigationView.FooterMenuItems
+                                .OfType<muxc.NavigationViewItem>()
+                                .FirstOrDefault(n => n.Tag.Equals(item.Tag));
+                    NavigationView.SelectedItem = SelectedItem;
+                }
+            }
             //UIHelper.HideProgressBar();
         }
 

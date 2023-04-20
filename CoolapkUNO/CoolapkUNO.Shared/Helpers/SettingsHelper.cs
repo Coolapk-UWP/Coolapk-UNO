@@ -65,7 +65,7 @@ namespace CoolapkUNO.Helpers
             }
             if (!LocalObject.KeyExists(APIVersion))
             {
-                //LocalObject.Save(APIVersion, Common.APIVersion.V13);
+                LocalObject.Save(APIVersion, Common.APIVersion.V13);
             }
             if (!LocalObject.KeyExists(UpdateDate))
             {
@@ -77,7 +77,7 @@ namespace CoolapkUNO.Helpers
             }
             if (!LocalObject.KeyExists(TokenVersion))
             {
-                //LocalObject.Save(TokenVersion, Common.TokenVersion.TokenV2);
+                LocalObject.Save(TokenVersion, Common.TokenVersion.TokenV2);
             }
             if (!LocalObject.KeyExists(IsUseCompositor))
             {
@@ -85,7 +85,7 @@ namespace CoolapkUNO.Helpers
             }
             if (!LocalObject.KeyExists(CurrentLanguage))
             {
-                //LocalObject.Save(CurrentLanguage, LanguageHelper.AutoLanguageCode);
+                LocalObject.Save(CurrentLanguage, LanguageHelper.AutoLanguageCode);
             }
             if (!LocalObject.KeyExists(IsUseMultiWindow))
             {
