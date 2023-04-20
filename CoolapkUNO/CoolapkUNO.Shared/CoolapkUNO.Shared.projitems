@@ -9,138 +9,34 @@
     <Import_RootNamespace>CoolapkUNO</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="$(MSBuildThisFileDirectory)Assets\SharedAssets.md" />
+    <ApplicationDefinition Include="$(MSBuildThisFileDirectory)App.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
-    <PRIResource Include="$(MSBuildThisFileDirectory)Strings\en-US\Resources.resw" />
-    <PRIResource Include="$(MSBuildThisFileDirectory)Strings\zh-CN\BrowserPage.resw" />
-    <PRIResource Include="$(MSBuildThisFileDirectory)Strings\zh-CN\CirclePage.resw" />
-    <PRIResource Include="$(MSBuildThisFileDirectory)Strings\zh-CN\Feed.resw" />
-    <PRIResource Include="$(MSBuildThisFileDirectory)Strings\zh-CN\FeedListPage.resw" />
-    <PRIResource Include="$(MSBuildThisFileDirectory)Strings\zh-CN\FeedShellPage.resw" />
-    <PRIResource Include="$(MSBuildThisFileDirectory)Strings\zh-CN\LoginDialog.resw" />
-    <PRIResource Include="$(MSBuildThisFileDirectory)Strings\zh-CN\MainPage.resw" />
-    <PRIResource Include="$(MSBuildThisFileDirectory)Strings\zh-CN\MarkDown.resw" />
-    <PRIResource Include="$(MSBuildThisFileDirectory)Strings\zh-CN\NotificationsPage.resw" />
-    <PRIResource Include="$(MSBuildThisFileDirectory)Strings\zh-CN\Resources.resw" />
-    <PRIResource Include="$(MSBuildThisFileDirectory)Strings\zh-CN\SettingsPage.resw" />
-    <PRIResource Include="$(MSBuildThisFileDirectory)Strings\zh-CN\TitleBar.resw" />
-  </ItemGroup>
-  <ItemGroup>
-    <!--
-		 Add files present in the shared project folder, excluding the ones
-		 explicitly included in the projitem, so files can be added from vscode
-		 without manipulating the projitem file.
-	-->
-    <Compile Include="$(MSBuildThisFileDirectory)Common\HtmlToText.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Common\TokenCreater.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Common\Utils.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Common\WeakEvent.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Controls\TextBlockEx\TextBlockEx.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Controls\TitleBar\TitleBar.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Controls\TitleBar\TitleBar.Properties.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Controls\TitleBar\TitleBarTemplateSettings.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Controls\TitleBar\TitleBarTemplateSettings.Properties.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Helpers\DataHelper.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Helpers\DateHelper.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Helpers\EmojiHelper.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Helpers\Exceptions\ExceptionHandlingSynchronizationContext.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Helpers\ImageCacheHelper.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Helpers\NetworkHelper.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Helpers\RequestHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\Slot.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\SettingsHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\ThemeHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\UIHelper.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Helpers\UriHelper.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Helpers\ValueConverters\FontSizeToLineHeight.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Helpers\ValueConverters\HTMLToTextConverter.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\Entity.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\Exceptions\CoolapkMessageException.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\Exceptions\UserNameErrorException.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\Feeds\FeedDetailModel.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\Feeds\FeedModel.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\Feeds\FeedModelBase.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\Feeds\FeedReplyModel.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\Feeds\SourceFeedModel.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\Feeds\SourceFeedReplyModel.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\Images\ImageModel.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\IndexPageModel.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\Interfaces.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\Users\ContactModel.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\Users\UserAction.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\Users\UserModel.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Pages\Interfaces.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Pages\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\DataSource\DataSourceBase.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\DataSource\EntityItemSourse.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\DataSource\IncrementalLoadingBase.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\FeedPages\IndexViewModel.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\Interfaces.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\Providers\CoolapkListProvider.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\Providers\SearchListProvider.cs" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\BadgeLogo.scale-100.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\BadgeLogo.scale-125.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\BadgeLogo.scale-150.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\BadgeLogo.scale-200.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\BadgeLogo.scale-400.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\LargeTile.scale-100.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\LargeTile.scale-125.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\LargeTile.scale-150.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\LargeTile.scale-200.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\LargeTile.scale-400.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\LockScreenLogo.scale-200.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\SmallTile.scale-100.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\SmallTile.scale-125.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\SmallTile.scale-150.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\SmallTile.scale-200.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\SmallTile.scale-400.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\SplashScreen.scale-100.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\SplashScreen.scale-125.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\SplashScreen.scale-150.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\SplashScreen.scale-200.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\SplashScreen.scale-400.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\Square150x150Logo.scale-100.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\Square150x150Logo.scale-125.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\Square150x150Logo.scale-150.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\Square150x150Logo.scale-200.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\Square150x150Logo.scale-400.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\Square44x44Logo.altform-lightunplated_targetsize-16.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\Square44x44Logo.altform-lightunplated_targetsize-24.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\Square44x44Logo.altform-lightunplated_targetsize-256.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\Square44x44Logo.altform-lightunplated_targetsize-32.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\Square44x44Logo.altform-lightunplated_targetsize-48.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\Square44x44Logo.altform-unplated_targetsize-16.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\Square44x44Logo.altform-unplated_targetsize-24.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\Square44x44Logo.altform-unplated_targetsize-256.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\Square44x44Logo.altform-unplated_targetsize-32.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\Square44x44Logo.altform-unplated_targetsize-48.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\Square44x44Logo.scale-100.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\Square44x44Logo.scale-125.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\Square44x44Logo.scale-150.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\Square44x44Logo.scale-200.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\Square44x44Logo.scale-400.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\Square44x44Logo.targetsize-16.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\Square44x44Logo.targetsize-24.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\Square44x44Logo.targetsize-256.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\Square44x44Logo.targetsize-32.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\Square44x44Logo.targetsize-48.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\StoreLogo.scale-100.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\StoreLogo.scale-125.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\StoreLogo.scale-150.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\StoreLogo.scale-200.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\StoreLogo.scale-400.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\Wide310x150Logo.scale-100.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\Wide310x150Logo.scale-125.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\Wide310x150Logo.scale-150.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\Wide310x150Logo.scale-200.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\Wide310x150Logo.scale-400.png" />
-    <Page Include="$(MSBuildThisFileDirectory)Controls\TitleBar\TitleBar.xaml">
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="$(MSBuildThisFileDirectory)Controls\NavigationView\NavigationBackButton.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="$(MSBuildThisFileDirectory)Controls\TitleBar\TitleBar_themeresources.xaml">
+    <Page Include="$(MSBuildThisFileDirectory)Controls\NavigationView\NavigationView.Themeresources.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Controls\NavigationView\NavigationView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -148,17 +44,33 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="$(MSBuildThisFileDirectory)Themes\Generic.xaml">
+    <Page Include="$(MSBuildThisFileDirectory)Styles\Button.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Themes\Color.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Themes\CustomStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)Assets\SharedAssets.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <!--
+		 Add files present in the shared project folder, excluding the ones
+		 explicitly included in the projitem, so files can be added from vscode
+		 without manipulating the projitem file.
+	-->
     <_Globbled_Page Include="$(MSBuildThisFileDirectory)**/*.xaml" Exclude="@(Page);@(ApplicationDefinition)">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </_Globbled_Page>
-    <ApplicationDefinition Include="@(_Globbled_Page)">
-      <SubType>Designer</SubType>
-    </ApplicationDefinition>
+    <Page Include="@(_Globbled_Page)" />
     <_Globbed_Compile Include="$(MSBuildThisFileDirectory)**/*.xaml.cs" Exclude="@(Compile)">
       <DependentUpon>%(Filename)</DependentUpon>
     </_Globbed_Compile>
@@ -168,5 +80,13 @@
     <PRIResource Include="@(_Globbed_PRIResource)" />
     <_Globbed_Content Include="$(MSBuildThisFileDirectory)Assets/**/*.*" Exclude="@(Content)" />
     <Content Include="@(_Globbed_Content)" />
+    <!-- Mark the files from this folder as being part of WinUI -->
+    <Page Update="$(MSBuildThisFileDirectory)**/*.xaml" XamlRuntime="WinUI" />
+    <ApplicationDefinition Update="$(MSBuildThisFileDirectory)**/*.xaml" XamlRuntime="WinUI" />
+    <!-- Make sure XAML files force reevaluation of up-to-date checks -->
+    <UpToDateCheckInput Include="$(MSBuildThisFileDirectory)**/*.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)Pages\" />
   </ItemGroup>
 </Project>

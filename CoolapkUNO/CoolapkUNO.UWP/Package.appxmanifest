@@ -7,11 +7,11 @@
   IgnorableNamespaces="uap mp">
 
   <Identity
-    Name="432080aa-7fb7-422a-b066-885372800272"
-    Publisher="CN=qq251"
+    Name="9BC97DD4-D595-4209-9CCF-89B60EA11F6B"
+    Publisher="O=MyCompany"
     Version="1.0.0.0" />
 
-  <mp:PhoneIdentity PhoneProductId="f5704330-bc78-45d9-a01d-297b029a84a8" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
+  <mp:PhoneIdentity PhoneProductId="7BA75D75-F407-4D5E-971E-BA6927A925D7" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
     <DisplayName>CoolapkUNO</DisplayName>
@@ -37,15 +37,8 @@
         Square44x44Logo="Assets\Square44x44Logo.png"
         Description="CoolapkUNO"
         BackgroundColor="transparent">
-        <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png" Square71x71Logo="Assets\SmallTile.png" Square310x310Logo="Assets\LargeTile.png">
-          <uap:ShowNameOnTiles>
-            <uap:ShowOn Tile="square150x150Logo"/>
-            <uap:ShowOn Tile="wide310x150Logo"/>
-            <uap:ShowOn Tile="square310x310Logo"/>
-          </uap:ShowNameOnTiles>
-        </uap:DefaultTile >
+        <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png"/>
         <uap:SplashScreen Image="Assets\SplashScreen.png" />
-        <uap:LockScreen BadgeLogo="Assets\BadgeLogo.png" Notification="badgeAndTileText"/>
       </uap:VisualElements>
     </Application>
   </Applications>

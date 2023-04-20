@@ -1,10 +1,9 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <LangVersion>preview</LangVersion>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <NoWarn>NU1701</NoWarn>
-  </PropertyGroup>
+	</PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)'=='Debug'">
     <MonoRuntimeDebuggerEnabled>true</MonoRuntimeDebuggerEnabled>
     <DefineConstants>$(DefineConstants);TRACE;DEBUG</DefineConstants>
@@ -16,6 +15,9 @@
 		-->
     <WasmShellILLinkerEnabled>false</WasmShellILLinkerEnabled>
   </PropertyGroup>
+  <ItemGroup>
+    <Content Include="Assets\SplashScreen.png" />
+	</ItemGroup>
   <ItemGroup>
     <UpToDateCheckInput Include="..\CoolapkUNO.Shared\**\*.xaml" />
   </ItemGroup>
@@ -38,24 +40,17 @@
     <None Include="wwwroot\web.config" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
-    <PackageReference Include="HtmlAgilityPack" Version="1.11.46" />
-    <PackageReference Include="MetroLog" Version="1.0.1" />
-    <PackageReference Include="Microsoft.Windows.Compatibility" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="Uno.Extensions.Logging.WebAssembly.Console" Version="1.3.0" />
-    <PackageReference Include="Uno.Microsoft.Toolkit.Uwp" Version="7.1.11" />
-    <PackageReference Include="Uno.Microsoft.Toolkit.Uwp.Connectivity" Version="7.1.11" />
-    <PackageReference Include="Uno.Microsoft.Toolkit.Uwp.UI" Version="7.1.11" />
-    <PackageReference Include="Uno.UI.WebAssembly" Version="4.2.6" />
-    <PackageReference Include="Uno.UI.RemoteControl" Version="4.2.6" Condition="'$(Configuration)'=='Debug'" />
-    <PackageReference Include="Uno.UI.Adapter.Microsoft.Extensions.Logging" Version="4.2.6" />
+    <PackageReference Include="MetroLog.Net6" Version="2.1.0" />
+    <PackageReference Include="Microsoft.Windows.Compatibility" Version="7.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Uno.Extensions.Logging.WebAssembly.Console" Version="1.4.0" />
+    <PackageReference Include="Uno.Microsoft.Toolkit.Uwp.UI.Controls.Markdown" Version="7.1.11" />
+    <PackageReference Include="Uno.UI.WebAssembly" Version="4.8.24" />
+    <PackageReference Include="Uno.UI.RemoteControl" Version="4.8.24" Condition="'$(Configuration)'=='Debug'" />
+    <PackageReference Include="Uno.UI.Adapter.Microsoft.Extensions.Logging" Version="4.8.24" />
     <PackageReference Include="Uno.Wasm.Bootstrap" Version="3.3.1" />
     <PackageReference Include="Uno.Wasm.Bootstrap.DevServer" Version="3.3.1" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Assets\" />
-  </ItemGroup>
-  <Import Project="..\CoolapkUNO.Shared\CoolapkUNO.Shared.projitems" Label="Shared" Condition="Exists('..\CoolapkUNO.Shared\CoolapkUNO.Shared.projitems')" />
+  <Import Project="..\CoolapkUNO.Shared\CoolapkUNO.Shared.projitems" Label="Shared" />
 </Project>

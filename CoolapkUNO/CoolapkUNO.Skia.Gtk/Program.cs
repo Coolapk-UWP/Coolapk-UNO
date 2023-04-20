@@ -4,7 +4,7 @@ using Uno.UI.Runtime.Skia;
 
 namespace CoolapkUNO.Skia.Gtk
 {
-    internal class Program
+    public sealed class Program
     {
         static void Main(string[] args)
         {
@@ -14,7 +14,7 @@ namespace CoolapkUNO.Skia.Gtk
                 expArgs.ExitApplication = true;
             };
 
-            var host = new GtkHost(() => new App(), args);
+            var host = new GtkHost(() => new App());
 
             host.Run();
         }

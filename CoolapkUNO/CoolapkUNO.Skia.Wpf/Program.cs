@@ -1,3 +1,0 @@
-﻿namespace CoolapkUNO.Skia.Gtk
-{
-}

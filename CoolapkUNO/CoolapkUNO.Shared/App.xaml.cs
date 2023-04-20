@@ -2,20 +2,11 @@
 using CoolapkUNO.Pages;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
+using Windows.ApplicationModel.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
 namespace CoolapkUNO
@@ -25,8 +16,6 @@ namespace CoolapkUNO
     /// </summary>
     public sealed partial class App : Application
     {
-        private Window _window;
-
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().
@@ -38,13 +27,14 @@ namespace CoolapkUNO
             this.InitializeComponent();
 
 #if HAS_UNO || NETFX_CORE
-            this.Suspending += OnSuspending;
-#endif
-
-#if !WINDOWS_UWP
-            Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri("ms-appx:///Themes/Generic.xaml") });
+			this.Suspending += OnSuspending;
 #endif
         }
+
+        /// <summary>
+        /// Gets the main window of the app.
+        /// </summary>
+        internal static Window MainWindow { get; private set; }
 
         /// <summary>
         /// Invoked when the application is launched normally by the end user.  Other entry points
@@ -53,54 +43,71 @@ namespace CoolapkUNO
         /// <param name="args">Details about the launch request and process.</param>
         protected override void OnLaunched(LaunchActivatedEventArgs args)
         {
-#if DEBUG
-            if (System.Diagnostics.Debugger.IsAttached)
+            EnsureWindow(args);
+        }
+
+        private async void EnsureWindow(IActivatedEventArgs e)
+        {
+            if (MainWindow == null)
             {
-                // this.DebugSettings.EnableFrameRateCounter = true;
-            }
+#if DEBUG
+                if (System.Diagnostics.Debugger.IsAttached)
+                {
+                    this.DebugSettings.EnableFrameRateCounter = true;
+                }
 #endif
 
-#if NET5_0 && WINDOWS
-            _window = new Window();
-            _window.Activate();
+#if NET6_0_OR_GREATER && WINDOWS && !HAS_UNO
+			    MainWindow = new Window();
+			    MainWindow.Activate();
 #else
-            _window = Window.Current;
+                MainWindow = Windows.UI.Xaml.Window.Current;
 #endif
-
-            var rootFrame = _window.Content as Frame;
+            }
 
             // Do not repeat app initialization when the Window already has content,
             // just ensure that the window is active
-            if (rootFrame == null)
+            if (!(MainWindow.Content is Frame rootFrame))
             {
+                CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = true;
+
                 // Create a Frame to act as the navigation context and navigate to the first page
                 rootFrame = new Frame();
 
                 rootFrame.NavigationFailed += OnNavigationFailed;
 
-                if (args.PreviousExecutionState == ApplicationExecutionState.Terminated)
+                if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
                 {
                     // TODO: Load state from previously suspended application
                 }
 
                 // Place the frame in the current Window
-                _window.Content = rootFrame;
+                MainWindow.Content = rootFrame;
+
+                ThemeHelper.Initialize();
             }
 
-#if !(NET5_0 && WINDOWS)
-            if (args.PrelaunchActivated == false)
-#endif
+            if (e is LaunchActivatedEventArgs args)
             {
-                if (rootFrame.Content == null)
+#if !(NET6_0_OR_GREATER && WINDOWS)
+                if (!args.PrelaunchActivated)
                 {
-                    // When the navigation stack isn't restored navigate to the first page,
-                    // configuring the new page by passing required information as a navigation
-                    // parameter
-                    rootFrame.Navigate(typeof(MainPage), args.Arguments);
+                    CoreApplication.EnablePrelaunch(true);
                 }
-                // Ensure the current window is active
-                _window.Activate();
+                else { return; }
+#endif
             }
+
+            if (rootFrame.Content == null)
+            {
+                // When the navigation stack isn't restored navigate to the first page,
+                // configuring the new page by passing required information as a navigation
+                // parameter
+                rootFrame.Navigate(typeof(MainPage), e);
+            }
+
+            // Ensure the current window is active
+            MainWindow.Activate();
         }
 
         /// <summary>
@@ -123,7 +130,7 @@ namespace CoolapkUNO
         private void OnSuspending(object sender, SuspendingEventArgs e)
         {
             var deferral = e.SuspendingOperation.GetDeferral();
-            // TODO: Save application state and stop any background activity
+            //TODO: Save application state and stop any background activity
             deferral.Complete();
         }
 
@@ -132,58 +139,67 @@ namespace CoolapkUNO
         /// </summary>
         private static void InitializeLogging()
         {
-            var factory = LoggerFactory.Create(builder =>
-            {
+#if DEBUG
+			// Logging is disabled by default for release builds, as it incurs a significant
+			// initialization cost from Microsoft.Extensions.Logging setup. If startup performance
+			// is a concern for your application, keep this disabled. If you're running on web or
+			// desktop targets, you can use url or command line parameters to enable it.
+			//
+			// For more performance documentation: https://platform.uno/docs/articles/Uno-UI-Performance.html
+
+			var factory = LoggerFactory.Create(builder =>
+			{
 #if __WASM__
-                builder.AddProvider(new global::Uno.Extensions.Logging.WebAssembly.WebAssemblyConsoleLoggerProvider());
-#elif __IOS__
-                builder.AddProvider(new global::Uno.Extensions.Logging.OSLogLoggerProvider());
+				builder.AddProvider(new global::Uno.Extensions.Logging.WebAssembly.WebAssemblyConsoleLoggerProvider());
+#elif __IOS__ && !__MACCATALYST__
+				builder.AddProvider(new global::Uno.Extensions.Logging.OSLogLoggerProvider());
 #elif NETFX_CORE
-                builder.AddDebug();
+				builder.AddDebug();
 #else
-                builder.AddConsole();
+				builder.AddConsole();
 #endif
 
-                // Exclude logs below this level
-                builder.SetMinimumLevel(LogLevel.Information);
+				// Exclude logs below this level
+				builder.SetMinimumLevel(LogLevel.Information);
 
-                // Default filters for Uno Platform namespaces
-                builder.AddFilter("Uno", LogLevel.Warning);
-                builder.AddFilter("Windows", LogLevel.Warning);
-                builder.AddFilter("Microsoft", LogLevel.Warning);
+				// Default filters for Uno Platform namespaces
+				builder.AddFilter("Uno", LogLevel.Warning);
+				builder.AddFilter("Windows", LogLevel.Warning);
+				builder.AddFilter("Microsoft", LogLevel.Warning);
 
                 // Generic Xaml events
-                // builder.AddFilter("Windows.UI.Xaml", LogLevel.Debug );
-                // builder.AddFilter("Windows.UI.Xaml.VisualStateGroup", LogLevel.Debug );
-                // builder.AddFilter("Windows.UI.Xaml.StateTriggerBase", LogLevel.Debug );
-                // builder.AddFilter("Windows.UI.Xaml.UIElement", LogLevel.Debug );
-                // builder.AddFilter("Windows.UI.Xaml.FrameworkElement", LogLevel.Trace );
+                builder.AddFilter("Windows.UI.Xaml", LogLevel.Debug);
+                builder.AddFilter("Windows.UI.Xaml.VisualStateGroup", LogLevel.Debug);
+                builder.AddFilter("Windows.UI.Xaml.StateTriggerBase", LogLevel.Debug);
+                builder.AddFilter("Windows.UI.Xaml.UIElement", LogLevel.Debug);
+                builder.AddFilter("Windows.UI.Xaml.FrameworkElement", LogLevel.Trace);
 
                 // Layouter specific messages
-                // builder.AddFilter("Windows.UI.Xaml.Controls", LogLevel.Debug );
-                // builder.AddFilter("Windows.UI.Xaml.Controls.Layouter", LogLevel.Debug );
-                // builder.AddFilter("Windows.UI.Xaml.Controls.Panel", LogLevel.Debug );
+                builder.AddFilter("Windows.UI.Xaml.Controls", LogLevel.Debug);
+                builder.AddFilter("Windows.UI.Xaml.Controls.Layouter", LogLevel.Debug);
+                builder.AddFilter("Windows.UI.Xaml.Controls.Panel", LogLevel.Debug);
 
-                // builder.AddFilter("Windows.Storage", LogLevel.Debug );
+                builder.AddFilter("Windows.Storage", LogLevel.Debug);
 
                 // Binding related messages
-                // builder.AddFilter("Windows.UI.Xaml.Data", LogLevel.Debug );
-                // builder.AddFilter("Windows.UI.Xaml.Data", LogLevel.Debug );
+                builder.AddFilter("Windows.UI.Xaml.Data", LogLevel.Debug);
+                builder.AddFilter("Windows.UI.Xaml.Data", LogLevel.Debug);
 
                 // Binder memory references tracking
-                // builder.AddFilter("Uno.UI.DataBinding.BinderReferenceHolder", LogLevel.Debug );
+                builder.AddFilter("Uno.UI.DataBinding.BinderReferenceHolder", LogLevel.Debug);
 
                 // RemoteControl and HotReload related
-                // builder.AddFilter("Uno.UI.RemoteControl", LogLevel.Information);
+                builder.AddFilter("Uno.UI.RemoteControl", LogLevel.Information);
 
                 // Debug JS interop
-                // builder.AddFilter("Uno.Foundation.WebAssemblyRuntime", LogLevel.Debug );
+                builder.AddFilter("Uno.Foundation.WebAssemblyRuntime", LogLevel.Debug);
             });
 
-            global::Uno.Extensions.LogExtensionPoint.AmbientLoggerFactory = factory;
+			global::Uno.Extensions.LogExtensionPoint.AmbientLoggerFactory = factory;
 
 #if HAS_UNO
 			global::Uno.UI.Adapter.Microsoft.Extensions.Logging.LoggingAdapter.Initialize();
+#endif
 #endif
         }
     }

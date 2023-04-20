@@ -1,24 +1,65 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-	<LangVersion>preview</LangVersion>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <OutputType Condition="'$(Configuration)'=='Release'">WinExe</OutputType>
+    <OutputType Condition="'$(Configuration)'=='Debug'">Exe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
   </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
-    <PackageReference Include="HtmlAgilityPack" Version="1.11.46" />
-    <PackageReference Include="MetroLog" Version="1.0.1" />
-    <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="6.0.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="Uno.Microsoft.Toolkit.Uwp" Version="7.1.11" />
-    <PackageReference Include="Uno.Microsoft.Toolkit.Uwp.Connectivity" Version="7.1.11" />
-    <PackageReference Include="Uno.Microsoft.Toolkit.Uwp.UI" Version="7.1.11" />
-    <PackageReference Include="Uno.UI.Skia.Wpf" Version="4.2.6" />
-    <PackageReference Include="Uno.UI.RemoteControl" Version="4.2.6" Condition="'$(Configuration)'=='Debug'" />
-    <PackageReference Include="Uno.UI.Adapter.Microsoft.Extensions.Logging" Version="4.2.6" />
+  <ItemGroup Label="AssemblyInfo">
+    <AssemblyAttribute Include="System.Runtime.InteropServices.ComVisibleAttribute">
+      <_Parameter1>false</_Parameter1>
+    </AssemblyAttribute>
+    <AssemblyAttribute Include="System.Windows.ThemeInfo">
+      <_Parameter1>System.Windows.ResourceDictionaryLocation.None</_Parameter1>
+      <_Parameter1_IsLiteral>true</_Parameter1_IsLiteral>
+      <_Parameter2>System.Windows.ResourceDictionaryLocation.SourceAssembly</_Parameter2>
+      <_Parameter2_IsLiteral>true</_Parameter2_IsLiteral>
+    </AssemblyAttribute>
   </ItemGroup>
   <ItemGroup>
-    <UpToDateCheckInput Include="..\CoolapkUNO.Shared\**\*.xaml" />
+    <PackageReference Include="MetroLog.Net6" Version="2.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Windows.CsWin32" Version="0.2.206-beta">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Uno.Microsoft.Toolkit.Uwp.UI.Controls.Markdown" Version="7.1.11" />
+    <PackageReference Include="Uno.UI.Skia.Wpf" Version="4.8.24" />
+    <PackageReference Include="Uno.UI.RemoteControl" Version="4.8.24" Condition="'$(Configuration)'=='Debug'" />
+    <PackageReference Include="Uno.UI.Adapter.Microsoft.Extensions.Logging" Version="4.8.24" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Assets\Fonts\uno-fluentui-assets.ttf" />
   </ItemGroup>
   <Import Project="..\CoolapkUNO.Shared\CoolapkUNO.Shared.projitems" Label="Shared" />
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Controls\FontIconFallback\FontIconFallback.xaml" />
+    <UpToDateCheckInput Remove="Controls\TitleBar\TitleBarButton.xaml" />
+    <UpToDateCheckInput Remove="Controls\TitleBar\TitleBarControl.xaml" />
+    <UpToDateCheckInput Remove="Styles\Window.xaml" />
+    <UpToDateCheckInput Remove="Themes\Color.xaml" />
+    <UpToDateCheckInput Remove="Themes\CustomStyles.xaml" />
+    <UpToDateCheckInput Remove="Themes\Generic.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <_Globbed_Compile Remove="Controls\FontIconFallback.cs" />
+    <_Globbed_Compile Remove="Controls\MaximizedWindowFixer.cs" />
+    <_Globbed_Compile Remove="Controls\TitleBar\BackRequestedEventArgs.cs" />
+    <_Globbed_Compile Remove="Controls\TitleBar\SnapLayout.cs" />
+    <_Globbed_Compile Remove="Controls\TitleBar\TitleBar.cs" />
+    <_Globbed_Compile Remove="Controls\TitleBar\TitleBarButton.cs" />
+    <_Globbed_Compile Remove="Controls\TitleBar\TitleBarControl.cs" />
+    <_Globbed_Compile Remove="Controls\WindowHelper.cs" />
+    <_Globbed_Compile Remove="Helpers\DpiHelper.cs" />
+    <_Globbed_Compile Remove="Helpers\IconHelper.cs" />
+    <_Globbed_Compile Remove="Helpers\WinRTColorHelper.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <_Globbled_Page Remove="Controls\FontIconFallback\FontIconFallback.xaml" />
+    <_Globbled_Page Remove="Controls\TitleBar\TitleBarButton.xaml" />
+    <_Globbled_Page Remove="Controls\TitleBar\TitleBarControl.xaml" />
+    <_Globbled_Page Remove="Styles\Window.xaml" />
+    <_Globbled_Page Remove="Themes\Generic.xaml" />
+  </ItemGroup>
 </Project>

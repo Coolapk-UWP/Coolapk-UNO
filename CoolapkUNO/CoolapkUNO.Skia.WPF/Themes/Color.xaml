@@ -1,0 +1,16 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Color x:Key="SystemBaseHighColor">#FF000000</Color>
+    <Color x:Key="SystemBaseMediumLowColor">#66000000</Color>
+    <Color x:Key="SystemChromeWhiteColor">#FFFFFFFF</Color>
+    <Color x:Key="SystemListLowColor">#19000000</Color>
+    <Color x:Key="SystemListMediumColor">#33000000</Color>
+
+    <SolidColorBrush x:Key="SystemControlBackgroundChromeWhiteBrush" Color="{StaticResource SystemChromeWhiteColor}" />
+    <SolidColorBrush x:Key="SystemControlDisabledBaseMediumLowBrush" Color="{StaticResource SystemBaseMediumLowColor}" />
+    <SolidColorBrush x:Key="SystemControlForegroundBaseHighBrush" Color="{StaticResource SystemBaseHighColor}" />
+    <SolidColorBrush x:Key="SystemControlHighlightAltBaseHighBrush" Color="{StaticResource SystemBaseHighColor}" />
+    <SolidColorBrush x:Key="SystemControlHighlightListMediumBrush" Color="{StaticResource SystemListMediumColor}" />
+    <SolidColorBrush x:Key="SystemControlHighlightListLowBrush" Color="{StaticResource SystemListLowColor}" />
+
+</ResourceDictionary>

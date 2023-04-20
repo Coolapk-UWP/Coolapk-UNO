@@ -1,233 +1,253 @@
-﻿using System;
+﻿using MetroLog;
+using Microsoft.Toolkit.Uwp.Helpers;
+using Newtonsoft.Json;
+using System;
 using System.Threading.Tasks;
-using Windows.Storage;
-using Windows.System.Profile;
+using Windows.Foundation;
 using Windows.UI.Xaml;
 using Windows.Web.Http;
 using Windows.Web.Http.Filters;
+using IObjectSerializer = Microsoft.Toolkit.Helpers.IObjectSerializer;
 
 namespace CoolapkUNO.Helpers
 {
     internal static partial class SettingsHelper
     {
-        public const string Uid = "Uid";
-        public const string Token = "Token";
-        public const string TileUrl = "TileUrl";
-        public const string UserName = "UserName";
-        public const string IsUseAPI2 = "IsUseAPI2";
-        public const string IsFirstRun = "IsFirstRun";
-        public const string APIVersion = "APIVersion";
-        public const string IsNoPicsMode = "IsNoPicsMode";
-        public const string TokenVersion = "TokenVersion";
-        public const string SelectedAppTheme = "SelectedAppTheme";
-        public const string IsUseOldEmojiMode = "IsUseOldEmojiMode";
-        public const string ShowOtherException = "ShowOtherException";
-        public const string IsDisplayOriginPicture = "IsDisplayOriginPicture";
-        public const string CheckUpdateWhenLuanching = "CheckUpdateWhenLuanching";
+        public const string Uid = nameof(Uid);
+        public const string Token = nameof(Token);
+        public const string TileUrl = nameof(TileUrl);
+        public const string UserName = nameof(UserName);
+        public const string IsUseAPI2 = nameof(IsUseAPI2);
+        public const string IsFirstRun = nameof(IsFirstRun);
+        public const string APIVersion = nameof(APIVersion);
+        public const string UpdateDate = nameof(UpdateDate);
+        public const string IsNoPicsMode = nameof(IsNoPicsMode);
+        public const string TokenVersion = nameof(TokenVersion);
+        public const string IsUseCompositor = nameof(IsUseCompositor);
+        public const string CurrentLanguage = nameof(CurrentLanguage);
+        public const string IsUseMultiWindow = nameof(IsUseMultiWindow);
+        public const string SelectedAppTheme = nameof(SelectedAppTheme);
+        public const string ShowOtherException = nameof(ShowOtherException);
+        public const string SemaphoreSlimCount = nameof(SemaphoreSlimCount);
+        public const string IsDisplayOriginPicture = nameof(IsDisplayOriginPicture);
+        public const string CheckUpdateWhenLaunching = nameof(CheckUpdateWhenLaunching);
 
-        public static Type Get<Type>(string key) => (Type)LocalSettings.Values[key];
-
-        public static void Set(string key, object value) => LocalSettings.Values[key] = value;
+        public static Type Get<Type>(string key) => LocalObject.Read<Type>(key);
+        public static void Set<Type>(string key, Type value) => LocalObject.Save(key, value);
+        public static void SetFile<Type>(string key, Type value) => LocalObject.CreateFileAsync(key, value);
+        public static async Task<Type> GetFile<Type>(string key) => await LocalObject.ReadFileAsync<Type>(key);
 
         public static void SetDefaultSettings()
         {
-            if (!LocalSettings.Values.ContainsKey(Uid))
+            if (!LocalObject.KeyExists(Uid))
             {
-                LocalSettings.Values.Add(Uid, string.Empty);
+                LocalObject.Save(Uid, string.Empty);
             }
-            if (!LocalSettings.Values.ContainsKey(Token))
+            if (!LocalObject.KeyExists(Token))
             {
-                LocalSettings.Values.Add(Token, string.Empty);
+                LocalObject.Save(Token, string.Empty);
             }
-            if (!LocalSettings.Values.ContainsKey(TileUrl))
+            if (!LocalObject.KeyExists(TileUrl))
             {
-                LocalSettings.Values.Add(TileUrl, "https://api.coolapk.com/v6/page/dataList?url=V9_HOME_TAB_FOLLOW&type=circle");
+                LocalObject.Save(TileUrl, "https://api.coolapk.com/v6/page/dataList?url=V9_HOME_TAB_FOLLOW&type=circle");
             }
-            if (!LocalSettings.Values.ContainsKey(UserName))
+            if (!LocalObject.KeyExists(UserName))
             {
-                LocalSettings.Values.Add(UserName, string.Empty);
+                LocalObject.Save(UserName, string.Empty);
             }
-            if (!LocalSettings.Values.ContainsKey(IsUseAPI2))
+            if (!LocalObject.KeyExists(IsUseAPI2))
             {
-                LocalSettings.Values.Add(IsUseAPI2, true);
+                LocalObject.Save(IsUseAPI2, true);
             }
-            if (!LocalSettings.Values.ContainsKey(IsFirstRun))
+            if (!LocalObject.KeyExists(IsFirstRun))
             {
-                LocalSettings.Values.Add(IsFirstRun, true);
+                LocalObject.Save(IsFirstRun, true);
             }
-            if (!LocalSettings.Values.ContainsKey(APIVersion))
+            if (!LocalObject.KeyExists(APIVersion))
             {
-                LocalSettings.Values.Add(APIVersion, "V12");
+                //LocalObject.Save(APIVersion, Common.APIVersion.V13);
             }
-            if (!LocalSettings.Values.ContainsKey(IsNoPicsMode))
+            if (!LocalObject.KeyExists(UpdateDate))
             {
-                LocalSettings.Values.Add(IsNoPicsMode, false);
+                LocalObject.Save(UpdateDate, new DateTime());
             }
-            if (!LocalSettings.Values.ContainsKey(TokenVersion))
+            if (!LocalObject.KeyExists(IsNoPicsMode))
             {
-                LocalSettings.Values.Add(TokenVersion, (int)Common.TokenVersion.TokenV2);
+                LocalObject.Save(IsNoPicsMode, false);
             }
-            if (!LocalSettings.Values.ContainsKey(SelectedAppTheme))
+            if (!LocalObject.KeyExists(TokenVersion))
             {
-                LocalSettings.Values.Add(SelectedAppTheme, (int)ElementTheme.Default);
+                //LocalObject.Save(TokenVersion, Common.TokenVersion.TokenV2);
             }
-            if (!LocalSettings.Values.ContainsKey(IsUseOldEmojiMode))
+            if (!LocalObject.KeyExists(IsUseCompositor))
             {
-                LocalSettings.Values.Add(IsUseOldEmojiMode, false);
+                LocalObject.Save(IsUseCompositor, true);
             }
-            if (!LocalSettings.Values.ContainsKey(ShowOtherException))
+            if (!LocalObject.KeyExists(CurrentLanguage))
             {
-                LocalSettings.Values.Add(ShowOtherException, true);
+                //LocalObject.Save(CurrentLanguage, LanguageHelper.AutoLanguageCode);
             }
-            if (!LocalSettings.Values.ContainsKey(IsDisplayOriginPicture))
+            if (!LocalObject.KeyExists(IsUseMultiWindow))
             {
-                LocalSettings.Values.Add(IsDisplayOriginPicture, false);
+                LocalObject.Save(IsUseMultiWindow, true);
             }
-            if (!LocalSettings.Values.ContainsKey(CheckUpdateWhenLuanching))
+            if (!LocalObject.KeyExists(SelectedAppTheme))
             {
-                LocalSettings.Values.Add(CheckUpdateWhenLuanching, true);
+                LocalObject.Save(SelectedAppTheme, ElementTheme.Default);
+            }
+            if (!LocalObject.KeyExists(ShowOtherException))
+            {
+                LocalObject.Save(ShowOtherException, true);
+            }
+            if (!LocalObject.KeyExists(SemaphoreSlimCount))
+            {
+                LocalObject.Save(SemaphoreSlimCount, Environment.ProcessorCount);
+            }
+            if (!LocalObject.KeyExists(IsDisplayOriginPicture))
+            {
+                LocalObject.Save(IsDisplayOriginPicture, false);
+            }
+            if (!LocalObject.KeyExists(CheckUpdateWhenLaunching))
+            {
+                LocalObject.Save(CheckUpdateWhenLaunching, true);
             }
         }
     }
 
     internal static partial class SettingsHelper
     {
-        public static ulong version = ulong.Parse(AnalyticsInfo.VersionInfo.DeviceFamilyVersion);
-        private static readonly ApplicationDataContainer LocalSettings = ApplicationData.Current.LocalSettings;
-        public static readonly MetroLog.ILogManager LogManager = MetroLog.LogManagerFactory.CreateLogManager();
-        public static double WindowsVersion = double.Parse($"{(ushort)((version & 0x00000000FFFF0000L) >> 16)}.{(ushort)(SettingsHelper.version & 0x000000000000FFFFL)}");
+        public static event TypedEventHandler<string, bool> LoginChanged;
+        public static readonly ApplicationDataStorageHelper LocalObject = ApplicationDataStorageHelper.GetCurrent(new SystemTextJsonObjectSerializer());
+        public static readonly ILogManager LogManager = LogManagerFactory.CreateLogManager();
 
-        static SettingsHelper()
-        {
-            SetDefaultSettings();
-        }
+        static SettingsHelper() => SetDefaultSettings();
 
-        public static Task<bool> LoginIn() => LoginIn(Get<string>(Uid), Get<string>(UserName), Get<string>(Token));
+        public static void InvokeLoginChanged(string sender, bool args) => LoginChanged?.Invoke(sender, args);
 
-        public static async Task<bool> LoginIn(string Uid, string UserName, string Token)
-        {
-            using (HttpBaseProtocolFilter filter = new HttpBaseProtocolFilter())
-            {
-                HttpCookieManager cookieManager = filter.CookieManager;
-                HttpCookie uid = new HttpCookie("uid", ".coolapk.com", "/");
-                HttpCookie username = new HttpCookie("username", ".coolapk.com", "/");
-                HttpCookie token = new HttpCookie("token", ".coolapk.com", "/");
-                uid.Value = Uid;
-                username.Value = UserName;
-                token.Value = Token;
-                DateTime Expires = DateTime.UtcNow.AddDays(365);
-                uid.Expires = username.Expires = token.Expires = Expires;
-                cookieManager.SetCookie(uid);
-                cookieManager.SetCookie(username);
-                cookieManager.SetCookie(token);
-                return await CheckLoginInfo();
-            }
-        }
+        //public static async Task<bool> Login()
+        //{
+        //    using (HttpBaseProtocolFilter filter = new HttpBaseProtocolFilter())
+        //    {
+        //        HttpCookieManager cookieManager = filter.CookieManager;
+        //        string uid = string.Empty, token = string.Empty, userName = string.Empty;
+        //        foreach (HttpCookie item in cookieManager.GetCookies(UriHelper.CoolapkUri))
+        //        {
+        //            switch (item.Name)
+        //            {
+        //                case "uid":
+        //                    uid = item.Value;
+        //                    break;
+        //                case "username":
+        //                    userName = item.Value;
+        //                    break;
+        //                case "token":
+        //                    token = item.Value;
+        //                    break;
+        //                default:
+        //                    break;
+        //            }
+        //        }
+        //        if (string.IsNullOrEmpty(uid) || string.IsNullOrEmpty(token) || string.IsNullOrEmpty(userName) || !await RequestHelper.CheckLogin())
+        //        {
+        //            Logout();
+        //            return false;
+        //        }
+        //        else
+        //        {
+        //            Set(Uid, uid);
+        //            Set(Token, token);
+        //            Set(UserName, userName);
+        //            InvokeLoginChanged(uid, true);
+        //            return true;
+        //        }
+        //    }
+        //}
 
-        public static async Task<bool> CheckLoginInfo()
-        {
-            try
-            {
-                using (HttpBaseProtocolFilter filter = new HttpBaseProtocolFilter())
-                {
-                    HttpCookieManager cookieManager = filter.CookieManager;
-                    string uid = string.Empty, token = string.Empty, userName = string.Empty;
-                    foreach (HttpCookie item in cookieManager.GetCookies(UriHelper.CoolapkUri))
-                    {
-                        switch (item.Name)
-                        {
-                            case "uid":
-                                uid = item.Value;
-                                break;
+        //public static async Task<bool> Login(string Uid, string UserName, string Token)
+        //{
+        //    if (!string.IsNullOrEmpty(Uid) && !string.IsNullOrEmpty(UserName) && !string.IsNullOrEmpty(Token))
+        //    {
+        //        using (HttpBaseProtocolFilter filter = new HttpBaseProtocolFilter())
+        //        {
+        //            HttpCookieManager cookieManager = filter.CookieManager;
+        //            HttpCookie uid = new HttpCookie("uid", ".coolapk.com", "/");
+        //            HttpCookie username = new HttpCookie("username", ".coolapk.com", "/");
+        //            HttpCookie token = new HttpCookie("token", ".coolapk.com", "/");
+        //            uid.Value = Uid;
+        //            username.Value = UserName;
+        //            token.Value = Token;
+        //            cookieManager.SetCookie(uid);
+        //            cookieManager.SetCookie(username);
+        //            cookieManager.SetCookie(token);
+        //        }
+        //        if (await RequestHelper.CheckLogin())
+        //        {
+        //            Set(SettingsHelper.Uid, Uid);
+        //            Set(SettingsHelper.Token, Token);
+        //            Set(SettingsHelper.UserName, UserName);
+        //            InvokeLoginChanged(Uid, true);
+        //            return true;
+        //        }
+        //        else
+        //        {
+        //            Logout();
+        //            return false;
+        //        }
+        //    }
+        //    return false;
+        //}
 
-                            case "username":
-                                userName = item.Value;
-                                break;
+        //public static async Task<bool> CheckLoginAsync()
+        //{
+        //    using (HttpBaseProtocolFilter filter = new HttpBaseProtocolFilter())
+        //    {
+        //        HttpCookieManager cookieManager = filter.CookieManager;
+        //        string uid = string.Empty, token = string.Empty, userName = string.Empty;
+        //        foreach (HttpCookie item in cookieManager.GetCookies(UriHelper.CoolapkUri))
+        //        {
+        //            switch (item.Name)
+        //            {
+        //                case "uid":
+        //                    uid = item.Value;
+        //                    break;
+        //                case "username":
+        //                    userName = item.Value;
+        //                    break;
+        //                case "token":
+        //                    token = item.Value;
+        //                    break;
+        //                default:
+        //                    break;
+        //            }
+        //        }
+        //        return !string.IsNullOrEmpty(uid) && !string.IsNullOrEmpty(token) && !string.IsNullOrEmpty(userName) && await RequestHelper.CheckLogin();
+        //    }
+        //}
 
-                            case "token":
-                                token = item.Value;
-                                break;
+        //public static void Logout()
+        //{
+        //    using (HttpBaseProtocolFilter filter = new HttpBaseProtocolFilter())
+        //    {
+        //        HttpCookieManager cookieManager = filter.CookieManager;
+        //        foreach (HttpCookie item in cookieManager.GetCookies(UriHelper.Base2Uri))
+        //        {
+        //            cookieManager.DeleteCookie(item);
+        //        }
+        //    }
+        //    Set(Uid, string.Empty);
+        //    Set(Token, string.Empty);
+        //    Set(UserName, string.Empty);
+        //    InvokeLoginChanged(string.Empty, false);
+        //}
+    }
 
-                            default:
-                                break;
-                        }
-                    }
+    public class SystemTextJsonObjectSerializer : IObjectSerializer
+    {
+        // Specify your serialization settings
+        private readonly JsonSerializerSettings settings = new JsonSerializerSettings() { DefaultValueHandling = DefaultValueHandling.Ignore };
 
-                    if (string.IsNullOrEmpty(uid) || string.IsNullOrEmpty(token) || string.IsNullOrEmpty(userName) || !await RequestHelper.CheckLogin())
-                    {
-                        Logout();
-                        return false;
-                    }
-                    else
-                    {
-                        Set(Uid, uid);
-                        Set(Token, token);
-                        Set(UserName, userName);
-                        return true;
-                    }
-                }
-            }
-            catch { throw; }
-        }
+        string IObjectSerializer.Serialize<T>(T value) => JsonConvert.SerializeObject(value, typeof(T), Formatting.Indented, settings);
 
-        public static bool CheckLoginInfoFast()
-        {
-            try
-            {
-                using (HttpBaseProtocolFilter filter = new HttpBaseProtocolFilter())
-                {
-                    HttpCookieManager cookieManager = filter.CookieManager;
-                    string uid = string.Empty, token = string.Empty, userName = string.Empty;
-                    foreach (HttpCookie item in cookieManager.GetCookies(UriHelper.CoolapkUri))
-                    {
-                        switch (item.Name)
-                        {
-                            case "uid":
-                                uid = item.Value;
-                                break;
-
-                            case "username":
-                                userName = item.Value;
-                                break;
-
-                            case "token":
-                                token = item.Value;
-                                break;
-
-                            default:
-                                break;
-                        }
-                    }
-
-                    if (string.IsNullOrEmpty(uid) || string.IsNullOrEmpty(token) || string.IsNullOrEmpty(userName))
-                    {
-                        Logout();
-                        return false;
-                    }
-                    else
-                    {
-                        Set(Uid, uid);
-                        Set(Token, token);
-                        Set(UserName, userName);
-                        return true;
-                    }
-                }
-            }
-            catch { throw; }
-        }
-
-        public static void Logout()
-        {
-            using (HttpBaseProtocolFilter filter = new HttpBaseProtocolFilter())
-            {
-                HttpCookieManager cookieManager = filter.CookieManager;
-                foreach (HttpCookie item in cookieManager.GetCookies(UriHelper.Base2Uri))
-                {
-                    cookieManager.DeleteCookie(item);
-                }
-            }
-            Set(Uid, string.Empty);
-            Set(UserName, string.Empty);
-        }
+        public T Deserialize<T>(string value) => JsonConvert.DeserializeObject<T>(value, settings);
     }
 }
