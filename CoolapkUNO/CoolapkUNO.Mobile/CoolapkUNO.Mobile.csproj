@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net6.0-android;net6.0-ios;net6.0-maccatalyst</TargetFrameworks>
+    <TargetFramework>net6.0-android</TargetFramework>
     <!-- Disabled because of https://github.com/xamarin/xamarin-macios/issues/16401-->
     <!-- <TargetFrameworks>$(TargetFrameworks);net6.0-macos</TargetFrameworks> -->
     <SingleProject>true</SingleProject>
@@ -50,7 +50,7 @@
         <MtouchExtraArgs>$(MtouchExtraArgs) --marshal-objectivec-exceptions:disable</MtouchExtraArgs>
       </PropertyGroup>
       <ItemGroup>
-        <PackageReference Include="Uno.Extensions.Logging.OSLog" Version="1.4.0" />
+        <PackageReference Include="Uno.Extensions.Logging.OSLog" Version="1.7.0" />
       </ItemGroup>
     </When>
     <When Condition="'$(TargetFramework)'=='net6.0-maccatalyst'">
@@ -65,7 +65,7 @@
         <InvariantGlobalization>false</InvariantGlobalization>
       </PropertyGroup>
       <ItemGroup>
-        <PackageReference Include="Uno.Extensions.Logging.OSLog" Version="1.4.0" />
+        <PackageReference Include="Uno.Extensions.Logging.OSLog" Version="1.7.0" />
       </ItemGroup>
     </When>
     <When Condition="'$(TargetFramework)'=='net6.0-macos'">
