@@ -36,13 +36,7 @@ namespace CoolapkUNO.Helpers
                             && rootElement.RequestedTheme != ElementTheme.Default
                                 ? rootElement.RequestedTheme
                                 : SettingsHelper.Get<ElementTheme>(SettingsHelper.SelectedAppTheme)
-                        : UIHelper.AwaitByTaskCompleteSource(() =>
-                            CurrentApplicationWindow.Dispatcher.AwaitableRunAsync(() =>
-                                CurrentApplicationWindow.Content is FrameworkElement _rootElement
-                                    && _rootElement.RequestedTheme != ElementTheme.Default
-                                        ? _rootElement.RequestedTheme
-                                        : SettingsHelper.Get<ElementTheme>(SettingsHelper.SelectedAppTheme),
-                                CoreDispatcherPriority.High));
+                        : SettingsHelper.Get<ElementTheme>(SettingsHelper.SelectedAppTheme);
             }
         }
 
@@ -59,12 +53,7 @@ namespace CoolapkUNO.Helpers
                         ? CurrentApplicationWindow.Content is FrameworkElement rootElement
                             ? rootElement.RequestedTheme
                             : ElementTheme.Default
-                        : UIHelper.AwaitByTaskCompleteSource(() =>
-                            CurrentApplicationWindow.Dispatcher.AwaitableRunAsync(() =>
-                                CurrentApplicationWindow.Content is FrameworkElement _rootElement
-                                    ? _rootElement.RequestedTheme
-                                    : ElementTheme.Default,
-                                CoreDispatcherPriority.High));
+                        : ElementTheme.Default;
             }
             set
             {

@@ -45,7 +45,7 @@
                                 <ComboBoxItem x:Uid="/SettingsPage/RadioThemeDefault" />
                             </ComboBox>
                         </controls:Setting>
-                        <controls:Setting x:Uid="/SettingsPage/NoPicsModeSettings" Icon="&#xEB9F;">
+                        <controls:Setting x:Uid="/SettingsPage/NoPicsModeSettings" Icon="&#xE91B;">
                             <ToggleSwitch IsOn="{Binding IsNoPicsMode, Mode=TwoWay}" Style="{StaticResource ToggleSwitchSettingStyle}" />
                         </controls:Setting>
                         <controls:Setting x:Uid="/SettingsPage/UseMultiWindowSettings" Icon="&#xE78B;">
@@ -289,7 +289,7 @@
                         <controls:Setting x:Uid="/SettingsPage/ShowOtherExceptionSettings" Icon="&#xE90F;">
                             <ToggleSwitch IsOn="{Binding ShowOtherException, Mode=TwoWay}" Style="{StaticResource ToggleSwitchSettingStyle}" />
                         </controls:Setting>
-                        <controls:Setting x:Uid="/SettingsPage/CleanCacheSettings" Icon="&#xEA99;">
+                        <controls:Setting x:Uid="/SettingsPage/CleanCacheSettings" Icon="&#xE74D;">
                             <controls:StackPanel Orientation="Horizontal" Spacing="18">
                                 <Border Visibility="{Binding IsCleanCache, Converter={StaticResource BoolToVisibilityConverter}}">
                                     <muxc:ProgressRing
@@ -326,7 +326,7 @@
                             x:Name="GoToTestPage"
                             x:Uid="/SettingsPage/GoToTestPage"
                             Click="Button_Click"
-                            Icon="&#xEC7A;"
+                            Icon="&#xE835;"
                             IsClickEnabled="True"
                             Tag="TestPage" />
                     </controls:SettingsGroup.Items>

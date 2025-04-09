@@ -3,21 +3,21 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>net6.0</TargetFramework>
     <NoWarn>NU1701</NoWarn>
-	</PropertyGroup>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)'=='Debug'">
     <MonoRuntimeDebuggerEnabled>true</MonoRuntimeDebuggerEnabled>
     <DefineConstants>$(DefineConstants);TRACE;DEBUG</DefineConstants>
     <DebugType>portable</DebugType>
     <DebugSymbols>true</DebugSymbols>
     <!--
-		IL Linking is disabled in Debug configuration.
-		When building in Release, see https://platform.uno/docs/articles/features/using-il-linker-webassembly.html
-		-->
+    IL Linking is disabled in Debug configuration.
+    When building in Release, see https://platform.uno/docs/articles/features/using-il-linker-webassembly.html
+    -->
     <WasmShellILLinkerEnabled>false</WasmShellILLinkerEnabled>
   </PropertyGroup>
   <ItemGroup>
     <Content Include="Assets\SplashScreen.png" />
-	</ItemGroup>
+  </ItemGroup>
   <ItemGroup>
     <UpToDateCheckInput Include="..\CoolapkUNO.Shared\**\*.xaml" />
   </ItemGroup>
@@ -30,11 +30,11 @@
   </ItemGroup>
   <ItemGroup>
     <!--
-		This item group is required by the project template because of the
-		new SDK-Style project, otherwise some files are not added automatically.
+    This item group is required by the project template because of the
+    new SDK-Style project, otherwise some files are not added automatically.
 
-		You can safely remove this ItemGroup completely.
-		-->
+    You can safely remove this ItemGroup completely.
+    -->
     <None Include="Program.cs" />
     <None Include="LinkerConfig.xml" />
     <None Include="wwwroot\web.config" />

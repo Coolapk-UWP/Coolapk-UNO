@@ -1,0 +1,69 @@
+name: build and deploy
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+env:
+  DOTNET_VERSION: '6.0.x' # The .NET SDK version to use
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    env:
+      Solution_Name: CoolapkUNO/CoolapkUNO.Wasm/CoolapkUNO.Wasm.csproj
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # Install the .NET Core App workload
+      - name: Install .NET Core App
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Install WASM Tools Workload
+        run: dotnet workload install wasm-tools
+
+      # Restore the application to populate the obj folder with RuntimeIdentifiers
+      - name: Install Dependencies
+        run: dotnet restore $Solution_Name
+
+      - name: Publish
+        run: dotnet publish $Solution_Name -c:Release -o:public
+
+      # Copy index.html to 404.html to serve the same file when a file is not found
+      - name: copy index.html to 404.html
+        run: cp public/wwwroot/index.html public/wwwroot/404.html
+
+      # Add .nojekyll file to tell GitHub pages to not treat this as a Jekyll project. (Allow files and folders starting with an underscore)
+      - name: Add .nojekyll file
+        run: touch public/wwwroot/.nojekyll
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: public/wwwroot
+
+  deploy:
+    needs: build
+
+    permissions:
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
