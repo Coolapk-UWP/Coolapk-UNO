@@ -39,16 +39,16 @@ jobs:
 
       # Copy index.html to 404.html to serve the same file when a file is not found
       - name: copy index.html to 404.html
-        run: cp public/wwwroot/index.html public/wwwroot/404.html
+        run: cp public/index.html public/404.html
 
       # Add .nojekyll file to tell GitHub pages to not treat this as a Jekyll project. (Allow files and folders starting with an underscore)
       - name: Add .nojekyll file
-        run: touch public/wwwroot/.nojekyll
+        run: touch public/.nojekyll
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: public/wwwroot
+          path: public
 
   deploy:
     needs: build
