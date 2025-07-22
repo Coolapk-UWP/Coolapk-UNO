@@ -10,41 +10,4 @@
   <PropertyGroup />
   <Import Project="CoolapkUNO.Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\CodeSharing\Microsoft.CodeSharing.CSharp.targets" />
-  <ItemGroup>
-    <UpToDateCheckInput Remove="Controls\PageHeader.xaml" />
-    <UpToDateCheckInput Remove="Pages\SettingsPages\SettingsPage.xaml" />
-    <UpToDateCheckInput Remove="Pages\SettingsPages\TestPage.xaml" />
-    <UpToDateCheckInput Remove="Styles\Button.xaml" />
-    <UpToDateCheckInput Remove="Styles\TextBlock.xaml" />
-    <UpToDateCheckInput Remove="Themes\Color.xaml" />
-    <UpToDateCheckInput Remove="Themes\CustomStyles.xaml" />
-    <UpToDateCheckInput Remove="Themes\Generic.xaml" />
-  </ItemGroup>
-  <ItemGroup>
-    <_Globbed_Compile Remove="Common\HtmlToText.cs" />
-    <_Globbed_Compile Remove="Common\TokenCreater.cs" />
-    <_Globbed_Compile Remove="Common\WeakEvent.cs" />
-    <_Globbed_Compile Remove="Controls\PageHeader.xaml.cs" />
-    <_Globbed_Compile Remove="Controls\Slot.cs" />
-    <_Globbed_Compile Remove="Controls\StackPanel.cs" />
-    <_Globbed_Compile Remove="Helpers\DataHelper.cs" />
-    <_Globbed_Compile Remove="Helpers\DateHelper.cs" />
-    <_Globbed_Compile Remove="Helpers\LanguageHelper.cs" />
-    <_Globbed_Compile Remove="Helpers\SettingsHelper.cs" />
-    <_Globbed_Compile Remove="Helpers\ThemeHelper.cs" />
-    <_Globbed_Compile Remove="Helpers\UIHelper.cs" />
-    <_Globbed_Compile Remove="Pages\SettingsPages\SettingsPage.xaml.cs" />
-    <_Globbed_Compile Remove="Pages\SettingsPages\TestPage.xaml.cs" />
-    <_Globbed_Compile Remove="ViewModels\Interfaces.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <_Globbled_Page Remove="Controls\PageHeader.xaml" />
-    <_Globbled_Page Remove="Pages\SettingsPages\SettingsPage.xaml" />
-    <_Globbled_Page Remove="Pages\SettingsPages\TestPage.xaml" />
-    <_Globbled_Page Remove="Styles\Button.xaml" />
-    <_Globbled_Page Remove="Styles\TextBlock.xaml" />
-    <_Globbled_Page Remove="Themes\Color.xaml" />
-    <_Globbled_Page Remove="Themes\CustomStyles.xaml" />
-    <_Globbled_Page Remove="Themes\Generic.xaml" />
-  </ItemGroup>
 </Project>

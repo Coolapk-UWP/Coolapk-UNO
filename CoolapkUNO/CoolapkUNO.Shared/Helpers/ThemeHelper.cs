@@ -2,9 +2,7 @@
 using Microsoft.Toolkit.Uwp.Helpers;
 using Windows.ApplicationModel.Core;
 using Windows.UI;
-using Windows.UI.Core;
 using Windows.UI.ViewManagement;
-using Windows.UI.WindowManagement;
 using Windows.UI.Xaml;
 
 namespace CoolapkUNO.Helpers
@@ -131,22 +129,25 @@ namespace CoolapkUNO.Helpers
                 }
                 else
                 {
-#if HAS_UNO_SKIA_WPF
-                    bool ExtendViewIntoTitleBar = Controls.TitleBar.GetExtendViewIntoTitleBar(WPF.MainWindow.Instance);
-                    Controls.TitleBar.SetForeground(WPF.MainWindow.Instance, new System.Windows.Media.SolidColorBrush(ForegroundColor.ToColor()));
-                    Controls.TitleBar.SetButtonForeground(WPF.MainWindow.Instance, new System.Windows.Media.SolidColorBrush(ForegroundColor.ToColor()));
-                    Controls.TitleBar.SetButtonHoverForeground(WPF.MainWindow.Instance, new System.Windows.Media.SolidColorBrush(ForegroundColor.ToColor()));
-                    Controls.TitleBar.SetButtonPressedForeground(WPF.MainWindow.Instance, new System.Windows.Media.SolidColorBrush(ForegroundColor.ToColor()));
-                    Controls.TitleBar.SetBackground(WPF.MainWindow.Instance, new System.Windows.Media.SolidColorBrush(BackgroundColor.ToColor()));
-                    Controls.TitleBar.SetInactiveBackground(WPF.MainWindow.Instance, new System.Windows.Media.SolidColorBrush(BackgroundColor.ToColor()));
-                    Controls.TitleBar.SetButtonBackground(WPF.MainWindow.Instance, new System.Windows.Media.SolidColorBrush((ExtendViewIntoTitleBar ? Colors.Transparent : BackgroundColor).ToColor()));
-                    Controls.TitleBar.SetButtonInactiveBackground(WPF.MainWindow.Instance, new System.Windows.Media.SolidColorBrush((ExtendViewIntoTitleBar ? Colors.Transparent : BackgroundColor).ToColor()));
-#else
                     bool ExtendViewIntoTitleBar = CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar;
                     ApplicationViewTitleBar TitleBar = ApplicationView.GetForCurrentView().TitleBar;
                     TitleBar.ForegroundColor = TitleBar.ButtonForegroundColor = ForegroundColor;
                     TitleBar.BackgroundColor = TitleBar.InactiveBackgroundColor = BackgroundColor;
                     TitleBar.ButtonBackgroundColor = TitleBar.ButtonInactiveBackgroundColor = ExtendViewIntoTitleBar ? Colors.Transparent : BackgroundColor;
+
+#if HAS_UNO_SKIA_WPF
+                    if (System.Windows.Application.Current.MainWindow is System.Windows.Window window)
+                    {
+                        Controls.TitleBar.SetExtendViewIntoTitleBar(window, ExtendViewIntoTitleBar);
+                        Controls.TitleBar.SetForeground(window, new System.Windows.Media.SolidColorBrush(ForegroundColor.ToColor()));
+                        Controls.TitleBar.SetButtonForeground(window, new System.Windows.Media.SolidColorBrush(ForegroundColor.ToColor()));
+                        Controls.TitleBar.SetButtonHoverForeground(window, new System.Windows.Media.SolidColorBrush(ForegroundColor.ToColor()));
+                        Controls.TitleBar.SetButtonPressedForeground(window, new System.Windows.Media.SolidColorBrush(ForegroundColor.ToColor()));
+                        Controls.TitleBar.SetBackground(window, new System.Windows.Media.SolidColorBrush(BackgroundColor.ToColor()));
+                        Controls.TitleBar.SetInactiveBackground(window, new System.Windows.Media.SolidColorBrush(BackgroundColor.ToColor()));
+                        Controls.TitleBar.SetButtonBackground(window, new System.Windows.Media.SolidColorBrush((ExtendViewIntoTitleBar ? Colors.Transparent : BackgroundColor).ToColor()));
+                        Controls.TitleBar.SetButtonInactiveBackground(window, new System.Windows.Media.SolidColorBrush((ExtendViewIntoTitleBar ? Colors.Transparent : BackgroundColor).ToColor()));
+                    }
 #endif
                 }
             });

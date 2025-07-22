@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 env:
-  DOTNET_VERSION: '6.0.x' # The .NET SDK version to use
+  DOTNET_VERSION: '9.0.x' # The .NET SDK version to use
 
 jobs:
   build:
@@ -37,18 +37,14 @@ jobs:
       - name: Publish
         run: dotnet publish $Solution_Name -c:Release -o:public
 
-      # Copy index.html to 404.html to serve the same file when a file is not found
-      - name: copy index.html to 404.html
-        run: cp public/index.html public/404.html
-
       # Add .nojekyll file to tell GitHub pages to not treat this as a Jekyll project. (Allow files and folders starting with an underscore)
       - name: Add .nojekyll file
-        run: touch public/.nojekyll
+        run: touch public/wwwroot/.nojekyll
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: public
+          path: public/wwwroot
 
   deploy:
     needs: build

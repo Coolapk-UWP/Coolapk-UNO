@@ -18,7 +18,7 @@ using Windows.UI.Xaml.Shapes;
 
 namespace CoolapkUNO.Controls
 {
-    public sealed class PivotHeader : ListBox
+    public sealed partial class PivotHeader : ListBox
     {
         private CancellationTokenSource cts;
 
@@ -185,7 +185,7 @@ namespace CoolapkUNO.Controls
 
         private void TryStartAnimationWithScale(FrameworkElement newIndicator, FrameworkElement oldIndicator)
         {
-            Compositor compositor = Window.Current?.Compositor;
+            Compositor compositor = Windows.UI.Xaml.Window.Current?.Compositor;
 
             Visual old_target = ElementCompositionPreview.GetElementVisual(oldIndicator);
             Visual new_target = ElementCompositionPreview.GetElementVisual(newIndicator);

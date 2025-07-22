@@ -1,4 +1,5 @@
 ﻿using CoolapkUNO.Common;
+using CoolapkUNO.Controls;
 using CoolapkUNO.Helpers;
 using System;
 using System.Globalization;
@@ -25,6 +26,9 @@ namespace CoolapkUNO.Pages.SettingsPages
                 if (IsExtendsTitleBar != value)
                 {
                     CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = value;
+#if HAS_UNO_SKIA_WPF
+                    TitleBar.SetExtendViewIntoTitleBar(System.Windows.Application.Current.MainWindow, value);
+#endif
                     ThemeHelper.UpdateSystemCaptionButtonColors();
                 }
             }

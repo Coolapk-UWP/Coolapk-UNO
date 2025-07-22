@@ -273,14 +273,14 @@ namespace CoolapkUNO.ViewModels.SettingsPages
             //});
         }
 
-        public async void CleanCache()
+        public void CleanCache()
         {
             IsCleanCache = true;
             //await ImageCacheHelper.CleanCacheAsync();
             IsCleanCache = false;
         }
 
-        public async void CheckUpdate()
+        public void CheckUpdate()
         {
             //CheckingUpdate = true;
             //UpdateInfo info = null;

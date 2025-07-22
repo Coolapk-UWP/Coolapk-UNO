@@ -101,35 +101,38 @@ namespace CoolapkUNO.Pages
             SearchBoxHolder.RegisterPropertyChangedCallback(Slot.IsStretchProperty, new DependencyPropertyChangedCallback(OnIsStretchProperty));
             NavigationView.RegisterPropertyChangedCallback(muxc.NavigationView.IsBackButtonVisibleProperty, new DependencyPropertyChangedCallback(OnIsBackButtonVisibleChanged));
             if (ApiInformation.IsMethodPresent("Windows.UI.Composition.Compositor", "TryCreateBlurredWallpaperBackdropBrush")) { BackdropMaterial.SetApplyToRootOrPageBackground(this, true); }
+#if HAS_UNO_SKIA_WPF
+            DependencyPropertyDescriptor.FromProperty(TitleBar.SystemOverlayRightInsetProperty, typeof(System.Windows.Window)).AddValueChanged(System.Windows.Application.Current.MainWindow, (_, _) => RightPaddingColumn.Width = new GridLength(TitleBar.GetSystemOverlayRightInset(System.Windows.Application.Current.MainWindow)));
+#endif
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
             //OnLoginChanged(string.Empty, true);
-            Window.Current?.SetTitleBar(DragRegion);
+            Windows.UI.Xaml.Window.Current?.SetTitleBar(DragRegion);
             //SettingsHelper.LoginChanged += OnLoginChanged;
             if (ApiInformation.IsTypePresent("Windows.Phone.UI.Input.HardwareButtons"))
             { HardwareButtons.BackPressed += System_BackPressed; }
             SystemNavigationManager.GetForCurrentView().BackRequested += System_BackRequested;
             AppTitleText.Text = ResourceLoader.GetForViewIndependentUse().GetString("AppName") ?? "酷安";
             CoreApplication.GetCurrentView().TitleBar.LayoutMetricsChanged += TitleBar_LayoutMetricsChanged;
-#if HAS_UNO_SKIA_WPF
-            RightPaddingColumn.Width = new GridLength(TitleBar.GetSystemOverlayRightInset(WPF.MainWindow.Instance));
-#endif
             if (!isLoaded)
             {
                 if (e.Parameter is IActivatedEventArgs ActivatedEventArgs)
                 { OpenActivatedEventArgs(ActivatedEventArgs); }
                 isLoaded = true;
             }
+#if HAS_UNO_SKIA_WPF
+            RightPaddingColumn.Width = new GridLength(TitleBar.GetSystemOverlayRightInset(System.Windows.Application.Current.MainWindow));
+#endif
             ThemeHelper.Initialize();
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
             base.OnNavigatedFrom(e);
-            Window.Current.SetTitleBar(null);
+            Windows.UI.Xaml.Window.Current.SetTitleBar(null);
             //SettingsHelper.LoginChanged -= OnLoginChanged;
             if (ApiInformation.IsTypePresent("Windows.Phone.UI.Input.HardwareButtons"))
             { HardwareButtons.BackPressed -= System_BackPressed; }
@@ -144,7 +147,7 @@ namespace CoolapkUNO.Pages
 
         public string GetAppTitleFromSystem => Package.Current.DisplayName;
 
-        private async void OpenActivatedEventArgs(IActivatedEventArgs args)
+        private void OpenActivatedEventArgs(IActivatedEventArgs args)
         {
             //if (!await UIHelper.OpenActivatedEventArgs(args))
             {
@@ -285,7 +288,7 @@ namespace CoolapkUNO.Pages
 
         //private void OnLoginChanged(string sender, bool args) => _ = Dispatcher.AwaitableRunAsync(() => SetUserAvatar(args));
 
-        private async void SetUserAvatar(bool isLogin)
+        private void SetUserAvatar(bool isLogin)
         {
             //if (isLogin && await SettingsHelper.CheckLoginAsync())
             //{
@@ -358,7 +361,7 @@ namespace CoolapkUNO.Pages
 
         #region 搜索框
 
-        private async void AutoSuggestBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
+        private void AutoSuggestBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
         {
             //if (args.Reason == AutoSuggestionBoxTextChangeReason.UserInput)
             //{

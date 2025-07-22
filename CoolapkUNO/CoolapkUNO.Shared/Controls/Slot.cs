@@ -1,16 +1,24 @@
-﻿using Windows.Foundation;
+﻿using System;
+using Windows.Foundation;
+using Windows.Foundation.Metadata;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media;
 
 namespace CoolapkUNO.Controls
 {
     public partial class Slot : Panel
     {
-        public bool IsStretch
-        {
-            get => (bool)GetValue(IsStretchProperty);
-            set => SetValue(IsStretchProperty, value);
-        }
+        public static bool IsXamlRootSupported { get; } = ApiInformation.IsPropertyPresent("Windows.UI.Xaml.UIElement", "XamlRoot");
+
+        private FrameworkElement RootElement;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Slot"/> class.
+        /// </summary>
+        public Slot() { }
+
+        #region IsStretch
 
         /// <summary>
         /// Identifies the <see cref="IsStretch"/> dependency property.
@@ -21,6 +29,26 @@ namespace CoolapkUNO.Controls
                 typeof(bool),
                 typeof(Slot),
                 new PropertyMetadata(true, OnLayoutPropertyChanged));
+
+        public bool IsStretch
+        {
+            get => (bool)GetValue(IsStretchProperty);
+            set => SetValue(IsStretchProperty, value);
+        }
+
+        #endregion
+
+        #region Orientation
+
+        /// <summary>
+        /// Identifies the <see cref="Orientation"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty OrientationProperty =
+            DependencyProperty.Register(
+                nameof(Orientation),
+                typeof(Orientation),
+                typeof(Slot),
+                new PropertyMetadata(Orientation.Vertical, OnLayoutPropertyChanged));
 
         /// <summary>
         /// Gets or sets a value that indicates the dimension by which child elements are
@@ -33,31 +61,27 @@ namespace CoolapkUNO.Controls
             set => SetValue(OrientationProperty, value);
         }
 
-        /// <summary>
-        /// Identifies the <see cref="Orientation"/> dependency property.
-        /// </summary>
-        public static readonly DependencyProperty OrientationProperty =
-            DependencyProperty.Register(
-                nameof(Orientation),
-                typeof(Orientation),
-                typeof(Slot),
-                new PropertyMetadata(Orientation.Vertical, OnLayoutPropertyChanged));
+        #endregion
 
-        public UIElement LastControl
-        {
-            get => (UIElement)GetValue(LastControlProperty);
-            set => SetValue(LastControlProperty, value);
-        }
+        #region PreviousElement
 
         /// <summary>
-        /// Identifies the <see cref="LastControl"/> dependency property.
+        /// Identifies the <see cref="PreviousElement"/> dependency property.
         /// </summary>
-        public static readonly DependencyProperty LastControlProperty =
+        public static readonly DependencyProperty PreviousElementProperty =
             DependencyProperty.Register(
-                nameof(LastControl),
-                typeof(UIElement),
+                nameof(PreviousElement),
+                typeof(FrameworkElement),
                 typeof(Slot),
                 null);
+
+        public FrameworkElement PreviousElement
+        {
+            get => (FrameworkElement)GetValue(PreviousElementProperty);
+            set => SetValue(PreviousElementProperty, value);
+        }
+
+        #endregion
 
         private static void OnLayoutPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -69,6 +93,8 @@ namespace CoolapkUNO.Controls
 
         protected override Size ArrangeOverride(Size arrangeSize)
         {
+            RootElement = (GetXAMLRoot(this) ?? FindAscendant(this)) as FrameworkElement;
+
             bool isStretch = IsStretch;
             bool fHorizontal = Orientation == Orientation.Horizontal;
             UIElementCollection children = Children;
@@ -86,73 +112,104 @@ namespace CoolapkUNO.Controls
             }
             else
             {
-                Window window = Window.Current;
                 if (fHorizontal)
                 {
-                    Point screenCoords = LastControl != null
-                        ? LastControl.TransformToVisual(window.Content).TransformPoint(new Point(LastControl.ActualSize.X, 0))
-                        : TransformToVisual(window.Content).TransformPoint(new Point(0, 0));
+                    Point screenCoords = PreviousElement != null
+                        ? PreviousElement.TransformToVisual(RootElement).TransformPoint(new Point(PreviousElement.ActualWidth, 0))
+                        : TransformToVisual(RootElement).TransformPoint(new Point(0, 0));
 
-                    double leftPadding = screenCoords.X;
-                    double rightPadding = window.Bounds.Width - screenCoords.X - arrangeSize.Width;
+                    double leftPadding = Math.Max(0, screenCoords.X);
+                    double rightPadding = Math.Max(0, RootElement.ActualWidth - screenCoords.X - arrangeSize.Width);
 
                     if (leftPadding > rightPadding)
                     {
                         double padding = leftPadding - rightPadding;
-                        Rect rcChild = new Rect(0, 0, arrangeSize.Width - padding, arrangeSize.Height);
+                        double width = Math.Max(0, arrangeSize.Width - padding);
+                        Rect rcChild = new Rect(0, 0, width, arrangeSize.Height);
                         foreach (UIElement child in children)
                         {
                             child?.Arrange(rcChild);
                             if (child is FrameworkElement element)
                             {
-                                element.MaxWidth = arrangeSize.Width - padding;
+                                element.MaxWidth = width;
                             }
                         }
                     }
                     else
                     {
                         double padding = rightPadding - leftPadding;
-                        Rect rcChild = new Rect(padding, 0, arrangeSize.Width - padding, arrangeSize.Height);
+                        double width = Math.Max(0, arrangeSize.Width - padding);
+                        Rect rcChild = new Rect(padding, 0, width, arrangeSize.Height);
                         foreach (UIElement child in children)
                         {
                             child?.Arrange(rcChild);
                             if (child is FrameworkElement element)
                             {
-                                element.MaxWidth = arrangeSize.Width - padding;
+                                element.MaxWidth = width;
                             }
                         }
                     }
                 }
                 else
                 {
-                    Point screenCoords = LastControl != null
-                        ? LastControl.TransformToVisual(window.Content).TransformPoint(new Point(0, LastControl.ActualSize.Y))
-                        : TransformToVisual(window.Content).TransformPoint(new Point(0, 0));
+                    Point screenCoords = PreviousElement != null
+                        ? PreviousElement.TransformToVisual(RootElement).TransformPoint(new Point(0, PreviousElement.ActualHeight))
+                        : TransformToVisual(RootElement).TransformPoint(new Point(0, 0));
 
-                    double topPadding = screenCoords.Y;
-                    double buttonPadding = window.Bounds.Height - screenCoords.Y - arrangeSize.Height;
+                    double topPadding = Math.Max(0, screenCoords.Y);
+                    double buttonPadding = Math.Max(0, RootElement.ActualHeight - screenCoords.Y - arrangeSize.Height);
 
                     if (topPadding > buttonPadding)
                     {
                         double padding = topPadding - buttonPadding;
-                        Rect rcChild = new Rect(0, 0, arrangeSize.Width, arrangeSize.Height - padding);
+                        double height = Math.Max(0, arrangeSize.Height - padding);
+                        Rect rcChild = new Rect(0, 0, arrangeSize.Width, height);
                         foreach (UIElement child in children)
                         {
                             child?.Arrange(rcChild);
+                            if (child is FrameworkElement element)
+                            {
+                                element.MaxHeight = height;
+                            }
                         }
                     }
                     else
                     {
                         double padding = buttonPadding - topPadding;
-                        Rect rcChild = new Rect(0, padding, arrangeSize.Width, arrangeSize.Height - padding);
+                        double height = Math.Max(0, arrangeSize.Height - padding);
+                        Rect rcChild = new Rect(0, padding, arrangeSize.Width, height);
                         foreach (UIElement child in children)
                         {
                             child?.Arrange(rcChild);
+                            if (child is FrameworkElement element)
+                            {
+                                element.MaxHeight = height;
+                            }
                         }
                     }
                 }
             }
-            return arrangeSize;
+            return base.ArrangeOverride(arrangeSize);
         }
+
+        private static DependencyObject FindAscendant(DependencyObject element)
+        {
+            DependencyObject result = null;
+            while (true)
+            {
+                DependencyObject parent = VisualTreeHelper.GetParent(element);
+                if (parent == null)
+                {
+                    return result;
+                }
+                result = element = parent;
+            }
+        }
+
+        private static UIElement GetXAMLRoot(UIElement element) =>
+            IsXamlRootSupported && element.XamlRoot != null
+                ? element.XamlRoot.Content
+                : Windows.UI.Xaml.Window.Current is Window window
+                    ? window.Content : null;
     }
 }

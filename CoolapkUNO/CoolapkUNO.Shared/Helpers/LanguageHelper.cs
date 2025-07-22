@@ -14,8 +14,8 @@ namespace CoolapkUNO.Helpers
         public static readonly List<string> SupportLanguages = new List<string>()
         {
             "en-US",
-            "zh-CN",
-            "zh-TW"
+            "zh-Hans",
+            "zh-Hant"
         };
 
         private static readonly List<string> SupportLanguageCodes = new List<string>()

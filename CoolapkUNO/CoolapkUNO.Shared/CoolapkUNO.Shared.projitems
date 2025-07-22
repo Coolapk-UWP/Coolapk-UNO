@@ -15,127 +15,14 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
-      <DependentUpon>App.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Common\HtmlToText.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Common\TokenCreater.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Common\WeakEvent.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Controls\PageHeader.xaml.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Controls\PivotHeader\IShyHeader.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Controls\PivotHeader\PivotHeader.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Controls\SettingExpander\SettingExpander.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Controls\SettingExpander\SettingExpander.Properties.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Controls\SettingExpander\SettingExpanderAutomationPeer.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Controls\SettingsGroup\SettingsGroup.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Controls\SettingsGroup\SettingsGroup.Properties.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Controls\SettingsGroup\SettingsGroupAutomationPeer.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Controls\Setting\Setting.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Controls\Setting\Setting.Properties.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Controls\Setting\SettingAutomationPeer.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Controls\Slot.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Controls\StackPanel.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Helpers\DataHelper.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Helpers\DateHelper.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Helpers\LanguageHelper.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Helpers\SettingsHelper.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Helpers\ThemeHelper.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Helpers\UIHelper.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Pages\MainPage.xaml.cs">
-      <DependentUpon>MainPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Pages\SettingsPages\SettingsPage.xaml.cs">
-      <DependentUpon>SettingsPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Pages\SettingsPages\TestPage.xaml.cs">
-      <DependentUpon>TestPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\Interfaces.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\SettingsPages\SettingsViewModel.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Page Include="$(MSBuildThisFileDirectory)Controls\NavigationView\NavigationBackButton.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="$(MSBuildThisFileDirectory)Controls\NavigationView\NavigationView.Themeresources.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="$(MSBuildThisFileDirectory)Controls\NavigationView\NavigationView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="$(MSBuildThisFileDirectory)Controls\PageHeader.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="$(MSBuildThisFileDirectory)Controls\PivotHeader\PivotHeader.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="$(MSBuildThisFileDirectory)Controls\SettingExpander\SettingExpander.ThemeResources.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="$(MSBuildThisFileDirectory)Controls\SettingExpander\SettingExpander.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="$(MSBuildThisFileDirectory)Controls\SettingsGroup\SettingsGroup.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="$(MSBuildThisFileDirectory)Controls\Setting\Setting.ThemeResources.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="$(MSBuildThisFileDirectory)Controls\Setting\Setting.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="$(MSBuildThisFileDirectory)Pages\MainPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="$(MSBuildThisFileDirectory)Pages\SettingsPages\SettingsPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="$(MSBuildThisFileDirectory)Pages\SettingsPages\TestPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="$(MSBuildThisFileDirectory)Styles\Button.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="$(MSBuildThisFileDirectory)Styles\TextBlock.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="$(MSBuildThisFileDirectory)Themes\Color.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="$(MSBuildThisFileDirectory)Themes\CustomStyles.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="$(MSBuildThisFileDirectory)Themes\Generic.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)Assets\SharedAssets.md" />
   </ItemGroup>
   <ItemGroup>
     <!--
-		 Add files present in the shared project folder, excluding the ones
-		 explicitly included in the projitem, so files can be added from vscode
-		 without manipulating the projitem file.
-	-->
+       Add files present in the shared project folder, excluding the ones
+       explicitly included in the projitem, so files can be added from vscode
+       without manipulating the projitem file.
+    -->
     <_Globbled_Page Include="$(MSBuildThisFileDirectory)**/*.xaml" Exclude="@(Page);@(ApplicationDefinition)">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

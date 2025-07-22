@@ -2,8 +2,9 @@
   <PropertyGroup>
     <OutputType Condition="'$(Configuration)'=='Release'">WinExe</OutputType>
     <OutputType Condition="'$(Configuration)'=='Debug'">Exe</OutputType>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup Label="AssemblyInfo">
     <AssemblyAttribute Include="System.Runtime.InteropServices.ComVisibleAttribute">
@@ -18,49 +19,20 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+    <PackageReference Include="HarfBuzzSharp" Version="8.3.1.1" />
     <PackageReference Include="MetroLog.Net6" Version="2.1.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="9.0.4" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="9.0.7" />
     <PackageReference Include="Microsoft.Windows.CsWin32" Version="0.3.183">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="SkiaSharp" Version="3.119.0" />
     <PackageReference Include="Uno.Microsoft.Toolkit.Uwp.UI.Controls.Markdown" Version="7.1.11" />
-    <PackageReference Include="Uno.UI.Skia.Wpf" Version="4.10.39" />
-    <PackageReference Include="Uno.UI.RemoteControl" Version="4.10.39" Condition="'$(Configuration)'=='Debug'" />
-    <PackageReference Include="Uno.UI.Adapter.Microsoft.Extensions.Logging" Version="4.10.39" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Assets\Fonts\uno-fluentui-assets.ttf" />
+    <PackageReference Include="Uno.UI.Skia.Wpf" Version="5.6.99" />
+    <PackageReference Include="Uno.UI.RemoteControl" Version="5.6.99" Condition="'$(Configuration)'=='Debug'" />
+    <PackageReference Include="Uno.UI.Adapter.Microsoft.Extensions.Logging" Version="5.6.99" />
+    <Manifest Include="$(ApplicationManifest)" />
   </ItemGroup>
   <Import Project="..\CoolapkUNO.Shared\CoolapkUNO.Shared.projitems" Label="Shared" />
-  <ItemGroup>
-    <UpToDateCheckInput Remove="Controls\FontIconFallback\FontIconFallback.xaml" />
-    <UpToDateCheckInput Remove="Controls\TitleBar\TitleBarButton.xaml" />
-    <UpToDateCheckInput Remove="Controls\TitleBar\TitleBarControl.xaml" />
-    <UpToDateCheckInput Remove="Styles\Window.xaml" />
-    <UpToDateCheckInput Remove="Themes\Color.xaml" />
-    <UpToDateCheckInput Remove="Themes\CustomStyles.xaml" />
-    <UpToDateCheckInput Remove="Themes\Generic.xaml" />
-  </ItemGroup>
-  <ItemGroup>
-    <_Globbed_Compile Remove="Controls\FontIconFallback.cs" />
-    <_Globbed_Compile Remove="Controls\MaximizedWindowFixer.cs" />
-    <_Globbed_Compile Remove="Controls\TitleBar\BackRequestedEventArgs.cs" />
-    <_Globbed_Compile Remove="Controls\TitleBar\SnapLayout.cs" />
-    <_Globbed_Compile Remove="Controls\TitleBar\TitleBar.cs" />
-    <_Globbed_Compile Remove="Controls\TitleBar\TitleBarButton.cs" />
-    <_Globbed_Compile Remove="Controls\TitleBar\TitleBarControl.cs" />
-    <_Globbed_Compile Remove="Controls\WindowHelper.cs" />
-    <_Globbed_Compile Remove="Helpers\DpiHelper.cs" />
-    <_Globbed_Compile Remove="Helpers\IconHelper.cs" />
-    <_Globbed_Compile Remove="Helpers\WinRTColorHelper.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <_Globbled_Page Remove="Controls\FontIconFallback\FontIconFallback.xaml" />
-    <_Globbled_Page Remove="Controls\TitleBar\TitleBarButton.xaml" />
-    <_Globbled_Page Remove="Controls\TitleBar\TitleBarControl.xaml" />
-    <_Globbled_Page Remove="Styles\Window.xaml" />
-    <_Globbled_Page Remove="Themes\Generic.xaml" />
-  </ItemGroup>
 </Project>

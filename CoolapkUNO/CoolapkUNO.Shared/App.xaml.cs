@@ -2,6 +2,7 @@
 using CoolapkUNO.Pages;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.Core;
@@ -24,11 +25,12 @@ namespace CoolapkUNO
         {
             InitializeLogging();
 
-            this.InitializeComponent();
+            InitializeComponent();
 
 #if HAS_UNO || NETFX_CORE
-			this.Suspending += OnSuspending;
+            Suspending += OnSuspending;
 #endif
+            UnhandledException += Application_UnhandledException;
 
 #if !WINDOWS_UWP
             Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri("ms-appx:///Themes/Generic.xaml") });
@@ -50,14 +52,15 @@ namespace CoolapkUNO
             EnsureWindow(args);
         }
 
-        private async void EnsureWindow(IActivatedEventArgs e)
+        private void EnsureWindow(IActivatedEventArgs e)
         {
             if (MainWindow == null)
             {
+                RegisterExceptionHandlingSynchronizationContext();
 #if DEBUG
                 if (System.Diagnostics.Debugger.IsAttached)
                 {
-                    this.DebugSettings.EnableFrameRateCounter = true;
+                    DebugSettings.EnableFrameRateCounter = true;
                 }
 #endif
 
@@ -119,7 +122,7 @@ namespace CoolapkUNO
         /// </summary>
         /// <param name="sender">The Frame which failed navigation</param>
         /// <param name="e">Details about the navigation failure</param>
-        void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
+        private void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
         {
             throw new InvalidOperationException($"Failed to load {e.SourcePageType.FullName}: {e.Exception}");
         }
@@ -205,6 +208,49 @@ namespace CoolapkUNO
 			global::Uno.UI.Adapter.Microsoft.Extensions.Logging.LoggingAdapter.Initialize();
 #endif
 #endif
+        }
+
+        private void Application_UnhandledException(object sender, Windows.UI.Xaml.UnhandledExceptionEventArgs e)
+        {
+            if (!(!SettingsHelper.Get<bool>(SettingsHelper.ShowOtherException) || e.Exception is TaskCanceledException || e.Exception is OperationCanceledException))
+            {
+                //ResourceLoader loader = ResourceLoader.GetForViewIndependentUse();
+                //UIHelper.ShowMessage($"{(string.IsNullOrEmpty(e.Exception.Message) ? loader.GetString("ExceptionThrown") : e.Exception.Message)} (0x{Convert.ToString(e.Exception.HResult, 16)})");
+            }
+            SettingsHelper.LogManager.GetLogger("Unhandled Exception - Application").Error(e.Exception.ExceptionToMessage(), e.Exception);
+            e.Handled = true;
+        }
+
+        /// <summary>
+        /// Should be called from OnActivated and OnLaunched
+        /// </summary>
+        private void RegisterExceptionHandlingSynchronizationContext()
+        {
+            ExceptionHandlingSynchronizationContext
+                .Register()
+                .UnhandledException += SynchronizationContext_UnhandledException;
+        }
+
+        private void SynchronizationContext_UnhandledException(object sender, Helpers.UnhandledExceptionEventArgs e)
+        {
+            if (!(e.Exception is TaskCanceledException) && !(e.Exception is OperationCanceledException))
+            {
+                //ResourceLoader loader = ResourceLoader.GetForViewIndependentUse();
+                //if (e.Exception is HttpRequestException || (e.Exception.HResult <= -2147012721 && e.Exception.HResult >= -2147012895))
+                //{
+                //    UIHelper.ShowMessage($"{loader.GetString("NetworkError")}(0x{Convert.ToString(e.Exception.HResult, 16)})");
+                //}
+                //else if (e.Exception is CoolapkMessageException)
+                //{
+                //    UIHelper.ShowMessage(e.Exception.Message);
+                //}
+                //else if (SettingsHelper.Get<bool>(SettingsHelper.ShowOtherException))
+                //{
+                //    UIHelper.ShowMessage($"{(string.IsNullOrEmpty(e.Exception.Message) ? loader.GetString("ExceptionThrown") : e.Exception.Message)} (0x{Convert.ToString(e.Exception.HResult, 16)})");
+                //}
+            }
+            SettingsHelper.LogManager.GetLogger("Unhandled Exception - SynchronizationContext").Error(e.Exception.ExceptionToMessage(), e.Exception);
+            e.Handled = true;
         }
     }
 }

@@ -170,11 +170,11 @@
                             </controls:SettingExpander.ActionContent>
                             <controls:SettingExpander.Items>
                                 <Grid Style="{StaticResource SettingExpanderContentGridStyle}">
-                                    <cwuc:MarkdownTextBlock
+                                    <!--<cwuc:MarkdownTextBlock
                                         HorizontalAlignment="Left"
                                         Background="{ThemeResource SystemControlTransparentBrush}"
                                         LinkClicked="MarkdownText_LinkClicked"
-                                        Text="{Binding AboutTextBlockText}" />
+                                        Text="{Binding AboutTextBlockText}" />-->
                                 </Grid>
                             </controls:SettingExpander.Items>
                         </controls:SettingExpander>
