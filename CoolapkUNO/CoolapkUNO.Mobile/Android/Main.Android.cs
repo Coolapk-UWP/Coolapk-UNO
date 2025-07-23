@@ -1,19 +1,10 @@
-﻿using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
+﻿using Android.Runtime;
 using Com.Nostra13.Universalimageloader.Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Windows.UI.Xaml.Media;
 
 namespace CoolapkUNO.Droid
 {
-    [global::Android.App.ApplicationAttribute(
+    [Android.App.Application(
         Label = "@string/ApplicationName",
         Icon = "@mipmap/icon",
         LargeHeap = true,
@@ -22,7 +13,7 @@ namespace CoolapkUNO.Droid
     )]
     public class Application : Windows.UI.Xaml.NativeApplication
     {
-        public Application(IntPtr javaReference, JniHandleOwnership transfer)
+        public Application(nint javaReference, JniHandleOwnership transfer)
             : base(() => new App(), javaReference, transfer)
         {
             ConfigureUniversalImageLoader();

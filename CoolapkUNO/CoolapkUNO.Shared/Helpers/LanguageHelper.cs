@@ -31,6 +31,7 @@ namespace CoolapkUNO.Helpers
 
         public static string GetCurrentLanguage()
         {
+#if WINDOWS_UWP
             IReadOnlyList<string> languages = GlobalizationPreferences.Languages;
             foreach (string language in languages)
             {
@@ -41,6 +42,10 @@ namespace CoolapkUNO.Helpers
                 }
             }
             return FallbackLanguageCode;
+#else
+            int temp = FindIndexFromSupportLanguageCodes(CultureInfo.CurrentCulture.Name);
+            return temp != -1 ? SupportLanguages[temp] : FallbackLanguageCode;
+#endif
         }
 
         public static string GetPrimaryLanguage()

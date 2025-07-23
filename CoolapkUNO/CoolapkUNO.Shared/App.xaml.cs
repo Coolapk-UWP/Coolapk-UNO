@@ -2,10 +2,12 @@
 using CoolapkUNO.Pages;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.Core;
+using Windows.ApplicationModel.Resources;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
@@ -74,7 +76,7 @@ namespace CoolapkUNO
 
             // Do not repeat app initialization when the Window already has content,
             // just ensure that the window is active
-            if (!(MainWindow.Content is Frame rootFrame))
+            if (MainWindow.Content is not Frame rootFrame)
             {
                 CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = true;
 
@@ -147,19 +149,19 @@ namespace CoolapkUNO
         private static void InitializeLogging()
         {
 #if DEBUG
-			// Logging is disabled by default for release builds, as it incurs a significant
-			// initialization cost from Microsoft.Extensions.Logging setup. If startup performance
-			// is a concern for your application, keep this disabled. If you're running on web or
-			// desktop targets, you can use url or command line parameters to enable it.
-			//
-			// For more performance documentation: https://platform.uno/docs/articles/Uno-UI-Performance.html
+            // Logging is disabled by default for release builds, as it incurs a significant
+            // initialization cost from Microsoft.Extensions.Logging setup. If startup performance
+            // is a concern for your application, keep this disabled. If you're running on web or
+            // desktop targets, you can use url or command line parameters to enable it.
+            //
+            // For more performance documentation: https://platform.uno/docs/articles/Uno-UI-Performance.html
 
-			var factory = LoggerFactory.Create(builder =>
+            ILoggerFactory factory = LoggerFactory.Create(builder =>
 			{
 #if __WASM__
-				builder.AddProvider(new global::Uno.Extensions.Logging.WebAssembly.WebAssemblyConsoleLoggerProvider());
+				builder.AddProvider(new Uno.Extensions.Logging.WebAssembly.WebAssemblyConsoleLoggerProvider());
 #elif __IOS__ && !__MACCATALYST__
-				builder.AddProvider(new global::Uno.Extensions.Logging.OSLogLoggerProvider());
+				builder.AddProvider(new Uno.Extensions.Logging.OSLogLoggerProvider());
 #elif NETFX_CORE
 				builder.AddDebug();
 #else
@@ -202,10 +204,10 @@ namespace CoolapkUNO
                 builder.AddFilter("Uno.Foundation.WebAssemblyRuntime", LogLevel.Debug);
             });
 
-			global::Uno.Extensions.LogExtensionPoint.AmbientLoggerFactory = factory;
+			Uno.Extensions.LogExtensionPoint.AmbientLoggerFactory = factory;
 
 #if HAS_UNO
-			global::Uno.UI.Adapter.Microsoft.Extensions.Logging.LoggingAdapter.Initialize();
+			Uno.UI.Adapter.Microsoft.Extensions.Logging.LoggingAdapter.Initialize();
 #endif
 #endif
         }
@@ -214,8 +216,8 @@ namespace CoolapkUNO
         {
             if (!(!SettingsHelper.Get<bool>(SettingsHelper.ShowOtherException) || e.Exception is TaskCanceledException || e.Exception is OperationCanceledException))
             {
-                //ResourceLoader loader = ResourceLoader.GetForViewIndependentUse();
-                //UIHelper.ShowMessage($"{(string.IsNullOrEmpty(e.Exception.Message) ? loader.GetString("ExceptionThrown") : e.Exception.Message)} (0x{Convert.ToString(e.Exception.HResult, 16)})");
+                ResourceLoader loader = ResourceLoader.GetForViewIndependentUse();
+                UIHelper.ShowMessage($"{(string.IsNullOrEmpty(e.Exception.Message) ? loader.GetString("ExceptionThrown") : e.Exception.Message)} (0x{e.Exception.HResult:X})");
             }
             SettingsHelper.LogManager.GetLogger("Unhandled Exception - Application").Error(e.Exception.ExceptionToMessage(), e.Exception);
             e.Handled = true;
@@ -233,21 +235,21 @@ namespace CoolapkUNO
 
         private void SynchronizationContext_UnhandledException(object sender, Helpers.UnhandledExceptionEventArgs e)
         {
-            if (!(e.Exception is TaskCanceledException) && !(e.Exception is OperationCanceledException))
+            if (e.Exception is not TaskCanceledException && e.Exception is not OperationCanceledException)
             {
-                //ResourceLoader loader = ResourceLoader.GetForViewIndependentUse();
-                //if (e.Exception is HttpRequestException || (e.Exception.HResult <= -2147012721 && e.Exception.HResult >= -2147012895))
-                //{
-                //    UIHelper.ShowMessage($"{loader.GetString("NetworkError")}(0x{Convert.ToString(e.Exception.HResult, 16)})");
-                //}
+                ResourceLoader loader = ResourceLoader.GetForViewIndependentUse();
+                if (e.Exception is HttpRequestException || (e.Exception.HResult <= -2147012721 && e.Exception.HResult >= -2147012895))
+                {
+                    UIHelper.ShowMessage($"{loader.GetString("NetworkError")}(0x{e.Exception.HResult:X})");
+                }
                 //else if (e.Exception is CoolapkMessageException)
                 //{
                 //    UIHelper.ShowMessage(e.Exception.Message);
                 //}
-                //else if (SettingsHelper.Get<bool>(SettingsHelper.ShowOtherException))
-                //{
-                //    UIHelper.ShowMessage($"{(string.IsNullOrEmpty(e.Exception.Message) ? loader.GetString("ExceptionThrown") : e.Exception.Message)} (0x{Convert.ToString(e.Exception.HResult, 16)})");
-                //}
+                else if (SettingsHelper.Get<bool>(SettingsHelper.ShowOtherException))
+                {
+                    UIHelper.ShowMessage($"{(string.IsNullOrEmpty(e.Exception.Message) ? loader.GetString("ExceptionThrown") : e.Exception.Message)} (0x{Convert.ToString(e.Exception.HResult, 16)})");
+                }
             }
             SettingsHelper.LogManager.GetLogger("Unhandled Exception - SynchronizationContext").Error(e.Exception.ExceptionToMessage(), e.Exception);
             e.Handled = true;

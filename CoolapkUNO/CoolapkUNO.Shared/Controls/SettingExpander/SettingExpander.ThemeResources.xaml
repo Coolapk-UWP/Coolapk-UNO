@@ -79,6 +79,7 @@
         <Setter Property="BorderBrush" Value="{ThemeResource SettingCardBorderBrush}" />
         <Setter Property="Background" Value="{ThemeResource SettingCardBackground}" />
         <Setter Property="BorderThickness" Value="{ThemeResource ExpanderContentDownBorderThickness}" />
+        <Setter Property="Padding" Value="{StaticResource ExpanderContentPadding}" />
     </Style>
 
 </ResourceDictionary>

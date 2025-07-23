@@ -1,4 +1,5 @@
-﻿using CoolapkUNO.Controls;
+﻿using CoolapkUNO.Common;
+using CoolapkUNO.Controls;
 using CoolapkUNO.Helpers;
 using CoolapkUNO.Pages.SettingsPages;
 using Microsoft.UI.Xaml.Controls;
@@ -13,6 +14,7 @@ using Windows.ApplicationModel.Resources;
 using Windows.Foundation.Metadata;
 using Windows.Phone.UI.Input;
 using Windows.UI.Core;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
@@ -74,14 +76,14 @@ namespace CoolapkUNO.Pages
         //    }
         //}
 
-        private readonly List<(string Tag, Type Page)> _pages = new List<(string Tag, Type Page)>
-        {
-            //("Find", typeof(FindPage)),
-            //("Home", typeof(IndexPage)),
-            //("Circle", typeof(CirclePage)),
-            ("Settings", typeof(SettingsPage)),
-            //("Notifications", typeof(NotificationsPage))
-        };
+        private readonly List<(string Tag, Type Page)> _pages =
+        [
+            ("Home", typeof(Page)),
+            ("Circle", typeof(Page)),
+            ("Find", typeof(Page)),
+            ("Notifications", typeof(Page)),
+            ("Settings", typeof(SettingsPage))
+        ];
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -93,7 +95,7 @@ namespace CoolapkUNO.Pages
         public MainPage()
         {
             InitializeComponent();
-            //UIHelper.MainPage = this;
+            UIHelper.MainPage = this;
             //LiveTileTask.Instance?.UpdateTile();
             //UIHelper.ShellDispatcher = Dispatcher;
             //NotificationsModel.Instance?.Update();
@@ -235,7 +237,7 @@ namespace CoolapkUNO.Pages
                     NavigationView.SelectedItem = SelectedItem;
                 }
             }
-            //UIHelper.HideProgressBar();
+            UIHelper.HideProgressBar();
         }
 
         private void NavigationViewControl_PaneClosing(muxc.NavigationView sender, muxc.NavigationViewPaneClosingEventArgs args)
@@ -332,31 +334,31 @@ namespace CoolapkUNO.Pages
 
         private void MenuFlyoutItem_Click(object sender, RoutedEventArgs e)
         {
-            //switch ((sender as FrameworkElement).Tag.ToString())
-            //{
-            //    case "Login":
-            //        NavigationViewFrame.Navigate(typeof(BrowserPage), new BrowserViewModel(UriHelper.LoginUri));
-            //        break;
-            //    case "Logout":
-            //        SettingsHelper.Logout();
-            //        break;
-            //    case "Settings":
-            //        NavigationView.SelectedItem = NavigationView.FooterMenuItems.LastOrDefault();
-            //        break;
-            //    case "CreateFeed":
-            //        new CreateFeedControl
-            //        {
-            //            FeedType = CreateFeedType.Feed,
-            //            PopupTransitions = new TransitionCollection
-            //            {
-            //                new EdgeUIThemeTransition
-            //                {
-            //                    Edge = EdgeTransitionLocation.Bottom
-            //                }
-            //            }
-            //        }.Show();
-            //        break;
-            //}
+            switch ((sender as FrameworkElement).Tag.ToString())
+            {
+                //case "Login":
+                //    NavigationViewFrame.Navigate(typeof(BrowserPage), new BrowserViewModel(UriHelper.LoginUri));
+                //    break;
+                //case "Logout":
+                //    SettingsHelper.Logout();
+                //    break;
+                case "Settings":
+                    NavigationView.SelectedItem = NavigationView.FooterMenuItems.LastOrDefault();
+                    break;
+                //case "CreateFeed":
+                //    new CreateFeedControl
+                //    {
+                //        FeedType = CreateFeedType.Feed,
+                //        PopupTransitions = new TransitionCollection
+                //            {
+                //                new EdgeUIThemeTransition
+                //                {
+                //                    Edge = EdgeTransitionLocation.Bottom
+                //                }
+                //            }
+                //    }.Show();
+                //    break;
+            }
         }
 
         #region 搜索框
@@ -408,74 +410,61 @@ namespace CoolapkUNO.Pages
 
         #region 状态栏
 
-        //public void ShowProgressBar()
-        //{
-        //    _ = Dispatcher.AwaitableRunAsync(() =>
-        //    {
-        //        ProgressBar.Visibility = Visibility.Visible;
-        //        ProgressBar.IsIndeterminate = true;
-        //        ProgressBar.ShowError = false;
-        //        ProgressBar.ShowPaused = false;
-        //    });
-        //}
+        public async void ShowProgressBar()
+        {
+            await Dispatcher.ResumeForegroundAsync();
+            ProgressBar.Visibility = Visibility.Visible;
+            ProgressBar.IsIndeterminate = true;
+            ProgressBar.ShowError = false;
+            ProgressBar.ShowPaused = false;
+        }
 
-        //public void ShowProgressBar(double value)
-        //{
-        //    _ = Dispatcher.AwaitableRunAsync(() =>
-        //    {
-        //        ProgressBar.Visibility = Visibility.Visible;
-        //        ProgressBar.IsIndeterminate = false;
-        //        ProgressBar.ShowError = false;
-        //        ProgressBar.ShowPaused = false;
-        //        ProgressBar.Value = value;
-        //    });
-        //}
+        public async void ShowProgressBar(double value)
+        {
+            await Dispatcher.ResumeForegroundAsync();
+            ProgressBar.Visibility = Visibility.Visible;
+            ProgressBar.IsIndeterminate = false;
+            ProgressBar.ShowError = false;
+            ProgressBar.ShowPaused = false;
+            ProgressBar.Value = value;
+        }
 
-        //public void PausedProgressBar()
-        //{
-        //    _ = Dispatcher.AwaitableRunAsync(() =>
-        //    {
-        //        ProgressBar.Visibility = Visibility.Visible;
-        //        ProgressBar.IsIndeterminate = true;
-        //        ProgressBar.ShowError = false;
-        //        ProgressBar.ShowPaused = true;
-        //    });
-        //}
+        public async void PausedProgressBar()
+        {
+            await Dispatcher.ResumeForegroundAsync();
+            ProgressBar.Visibility = Visibility.Visible;
+            ProgressBar.IsIndeterminate = true;
+            ProgressBar.ShowError = false;
+            ProgressBar.ShowPaused = true;
+        }
 
-        //public void ErrorProgressBar()
-        //{
-        //    _ = Dispatcher.AwaitableRunAsync(() =>
-        //    {
-        //        ProgressBar.Visibility = Visibility.Visible;
-        //        ProgressBar.IsIndeterminate = true;
-        //        ProgressBar.ShowPaused = false;
-        //        ProgressBar.ShowError = true;
-        //    });
-        //}
+        public async void ErrorProgressBar()
+        {
+            await Dispatcher.ResumeForegroundAsync();
+            ProgressBar.Visibility = Visibility.Visible;
+            ProgressBar.IsIndeterminate = true;
+            ProgressBar.ShowPaused = false;
+            ProgressBar.ShowError = true;
+        }
 
-        //public void HideProgressBar()
-        //{
-        //    _ = Dispatcher.AwaitableRunAsync(() =>
-        //    {
-        //        ProgressBar.Visibility = Visibility.Collapsed;
-        //        ProgressBar.IsIndeterminate = false;
-        //        ProgressBar.ShowError = false;
-        //        ProgressBar.ShowPaused = false;
-        //        ProgressBar.Value = 0;
-        //    });
-        //}
+        public async void HideProgressBar()
+        {
+            await Dispatcher.ResumeForegroundAsync();
+            ProgressBar.Visibility = Visibility.Collapsed;
+            ProgressBar.IsIndeterminate = false;
+            ProgressBar.ShowError = false;
+            ProgressBar.ShowPaused = false;
+            ProgressBar.Value = 0;
+        }
 
-        //public void ShowMessage(string message = null)
-        //{
-        //    _ = Dispatcher.AwaitableRunAsync(() =>
-        //    {
-        //        if (CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar)
-        //        {
-        //            AppTitleText.Text = message ?? ResourceLoader.GetForViewIndependentUse().GetString("AppName") ?? "酷安";
-        //        }
-        //        ApplicationView.GetForCurrentView().Title = message ?? string.Empty;
-        //    });
-        //}
+        public async void ShowMessage(string message = null)
+        {
+            await Dispatcher.ResumeForegroundAsync();
+
+            AppTitleText.Text = message ?? ResourceLoader.GetForViewIndependentUse().GetString("AppName") ?? "酷安";
+
+            ApplicationView.GetForCurrentView().Title = message ?? string.Empty;
+        }
 
         #endregion
     }

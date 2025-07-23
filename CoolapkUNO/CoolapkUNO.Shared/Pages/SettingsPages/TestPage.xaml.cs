@@ -102,7 +102,7 @@ namespace CoolapkUNO.Pages.SettingsPages
             {
                 if (progressValue != value)
                 {
-                    //UIHelper.ShowProgressBar(value);
+                    UIHelper.ShowProgressBar(value);
                     progressValue = value;
                 }
             }
@@ -116,14 +116,14 @@ namespace CoolapkUNO.Pages.SettingsPages
             {
                 if (isShowProgressRing != value)
                 {
-                    //if (value)
-                    //{
-                    //    UIHelper.ShowProgressBar();
-                    //}
-                    //else
-                    //{
-                    //    UIHelper.HideProgressBar();
-                    //}
+                    if (value)
+                    {
+                        UIHelper.ShowProgressBar();
+                    }
+                    else
+                    {
+                        UIHelper.HideProgressBar();
+                    }
                     isShowProgressRing = value;
                 }
             }
@@ -131,7 +131,7 @@ namespace CoolapkUNO.Pages.SettingsPages
 
         public TestPage() => InitializeComponent();
 
-        private async void Button_Click(object sender, RoutedEventArgs e)
+        private void Button_Click(object sender, RoutedEventArgs e)
         {
             switch ((sender as FrameworkElement).Tag.ToString())
             {
@@ -197,7 +197,7 @@ namespace CoolapkUNO.Pages.SettingsPages
             }
         }
 
-        private async void GetURLContent()
+        private void GetURLContent()
         {
             //Uri uri = URLTextBox.Text.ValidateAndGetUri();
             //(bool isSucceed, string result) = await RequestHelper.GetStringAsync(uri, "XMLHttpRequest");

@@ -45,7 +45,7 @@ namespace CoolapkUNO.Helpers
         {
             SynchronizationContext syncContext = Current ?? throw new InvalidOperationException("Ensure a synchronization context exists before calling this method.");
 
-            if (!(syncContext is ExceptionHandlingSynchronizationContext customSynchronizationContext))
+            if (syncContext is not ExceptionHandlingSynchronizationContext customSynchronizationContext)
             {
                 customSynchronizationContext = new ExceptionHandlingSynchronizationContext(syncContext);
                 SetSynchronizationContext(customSynchronizationContext);
@@ -136,7 +136,7 @@ namespace CoolapkUNO.Helpers
         {
             if (UnhandledException == null) { return false; }
 
-            UnhandledExceptionEventArgs exWrapper = new UnhandledExceptionEventArgs()
+            UnhandledExceptionEventArgs exWrapper = new()
             {
                 Exception = exception
             };
@@ -161,6 +161,6 @@ namespace CoolapkUNO.Helpers
     public class UnhandledExceptionEventArgs : EventArgs
     {
         public bool Handled { get; set; }
-        public Exception Exception { get; set; }
+        public Exception Exception { get; init; }
     }
 }

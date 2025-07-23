@@ -1,5 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+    <LangVersion>latest</LangVersion>
     <TargetFrameworks>net8.0-android;net8.0-ios;net8.0-maccatalyst</TargetFrameworks>
     <!-- Disabled because of https://github.com/xamarin/xamarin-macios/issues/16401-->
     <!-- <TargetFrameworks>$(TargetFrameworks);$baseTargetFramework$-macos</TargetFrameworks> -->

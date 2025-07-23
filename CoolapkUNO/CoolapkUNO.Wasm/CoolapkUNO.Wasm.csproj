@@ -1,5 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WebAssembly">
   <PropertyGroup>
+    <CompressionEnabled>false</CompressionEnabled>
+    <LangVersion>latest</LangVersion>
     <OutputType>Exe</OutputType>
     <RunAOTCompilation>true</RunAOTCompilation>
     <TargetFramework>net9.0</TargetFramework>

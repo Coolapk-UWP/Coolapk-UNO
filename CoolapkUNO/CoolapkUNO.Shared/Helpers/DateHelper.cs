@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CoolapkUWP.Helpers
+namespace CoolapkUNO.Helpers
 {
     public static class DateHelper
     {

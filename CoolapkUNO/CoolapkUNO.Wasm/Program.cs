@@ -1,7 +1,4 @@
-﻿using System;
-using Windows.UI.Xaml;
-
-namespace CoolapkUNO.Wasm
+﻿namespace CoolapkUNO.Wasm
 {
     public sealed class Program
     {

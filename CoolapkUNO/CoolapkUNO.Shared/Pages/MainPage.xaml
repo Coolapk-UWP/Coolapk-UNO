@@ -77,7 +77,9 @@
                         Margin="40,0"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Center"
-                        IsTabStop="True">
+                        IsTabStop="True"
+                        QuerySubmitted="AutoSuggestBox_QuerySubmitted"
+                        TextChanged="AutoSuggestBox_TextChanged">
                         <AutoSuggestBox.QueryIcon>
                             <muxc:AnimatedIcon>
                                 <muxc:AnimatedIcon.Source>
@@ -102,6 +104,46 @@
                     <Button.KeyboardAccelerators>
                         <KeyboardAccelerator Key="U" Modifiers="Control" />
                     </Button.KeyboardAccelerators>
+                    <Button.ContextFlyout>
+                        <MenuFlyout>
+                            <MenuFlyoutItem
+                                Click="MenuFlyoutItem_Click"
+                                Tag="CreateFeed"
+                                Text="写动态"
+                                Visibility="{x:Bind UserName, Converter={StaticResource StringVisibilityConverter}, Mode=OneWay}">
+                                <MenuFlyoutItem.Icon>
+                                    <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xE932;" />
+                                </MenuFlyoutItem.Icon>
+                            </MenuFlyoutItem>
+                            <MenuFlyoutSeparator Visibility="{x:Bind UserName, Converter={StaticResource StringVisibilityConverter}, Mode=OneWay}" />
+                            <MenuFlyoutItem
+                                Click="MenuFlyoutItem_Click"
+                                Tag="Settings"
+                                Text="设置">
+                                <MenuFlyoutItem.Icon>
+                                    <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xE713;" />
+                                </MenuFlyoutItem.Icon>
+                            </MenuFlyoutItem>
+                            <MenuFlyoutItem
+                                Click="MenuFlyoutItem_Click"
+                                Tag="Logout"
+                                Text="注销"
+                                Visibility="{x:Bind UserName, Converter={StaticResource StringVisibilityConverter}, Mode=OneWay}">
+                                <MenuFlyoutItem.Icon>
+                                    <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xF3B1;" />
+                                </MenuFlyoutItem.Icon>
+                            </MenuFlyoutItem>
+                            <MenuFlyoutItem
+                                Click="MenuFlyoutItem_Click"
+                                Tag="Login"
+                                Text="登录"
+                                Visibility="{x:Bind UserName, Converter={StaticResource StringVisibilityConverter}, ConverterParameter='true', Mode=OneWay}">
+                                <MenuFlyoutItem.Icon>
+                                    <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xE78B;" />
+                                </MenuFlyoutItem.Icon>
+                            </MenuFlyoutItem>
+                        </MenuFlyout>
+                    </Button.ContextFlyout>
                     <muxc:PersonPicture Width="28" Height="28" />
                 </Button>
             </Grid>
@@ -153,7 +195,10 @@
                     </muxc:NavigationViewItem.Icon>
                 </muxc:NavigationViewItem>
             </muxc:NavigationView.FooterMenuItems>
-            <Frame x:Name="NavigationViewFrame" x:FieldModifier="public" />
+            <Frame
+                x:Name="NavigationViewFrame"
+                x:FieldModifier="public"
+                Navigated="On_Navigated" />
         </muxc:NavigationView>
         <muxc:ProgressBar
             x:Name="ProgressBar"
