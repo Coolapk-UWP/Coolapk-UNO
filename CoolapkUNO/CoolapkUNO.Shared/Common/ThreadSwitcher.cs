@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
@@ -186,5 +187,16 @@ namespace CoolapkUNO.Common
         /// <param name="priority">Specifies the priority for event dispatch.</param>
         /// <returns>An object that you can <see langword="await"/>.</returns>
         public static ThreadPoolThreadSwitcher ResumeBackgroundAsync(WorkItemPriority priority = WorkItemPriority.Normal) => new(priority);
+
+#if !NET
+        /// <summary>
+        /// Creates a delegate of type <typeparamref name="T"/> with the specified target from this method.
+        /// </summary>
+        /// <typeparam name="T">The type of the delegate to create.</typeparam>
+        /// <param name="method">The method to create a delegate for.</param>
+        /// <param name="target">The object targeted by the delegate.</param>
+        /// <returns>The delegate for this method.</returns>
+        public static T CreateDelegate<T>(this MethodInfo method, object target = null) where T : Delegate => (T)method.CreateDelegate(typeof(T), target);
+#endif
     }
 }

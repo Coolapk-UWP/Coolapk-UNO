@@ -1,0 +1,14 @@
+﻿<Page
+    x:Class="CoolapkUNO.Pages.FeedPages.AdaptivePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:feedpages="using:CoolapkUNO.ViewModels.FeedPages"
+    xmlns:local="using:CoolapkUNO.Pages.FeedPages"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DataContext="{d:DesignInstance Type=feedpages:AdaptiveViewModel}"
+    DataContext="{x:Bind Provider}"
+    NavigationCacheMode="Enabled"
+    mc:Ignorable="d">
+    <Grid />
+</Page>

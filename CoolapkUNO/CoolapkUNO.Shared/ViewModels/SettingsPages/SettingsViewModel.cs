@@ -29,9 +29,9 @@ namespace CoolapkUNO.ViewModels.SettingsPages
             set => RaisePropertyChangedEvent();
         }
 
-        public DateTime UpdateDate
+        public DateTimeOffset UpdateDate
         {
-            get => SettingsHelper.Get<DateTime>(SettingsHelper.UpdateDate);
+            get => SettingsHelper.Get<DateTimeOffset>(SettingsHelper.UpdateDate);
             set
             {
                 if (UpdateDate != value)
@@ -63,7 +63,7 @@ namespace CoolapkUNO.ViewModels.SettingsPages
                 if (IsNoPicsMode != value)
                 {
                     SettingsHelper.Set(SettingsHelper.IsNoPicsMode, value);
-                    ThemeHelper.UISettingChanged?.Invoke(UISettingChangedType.NoPicChanged);
+                    ThemeHelper.InvokeUISettingChanged(UISettingChangedType.NoPicChanged);
                     RaisePropertyChangedEvent();
                 }
             }
@@ -255,7 +255,7 @@ namespace CoolapkUNO.ViewModels.SettingsPages
         public SettingsViewModel()
         {
             Caches = this;
-            SettingsHelper.LoginChanged += (sender, args) => IsLogin = args;
+            SettingsHelper.LoginChanged += args => IsLogin = args;
         }
 
         private void GetAboutTextBlockText()
@@ -282,7 +282,7 @@ namespace CoolapkUNO.ViewModels.SettingsPages
 
         public void CheckUpdate()
         {
-            //CheckingUpdate = true;
+            CheckingUpdate = true;
             //UpdateInfo info = null;
             //try
             //{
@@ -316,8 +316,8 @@ namespace CoolapkUNO.ViewModels.SettingsPages
             //        UpdateStateTitle = _loader.GetString("UpToDate");
             //    }
             //}
-            //UpdateDate = DateTime.Now;
-            //CheckingUpdate = false;
+            UpdateDate = DateTimeOffset.Now;
+            CheckingUpdate = false;
         }
 
         public Task Refresh(bool reset) => throw new NotImplementedException();

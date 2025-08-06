@@ -19,16 +19,9 @@ namespace CoolapkUNO.Pages.SettingsPages
     /// </summary>
     public sealed partial class SettingsPage : Page
     {
-        internal SettingsViewModel Provider;
+        internal SettingsViewModel Provider = SettingsViewModel.Caches ?? new SettingsViewModel();
 
         public SettingsPage() => InitializeComponent();
-
-        protected override void OnNavigatedTo(NavigationEventArgs e)
-        {
-            base.OnNavigatedTo(e);
-            Provider = SettingsViewModel.Caches ?? new SettingsViewModel();
-            DataContext = Provider;
-        }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {

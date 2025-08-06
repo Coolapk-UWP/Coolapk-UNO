@@ -1,0 +1,79 @@
+﻿using CoolapkUNO.ViewModels.FeedPages;
+using System;
+using System.Collections.ObjectModel;
+using System.Threading.Tasks;
+using Windows.ApplicationModel.Resources;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Navigation;
+
+// https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
+
+namespace CoolapkUNO.Pages.FeedPages
+{
+    /// <summary>
+    /// 可用于自身或导航至 Frame 内部的空白页。
+    /// </summary>
+    public sealed partial class FindPage : Page
+    {
+        private static int PivotIndex = 0;
+
+        private bool isLoaded;
+        private Func<bool, Task> Refresh;
+
+        public FindPage() => InitializeComponent();
+
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            base.OnNavigatedFrom(e);
+            PivotIndex = Pivot.SelectedIndex;
+        }
+
+        private void Pivot_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (!isLoaded)
+            {
+                Pivot.ItemsSource = GetMainItems();
+                Pivot.SelectedIndex = PivotIndex;
+                isLoaded = true;
+            }
+        }
+
+        private void Pivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            PivotItem MenuItem = Pivot.SelectedItem as PivotItem;
+            if ((Pivot.SelectedItem as PivotItem).Content is Frame Frame && Frame.Content is null)
+            {
+                string url = MenuItem.Tag.ToString() == "V9_HOME_TAB_HEADLINE"
+                    ? "/main/indexV8"
+                    : MenuItem.Tag.ToString() == "V11_FIND_DYH"
+                        ? "/user/dyhSubscribe"
+                        : $"/page?url={MenuItem.Tag}";
+                _ = Frame.Navigate(typeof(AdaptivePage), new AdaptiveViewModel(url, Dispatcher));
+                Refresh = (reset) => _ = (Frame.Content as AdaptivePage).Refresh(reset);
+            }
+            else if ((Pivot.SelectedItem as PivotItem).Content is Frame __ && __.Content is AdaptivePage AdaptivePage)
+            {
+                Refresh = (reset) => _ = AdaptivePage.Refresh(reset);
+            }
+        }
+
+        public static ObservableCollection<PivotItem> GetMainItems()
+        {
+            ResourceLoader loader = ResourceLoader.GetForCurrentView("FindPage");
+            ObservableCollection<PivotItem> items =
+            [
+                new PivotItem() { Tag = "V11_HOME_NEW", Header = loader.GetString("V11_HOME_NEW"), Content = new Frame() },
+                new PivotItem() { Tag = "V9_HOME_TAB_SHIPIN", Header = loader.GetString("V9_HOME_TAB_SHIPIN"), Content = new Frame() },
+                new PivotItem() { Tag = "V11_HOME_CAR", Header = loader.GetString("V11_HOME_CAR"), Content = new Frame() },
+                new PivotItem() { Tag = "V10_DIGITAL_HOME", Header = loader.GetString("V10_DIGITAL_HOME"), Content = new Frame() },
+                new PivotItem() { Tag = "V10_CHANNEL_SJB", Header = loader.GetString("V10_CHANNEL_SJB"), Content = new Frame() },
+                new PivotItem() { Tag = "V11_ZHUANTI_EARPHONE", Header = loader.GetString("V11_ZHUANTI_EARPHONE"), Content = new Frame() },
+                new PivotItem() { Tag = "V11_FIND_GOOD_GOODS_HOME", Header = loader.GetString("V11_FIND_GOOD_GOODS_HOME"), Content = new Frame() },
+            ];
+            return items;
+        }
+
+        private void RefreshButton_Click(object sender, RoutedEventArgs e) => _ = Refresh(true);
+    }
+}

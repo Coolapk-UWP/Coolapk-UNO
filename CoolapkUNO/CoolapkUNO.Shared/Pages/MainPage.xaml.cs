@@ -1,6 +1,7 @@
 ﻿using CoolapkUNO.Common;
 using CoolapkUNO.Controls;
 using CoolapkUNO.Helpers;
+using CoolapkUNO.Pages.FeedPages;
 using CoolapkUNO.Pages.SettingsPages;
 using Microsoft.UI.Xaml.Controls;
 using System;
@@ -78,9 +79,9 @@ namespace CoolapkUNO.Pages
 
         private readonly List<(string Tag, Type Page)> _pages =
         [
-            ("Home", typeof(Page)),
-            ("Circle", typeof(Page)),
-            ("Find", typeof(Page)),
+            ("Home", typeof(IndexPage)),
+            ("Circle", typeof(CirclePage)),
+            ("Find", typeof(FindPage)),
             ("Notifications", typeof(Page)),
             ("Settings", typeof(SettingsPage))
         ];
@@ -237,7 +238,7 @@ namespace CoolapkUNO.Pages
                     NavigationView.SelectedItem = SelectedItem;
                 }
             }
-            UIHelper.HideProgressBar();
+            UIHelper.HideProgressBarAsync();
         }
 
         private void NavigationViewControl_PaneClosing(muxc.NavigationView sender, muxc.NavigationViewPaneClosingEventArgs args)

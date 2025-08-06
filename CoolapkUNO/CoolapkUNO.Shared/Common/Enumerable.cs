@@ -1,0 +1,313 @@
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Linq;
+
+namespace CoolapkUNO.Common
+{
+    public static class Enumerable
+    {
+        /// <summary>
+        /// Adds the elements of the specified collection to the end of the <see cref="ICollection{TSource}"/>.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
+        /// <param name="source">The <see cref="ICollection{TSource}"/> to be added.</param>
+        /// <param name="collection">The collection whose elements should be added to the end of the <see cref="ICollection{TSource}"/>.
+        /// The collection itself cannot be <see langword="null"/>, but it can contain elements that are
+        /// <see langword="null"/>, if type <typeparamref name="TSource"/> is a reference type.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="collection"/> is null.</exception>
+        public static void AddRange<TSource>(this ICollection<TSource> source, IEnumerable<TSource> collection)
+        {
+            if (source == null)
+            {
+                throw new ArgumentNullException(nameof(source));
+            }
+
+            if (collection == null)
+            {
+                throw new ArgumentNullException(nameof(collection));
+            }
+
+            if (source is List<TSource> list)
+            {
+                list.AddRange(collection);
+            }
+            else if (source is TSource[] array)
+            {
+                int length = collection.Count();
+                int count = collection is List<TSource> _list
+                    ? _list.FindLastIndex(x => x != null) + 1
+                    : collection is TSource[] _array
+                        ? Array.FindLastIndex(_array, x => x != null) + 1
+                        : length;
+
+                if (count > 0)
+                {
+                    int _size = Array.FindLastIndex(array, x => x != null) + 1;
+                    if (array.Length - _size < count)
+                    {
+                        throw new ArgumentOutOfRangeException(nameof(array));
+                    }
+
+                    if (count == length)
+                    {
+                        if (collection is ICollection<TSource> _collection)
+                        {
+                            _collection.CopyTo(array, _size);
+                        }
+                        else
+                        {
+                            foreach (TSource item in collection)
+                            {
+                                array[_size++] = item;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        using (IEnumerator<TSource> enumerator = collection.GetEnumerator())
+                        {
+                            while (--count >= 0 && enumerator.MoveNext())
+                            {
+                                array[_size++] = enumerator.Current;
+                            }
+                        }
+                    }
+                }
+            }
+            else if (source is ISet<TSource> set)
+            {
+                set.UnionWith(collection);
+            }
+            else
+            {
+                foreach (TSource item in collection)
+                {
+                    source.Add(item);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Performs the specified action on each element of the <see cref="IEnumerable{T}"/>.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
+        /// <param name="source"></param>
+        /// <param name="action">The <see cref="Action{T}"/> delegate to perform on each element of the <see cref="List{T}"/>.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="action"/> is null.</exception>
+        public static void ForEach<TSource>(this IEnumerable<TSource> source, Action<TSource> action)
+        {
+            if (source == null)
+            {
+                throw new ArgumentNullException(nameof(source));
+            }
+
+            if (action == null)
+            {
+                throw new ArgumentNullException(nameof(action));
+            }
+
+            if (source is List<TSource> list)
+            {
+                list.ForEach(action);
+            }
+            else if (source is TSource[] array)
+            {
+                Array.ForEach(array, action);
+            }
+            else if (source is ImmutableList<TSource> immutableList)
+            {
+                immutableList.ForEach(action);
+            }
+            else
+            {
+                foreach (TSource item in source)
+                {
+                    action(item);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Filters the elements of an <see cref="IEnumerable"/> based on a specified type.
+        /// </summary>
+        /// <typeparam name="TResult">The type to filter the elements of the sequence on.</typeparam>
+        /// <param name="source">The <see cref="IEnumerable"/> whose elements to filter.</param>
+        /// <param name="predicate">A function to test each element for a condition.</param>
+        /// <returns>An <see cref="IEnumerable{TResult}"/> that contains elements from the input sequence of type <typeparamref name="TResult"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="predicate"/> is null.</exception>
+        public static IEnumerable<TResult> OfType<TResult>(this IEnumerable source, Func<TResult, bool> predicate)
+        {
+            if (source == null)
+            {
+                throw new ArgumentNullException(nameof(source));
+            }
+
+            if (predicate == null)
+            {
+                throw new ArgumentNullException(nameof(predicate));
+            }
+
+            foreach (object obj in source)
+            {
+                if (obj is TResult result && predicate(result))
+                {
+                    yield return result;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Removes all the elements that match the conditions defined by the specified predicate.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
+        /// <param name="source">The <see cref="ICollection{TSource}"/> to be removed.</param>
+        /// <param name="predicate">The <see cref="Func{T, TResult}"/> delegate that defines the conditions of the elements to remove.</param>
+        /// <returns>The number of elements removed from the <see cref="ICollection{TSource}"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="predicate"/> is null.</exception>
+        public static int RemoveAll<TSource>(this ICollection<TSource> source, Func<TSource, bool> predicate)
+        {
+            if (source == null)
+            {
+                throw new ArgumentNullException(nameof(source));
+            }
+
+            if (predicate == null)
+            {
+                throw new ArgumentNullException(nameof(predicate));
+            }
+
+            if (source is List<TSource> list)
+            {
+                return list.RemoveAll(predicate.Invoke);
+            }
+            else if (source is TSource[] array)
+            {
+                int freeIndex = 0;   // the first free slot in items array
+                int _size = array.Length;
+
+                // Find the first item which needs to be removed.
+                while (freeIndex < _size && !predicate(array[freeIndex])) { freeIndex++; }
+                if (freeIndex >= _size) { return 0; }
+
+                int current = freeIndex + 1;
+                while (current < _size)
+                {
+                    // Find the first item which needs to be kept.
+                    while (current < _size && predicate(array[current])) { current++; }
+
+                    if (current < _size)
+                    {
+                        // copy item to the free slot.
+                        array[freeIndex++] = array[current++];
+                    }
+                }
+
+                Array.Clear(array, freeIndex, _size - freeIndex); // Clear the elements so that the gc can reclaim the references.
+
+                int result = _size - freeIndex;
+                return result;
+            }
+            else if (source is HashSet<TSource> hashSet)
+            {
+                return hashSet.RemoveWhere(predicate.Invoke);
+            }
+            else if (source is IList<TSource> items)
+            {
+                int result = 0;
+                for (int i = 0; i < items.Count; i++)
+                {
+                loop:
+                    if (predicate(items[i]))
+                    {
+                        items.RemoveAt(i);
+                        result++;
+                        if (i < items.Count) { goto loop; }
+                        else { break; }
+                    }
+                }
+                return result;
+            }
+            else
+            {
+                return source.RemoveRange(source.Where(predicate).ToArray());
+            }
+        }
+
+        /// <summary>
+        /// Removes the elements of the specified collection of the <see cref="ICollection{TSource}"/>.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
+        /// <param name="source">The <see cref="ICollection{TSource}"/> to be removed.</param>
+        /// <param name="collection">The collection whose elements should be removed of the <see cref="ICollection{TSource}"/>.
+        /// The collection itself cannot be <see langword="null"/>, but it can contain elements that are
+        /// <see langword="null"/>, if type <typeparamref name="TSource"/> is a reference type.</param>
+        /// <returns>The number of elements removed from the <see cref="ICollection{TSource}"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="collection"/> is null.</exception>
+        public static int RemoveRange<TSource>(this ICollection<TSource> source, IEnumerable<TSource> collection)
+        {
+            if (source == null)
+            {
+                throw new ArgumentNullException(nameof(source));
+            }
+
+            if (collection == null)
+            {
+                throw new ArgumentNullException(nameof(collection));
+            }
+
+            if (source is TSource[] array)
+            {
+                return array.RemoveAll(collection.Contains);
+            }
+            else
+            {
+                return collection.Select(source.Remove).Count(x => x);
+            }
+        }
+
+        /// <summary>
+        /// Inverts the order of the elements in a sequence.
+        /// </summary>
+        /// <param name="text">A sequence of values to reverse.</param>
+        /// <returns>A sequence whose elements correspond to those of the input sequence in reverse order.</returns>
+        public static string Reverse(this string text)
+        {
+            char[] charArray = text.ToCharArray();
+            Array.Reverse(charArray);
+            return new string(charArray);
+        }
+
+        /// <summary>
+        /// Returns a specified number of contiguous elements from the start of a sequence.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
+        /// <param name="source">The sequence to return elements from.</param>
+        /// <param name="count">The number of elements to return.</param>
+        /// <param name="predicate">A function to test each element for a condition.</param>
+        /// <returns>An <see cref="IEnumerable{TSource}"/> that contains the specified number of elements from the start of the input sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="predicate"/> is null.</exception>
+        public static IEnumerable<TSource> Take<TSource>(this IEnumerable<TSource> source, int count, Func<TSource, bool> predicate)
+        {
+            if (source == null)
+            {
+                throw new ArgumentNullException(nameof(source));
+            }
+
+            if (predicate == null)
+            {
+                throw new ArgumentNullException(nameof(predicate));
+            }
+
+            foreach (TSource element in source)
+            {
+                if (predicate(element))
+                {
+                    yield return element;
+                    if (--count == 0) { break; }
+                }
+            }
+        }
+    }
+}

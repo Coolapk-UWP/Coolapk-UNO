@@ -1,5 +1,6 @@
 ﻿using CoolapkUNO.Common;
 using Microsoft.Toolkit.Uwp.Helpers;
+using System;
 using Windows.ApplicationModel.Core;
 using Windows.UI;
 using Windows.UI.ViewManagement;
@@ -15,9 +16,22 @@ namespace CoolapkUNO.Helpers
         private static Window CurrentApplicationWindow;
 
         // Keep reference so it does not get optimized/garbage collected
-        public static UISettings UISettings;
+        public static UISettings UISettings { get; } = new UISettings();
+        public static AccessibilitySettings AccessibilitySettings { get; } = new AccessibilitySettings();
 
-        public static WeakEvent<UISettingChangedType> UISettingChanged { get; } = new WeakEvent<UISettingChangedType>();
+        #region UISettingChanged
+
+        private static readonly WeakEvent<UISettingChangedType> actions = [];
+
+        public static event Action<UISettingChangedType> UISettingChanged
+        {
+            add => actions.Add(value);
+            remove => actions.Remove(value);
+        }
+
+        internal static void InvokeUISettingChanged(UISettingChangedType value) => actions.Invoke(value);
+
+        #endregion
 
         /// <summary>
         /// Gets the current actual theme of the app based on the requested theme of the
@@ -67,8 +81,14 @@ namespace CoolapkUNO.Helpers
 
                 SettingsHelper.Set(SettingsHelper.SelectedAppTheme, value);
                 UpdateSystemCaptionButtonColors();
-                UISettingChanged.Invoke(IsDarkTheme() ? UISettingChangedType.DarkMode : UISettingChangedType.LightMode);
+                InvokeUISettingChanged(IsDarkTheme() ? UISettingChangedType.DarkMode : UISettingChangedType.LightMode);
             }
+        }
+
+        static ThemeHelper()
+        {
+            // Registering to color changes, thus we notice when user changes theme system wide
+            UISettings.ColorValuesChanged += UISettings_ColorValuesChanged;
         }
 
         public static void Initialize()
@@ -76,16 +96,12 @@ namespace CoolapkUNO.Helpers
             // Save reference as this might be null when the user is in another app
             CurrentApplicationWindow = Window.Current ?? App.MainWindow;
             RootTheme = SettingsHelper.Get<ElementTheme>(SettingsHelper.SelectedAppTheme);
-
-            // Registering to color changes, thus we notice when user changes theme system wide
-            UISettings = new UISettings();
-            UISettings.ColorValuesChanged += UISettings_ColorValuesChanged;
         }
 
         private static void UISettings_ColorValuesChanged(UISettings sender, object args)
         {
             UpdateSystemCaptionButtonColors();
-            UISettingChanged.Invoke(IsDarkTheme() ? UISettingChangedType.DarkMode : UISettingChangedType.LightMode);
+            InvokeUISettingChanged(IsDarkTheme() ? UISettingChangedType.DarkMode : UISettingChangedType.LightMode);
         }
 
         public static bool IsDarkTheme()
@@ -95,7 +111,7 @@ namespace CoolapkUNO.Helpers
                     ? Application.Current.RequestedTheme == ApplicationTheme.Dark
                     : ActualTheme == ElementTheme.Dark
                 : ActualTheme == ElementTheme.Default
-                    ? UISettings.GetColorValue(UIColorType.Background) == Colors.Black
+                    ? UISettings.GetColorValue(UIColorType.Foreground).IsColorLight()
                     : ActualTheme == ElementTheme.Dark;
         }
 
@@ -106,9 +122,11 @@ namespace CoolapkUNO.Helpers
                     ? Application.Current.RequestedTheme == ApplicationTheme.Dark
                     : ActualTheme == ElementTheme.Dark
                 : ActualTheme == ElementTheme.Default
-                    ? UISettings.GetColorValue(UIColorType.Background) == Colors.Black
+                    ? UISettings.GetColorValue(UIColorType.Foreground).IsColorLight()
                     : ActualTheme == ElementTheme.Dark;
         }
+
+        public static bool IsColorLight(this Color color) => ((5 * color.G) + (2 * color.R) + color.B) > (8 * 128);
 
         public static void UpdateSystemCaptionButtonColors()
         {

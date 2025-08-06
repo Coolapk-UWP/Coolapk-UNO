@@ -1,0 +1,236 @@
+﻿using CoolapkUNO.Controls.DataTemplates;
+using CoolapkUNO.Helpers;
+using CoolapkUNO.Models;
+using CoolapkUNO.ViewModels.DataSource;
+using CoolapkUNO.ViewModels.Providers;
+using System;
+using System.Collections.Generic;
+using System.Text.Json;
+using System.Threading.Tasks;
+using Windows.UI.Core;
+
+namespace CoolapkUNO.ViewModels.FeedPages
+{
+    public class AdaptiveViewModel : EntityItemSource, IViewModel
+    {
+        private readonly string Uri;
+        private readonly List<Type> EntityTypes;
+        protected bool IsInitPage => Uri == "/main/init";
+        protected bool IsIndexPage => !Uri.Contains('?');
+        protected bool IsHotFeedPage => Uri == "/main/indexV8" || Uri == "/main/index";
+
+        private string title = string.Empty;
+        public string Title
+        {
+            get => title;
+            protected set
+            {
+                if (title != value)
+                {
+                    title = value;
+                    RaisePropertyChangedEvent();
+                }
+            }
+        }
+
+        private bool isShowTitle;
+        public bool IsShowTitle
+        {
+            get => isShowTitle;
+            set
+            {
+                if (isShowTitle != value)
+                {
+                    isShowTitle = value;
+                    RaisePropertyChangedEvent();
+                }
+            }
+        }
+
+        public AdaptiveViewModel(string uri, CoreDispatcher dispatcher, List<Type> types = null) : base(dispatcher)
+        {
+            Uri = GetUri(uri);
+            EntityTypes = types;
+            Provider = new CoolapkListProvider(
+                (p, firstItem, lastItem) =>
+                    UriHelper.GetUri(
+                        UriType.GetIndexPage,
+                        Uri,
+                        IsIndexPage ? "?" : "&",
+                        p,
+                        string.IsNullOrEmpty(firstItem) ? string.Empty : $"&firstItem={firstItem}",
+                        string.IsNullOrEmpty(lastItem) ? string.Empty : $"&lastItem={lastItem}"),
+                GetEntities,
+                "entityId");
+        }
+
+        public AdaptiveViewModel(CoolapkListProvider provider, CoreDispatcher dispatcher, List<Type> types = null) : base(dispatcher)
+        {
+            Provider = provider;
+            EntityTypes = types;
+        }
+
+        //public static AdaptiveViewModel GetUserListProvider(string uid, bool isFollowList, string name)
+        //{
+        //    return string.IsNullOrEmpty(uid)
+        //        ? throw new ArgumentException(nameof(uid))
+        //        : new AdaptiveViewModel(
+        //        new CoolapkListProvider(
+        //            (p, firstItem, lastItem) =>
+        //                UriHelper.GetUri(
+        //                    UriType.GetUserList,
+        //                    isFollowList ? "followList" : "fansList",
+        //                    uid,
+        //                    p,
+        //                    string.IsNullOrEmpty(firstItem) ? string.Empty : $"&firstItem={firstItem}",
+        //                    string.IsNullOrEmpty(lastItem) ? string.Empty : $"&lastItem={lastItem}"),
+        //            (o) => new Entity[] { new UserModel((JObject)(isFollowList ? o["fUserInfo"] : o["userInfo"])) },
+        //            "fuid"))
+        //        { Title = $"{name}的{(isFollowList ? "关注" : "粉丝")}" };
+        //}
+
+        //public static AdaptiveViewModel GetReplyListProvider(string id, FeedReplyModel reply = null)
+        //{
+        //    return string.IsNullOrEmpty(id)
+        //        ? throw new ArgumentException(nameof(id))
+        //        : reply == null
+        //        ? new AdaptiveViewModel(
+        //            new CoolapkListProvider(
+        //                (p, firstItem, lastItem) =>
+        //                    UriHelper.GetUri(
+        //                        UriType.GetHotReplies,
+        //                        id,
+        //                        p,
+        //                        p > 1 ? $"&firstItem={firstItem}&lastItem={lastItem}" : string.Empty),
+        //                (o) => new Entity[] { new FeedReplyModel(o) },
+        //                "uid"))
+        //        { Title = $"热门回复" }
+        //        : new AdaptiveViewModel(
+        //            new CoolapkListProvider(
+        //                (p, firstItem, lastItem) =>
+        //                    UriHelper.GetUri(
+        //                        UriType.GetReplyReplies,
+        //                        id,
+        //                        p,
+        //                        p > 1 ? $"&lastItem={lastItem}" : string.Empty),
+        //                (o) => new Entity[] { new FeedReplyModel(o, false) },
+        //                "uid"))
+        //        { Title = $"回复({reply.ReplyNum})" };
+        //}
+
+        //public static AdaptiveViewModel GetHistoryProvider(string title)
+        //{
+        //    if (string.IsNullOrEmpty(title)) { throw new ArgumentException(nameof(title)); }
+
+        //    UriType type = UriType.CheckLoginInfo;
+
+        //    switch (title)
+        //    {
+        //        case "我的常去":
+        //            type = UriType.GetUserRecentHistory;
+        //            break;
+        //        case "浏览历史":
+        //            type = UriType.GetUserHistory;
+        //            break;
+        //        default: throw new ArgumentException(nameof(title));
+        //    }
+
+        //    return new AdaptiveViewModel(
+        //        new CoolapkListProvider(
+        //            (p, firstItem, lastItem) =>
+        //                UriHelper.GetUri(
+        //                    type,
+        //                    p,
+        //                    string.IsNullOrEmpty(firstItem) ? string.Empty : $"&firstItem={firstItem}",
+        //                    string.IsNullOrEmpty(lastItem) ? string.Empty : $"&lastItem={lastItem}"),
+        //            (o) => new Entity[] { new HistoryModel(o) },
+        //            "uid"))
+        //    { Title = title };
+        //}
+
+        //public static AdaptiveViewModel GetUserFeedsProvider(string uid, string branch)
+        //{
+        //    return string.IsNullOrEmpty(uid)
+        //        ? throw new ArgumentException(nameof(uid))
+        //        : new AdaptiveViewModel(
+        //            new CoolapkListProvider(
+        //                (p, firstItem, lastItem) =>
+        //                    UriHelper.GetUri(
+        //                        UriType.GetUserFeeds,
+        //                        uid,
+        //                        p,
+        //                        string.IsNullOrEmpty(firstItem) ? string.Empty : $"&firstItem={firstItem}",
+        //                        string.IsNullOrEmpty(lastItem) ? string.Empty : $"&lastItem={lastItem}",
+        //                        branch),
+        //                (o) => new Entity[] { new FeedModel(o) },
+        //                "uid"));
+        //}
+
+        bool IViewModel.IsEqual(IViewModel other) => other is AdaptiveViewModel model && IsEqual(model);
+
+        public bool IsEqual(AdaptiveViewModel other) => !string.IsNullOrWhiteSpace(Uri) ? Uri == other.Uri : Provider == other.Provider;
+
+        private string GetUri(string uri)
+        {
+            if (uri.Contains("&title="))
+            {
+                const string Value = "&title=";
+                Title = uri[(uri.LastIndexOf(Value, StringComparison.Ordinal) + Value.Length)..];
+            }
+
+            if (uri.StartsWith("url="))
+            {
+                uri = uri.Replace("url=", string.Empty);
+            }
+
+            if (!uri.Contains("/page", StringComparison.Ordinal) && (uri.StartsWith('#') || (!uri.Contains("/main/") && !uri.Contains("/user/") && !uri.Contains("/apk/") && !uri.Contains("/appForum/") && !uri.Contains("/picture/") && !uri.Contains("/topic/") && !uri.Contains("/discovery/"))))
+            {
+                uri = "/page/dataList?url=" + uri;
+            }
+            else if (uri.StartsWith("/page", StringComparison.Ordinal) && !uri.Contains("/page/dataList"))
+            {
+                uri = uri.Replace("/page", "/page/dataList");
+            }
+            return uri.Replace("#", "%23");
+        }
+
+        private IEnumerable<Entity> GetEntities(JsonElement element)
+        {
+            if (element.TryGetProperty("entityTemplate", out JsonElement t) && t.GetString() == "configCard")
+            {
+                JsonElement j = JsonDocument.Parse(element.GetProperty("extraData").GetString()).RootElement;
+                Title = j.GetProperty("pageTitle").GetString();
+                yield return null;
+            }
+            else if (element.TryGetProperty("entityTemplate", out JsonElement tt) && tt.GetString() == "fabCard") { yield return null; }
+            else if (tt.GetString() == "feedCoolPictureGridCard")
+            {
+                foreach (JsonElement item in element.GetProperty("entities").EnumerateArray())
+                {
+                    Entity entity = EntityTemplateSelector.GetEntity(item, IsHotFeedPage);
+                    if (entity != null)
+                    {
+                        yield return entity;
+                    }
+                }
+            }
+            else
+            {
+                yield return EntityTemplateSelector.GetEntity(element, IsHotFeedPage);
+            }
+            yield break;
+        }
+
+        public override async Task<bool> AddItemAsync(Entity item)
+        {
+            if (item != null && item is not NullEntity
+                && (EntityTypes == null || EntityTypes.Contains(item.GetType())))
+            {
+                await AddAsync(item);
+                AddSubProvider(item);
+                return true;
+            }
+            return false;
+        }
+    }
+}

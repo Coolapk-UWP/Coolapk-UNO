@@ -1,136 +1,93 @@
 ﻿using CoolapkUNO.Helpers;
-using CoolapkUNO.Helpers;
-using Microsoft.Toolkit.Uwp.Helpers;
+using CoolapkUNO.Models.Network;
 using System;
-using Windows.ApplicationModel;
-using Windows.Security.ExchangeActiveSyncProvisioning;
 
 namespace CoolapkUNO.Common
 {
-    public class TokenCreater
+    /// <summary>
+    /// Create a token for Coolapk.
+    /// </summary>
+    /// <param name="version">The token version.</param>
+    public class TokenCreator(TokenVersion version = TokenVersion.TokenV2)
     {
-        private static readonly string Guid = System.Guid.NewGuid().ToString();
-        private static readonly string aid = RandHexString(16);
-        private static readonly string mac = RandMacAdress();
-        private static readonly string SystemManufacturer;
-        private static readonly string SystemProductName;
-
-        public static string DeviceCode;
-
-        private readonly TokenVersion TokenVersion;
-
-        static TokenCreater()
-        {
-            EasClientDeviceInformation deviceInfo = new EasClientDeviceInformation();
-            SystemManufacturer = deviceInfo.SystemManufacturer;
-            SystemProductName = deviceInfo.SystemProductName;
-            DeviceCode = CreateDeviceCode(aid, mac, SystemManufacturer, SystemManufacturer, SystemProductName, $"CoolapkUWP {Package.Current.Id.Version.ToFormattedString()}");
-        }
-
-        public TokenCreater(TokenVersion version = TokenVersion.TokenV2)
-        {
-            TokenVersion = version;
-        }
+        /// <summary>
+        /// Get or set the default device code.
+        /// </summary>
+        public static string DeviceCode { get; protected set; }
 
         /// <summary>
-        /// GetToken Generate a token with random device info
+        /// Initializes static members of the <see cref="TokenCreator"/> class.
         /// </summary>
-        public string GetToken()
-        {
-            switch (TokenVersion)
-            {
-                case TokenVersion.TokenV1:
-                    return GetCoolapkAppToken();
-                default:
-                case TokenVersion.TokenV2:
-                    return GetTokenWithDeviceCode(DeviceCode);
-            }
-        }
+        static TokenCreator() => DeviceCode = SettingsHelper.Get<DeviceInfo>(SettingsHelper.DeviceInfo).CreateDeviceCode();
 
         /// <summary>
-        /// GetTokenWithDeviceCode Generate a token with your device code
+        /// GetToken Generate a token with random device info.
         /// </summary>
-        private string GetTokenWithDeviceCode(string deviceCode)
+        public string GetToken() => version switch
         {
-            string timeStamp = DateTime.Now.ConvertDateTimeToUnixTimeStamp().ToString();
+            TokenVersion.TokenV1 => GetCoolapkAppToken(DeviceCode),
+            _ => GetTokenWithDeviceCode(DeviceCode),
+        };
 
-            string base64TimeStamp = timeStamp.GetBase64(true);
+        /// <summary>
+        /// Generate a token v1 with your device code.
+        /// </summary>
+        /// <param name="deviceCode">The device code.</param>
+        /// <returns>The generated token.</returns>
+        private static string GetTokenWithDeviceCode(string deviceCode)
+        {
+            string timeStamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString();
+
+            string base64TimeStamp = timeStamp.GetBase64();
             string md5TimeStamp = timeStamp.GetMD5();
             string md5DeviceCode = deviceCode.GetMD5();
 
             string token = $"token://com.coolapk.market/dcf01e569c1e3db93a3d0fcf191a622c?{md5TimeStamp}${md5DeviceCode}&com.coolapk.market";
-            string base64Token = token.GetBase64(true);
+            string base64Token = token.GetBase64();
             string md5Base64Token = base64Token.GetMD5();
             string md5Token = token.GetMD5();
 
-            string bcryptSalt = $"{$"$2y$10${base64TimeStamp}/{md5Token}".Substring(0, 31)}u";
-            string bcryptresult = BCrypt.Net.BCrypt.HashPassword(md5Base64Token, bcryptSalt);
+            string bcryptSalt = $"{$"$2y$10${base64TimeStamp}/{md5Token}"[..31]}u";
+            string bcryptResult = BCrypt.Net.BCrypt.HashPassword(md5Base64Token, bcryptSalt);
 
-            string appToken = $"v2{bcryptresult.GetBase64(true)}";
-
-            return appToken;
-        }
-
-        private static string GetCoolapkAppToken()
-        {
-            double timeStamp = DateTime.Now.ConvertDateTimeToUnixTimeStamp();
-            string hex_timeStamp = $"0x{Convert.ToString((int)timeStamp, 16)}";
-            // 时间戳加密
-            string md5_timeStamp = $"{timeStamp}".GetMD5();
-            string token = $"token://com.coolapk.market/c67ef5943784d09750dcfbb31020f0ab?{md5_timeStamp}${Guid}&com.coolapk.market";
-            string md5_token = token.GetBase64().GetMD5();
-            string appToken = $"{md5_token}{Guid}{hex_timeStamp}";
+            string appToken = $"v2{bcryptResult.GetBase64()}";
             return appToken;
         }
 
         /// <summary>
-        /// CreateDeviceCode Generace your custom device code
+        /// Generate a token v2 with your device code.
         /// </summary>
-        private static string CreateDeviceCode(string aid, string mac, string manufactor, string brand, string model, string buildNumber)
+        /// <param name="deviceCode">The device code.</param>
+        /// <returns>The generated token.</returns>
+        private static string GetCoolapkAppToken(string deviceCode)
         {
-            return $"{aid}; ; ; {mac}; {manufactor}; {brand}; {model}; {buildNumber}".GetBase64(true).Reverse();
+            long timeStamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+            string hex_timeStamp = $"0x{timeStamp:x}";
+
+            // 时间戳加密
+            string md5_timeStamp = timeStamp.ToString().GetMD5();
+            string md5_deviceCode = deviceCode.GetMD5();
+
+            string token = $"token://com.coolapk.market/c67ef5943784d09750dcfbb31020f0ab?{md5_timeStamp}${md5_deviceCode}&com.coolapk.market";
+            string md5_token = token.GetBase64(true).GetMD5();
+
+            string appToken = $"{md5_token}{md5_deviceCode}{hex_timeStamp}";
+            return appToken;
         }
 
-        private static string RandMacAdress()
-        {
-            Random rand = new Random();
-            string macAdress = string.Empty;
-            for (int i = 0; i < 6; i++)
-            {
-                macAdress += rand.Next(256).ToString("x2");
-                if (i != 5)
-                {
-                    macAdress += ":";
-                }
-            }
-            return macAdress;
-        }
+        /// <summary>
+        /// Update the device info.
+        /// </summary>
+        /// <param name="deviceInfo">The device info to update.</param>
+        public static void UpdateDeviceInfo(DeviceInfo deviceInfo) => DeviceCode = deviceInfo.CreateDeviceCode();
 
-        private static string RandHexString(int n)
-        {
-            Random rand = new Random();
-            byte[] bytes = new byte[n];
-            rand.NextBytes(bytes);
-            return BitConverter.ToString(bytes).ToUpperInvariant().Replace("-", "");
-        }
+        /// <inheritdoc/>
+        public override string ToString() => GetToken();
     }
 
     public enum TokenVersion
     {
-        TokenV1,
+        TokenV1 = 1,
         TokenV2
-    }
-
-    public enum APIVersion
-    {
-        小程序 = 5,
-        V6,
-        V7,
-        V8,
-        V9,
-        V10,
-        V11,
-        V12,
-        V13,
     }
 }

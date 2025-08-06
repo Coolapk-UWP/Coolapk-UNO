@@ -1,6 +1,7 @@
 ﻿using CoolapkUNO.Common;
 using CoolapkUNO.Controls;
 using CoolapkUNO.Helpers;
+using CoolapkUNO.Models.Network;
 using System;
 using System.Globalization;
 using Windows.ApplicationModel.Core;
@@ -49,7 +50,7 @@ namespace CoolapkUNO.Pages.SettingsPages
 
         internal int APIVersion
         {
-            get => (int)SettingsHelper.Get<APIVersion>(SettingsHelper.APIVersion) - 5;
+            get => (int)SettingsHelper.Get<APIVersions>(SettingsHelper.APIVersion) - 5;
             set
             {
                 if (APIVersion != value)
@@ -102,7 +103,7 @@ namespace CoolapkUNO.Pages.SettingsPages
             {
                 if (progressValue != value)
                 {
-                    UIHelper.ShowProgressBar(value);
+                    _ = UIHelper.ShowProgressBarAsync(value);
                     progressValue = value;
                 }
             }
@@ -118,11 +119,11 @@ namespace CoolapkUNO.Pages.SettingsPages
                 {
                     if (value)
                     {
-                        UIHelper.ShowProgressBar();
+                        _ = UIHelper.ShowProgressBarAsync();
                     }
                     else
                     {
-                        UIHelper.HideProgressBar();
+                        _ = UIHelper.HideProgressBarAsync();
                     }
                     isShowProgressRing = value;
                 }
@@ -181,8 +182,7 @@ namespace CoolapkUNO.Pages.SettingsPages
             ComboBox ComboBox = sender as ComboBox;
             switch (ComboBox.Tag.ToString())
             {
-                case "Language":
-                    CultureInfo culture = ComboBox.SelectedItem as CultureInfo;
+                case "Language" when ComboBox.SelectedItem is CultureInfo culture:
                     if (culture.Name != LanguageHelper.GetCurrentLanguage())
                     {
                         ApplicationLanguages.PrimaryLanguageOverride = culture.Name;

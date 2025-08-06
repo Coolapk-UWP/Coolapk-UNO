@@ -1,9 +1,11 @@
-﻿using CoolapkUNO.Helpers;
+﻿using CoolapkUNO.Common;
+using CoolapkUNO.Helpers;
 using CoolapkUNO.Pages;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Uno.Extensions;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.Core;
@@ -33,6 +35,7 @@ namespace CoolapkUNO
             Suspending += OnSuspending;
 #endif
             UnhandledException += Application_UnhandledException;
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
 #if !WINDOWS_UWP
             Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri("ms-appx:///Themes/Generic.xaml") });
@@ -204,7 +207,7 @@ namespace CoolapkUNO
                 builder.AddFilter("Uno.Foundation.WebAssemblyRuntime", LogLevel.Debug);
             });
 
-			Uno.Extensions.LogExtensionPoint.AmbientLoggerFactory = factory;
+            LogExtensionPoint.AmbientLoggerFactory = factory;
 
 #if HAS_UNO
 			Uno.UI.Adapter.Microsoft.Extensions.Logging.LoggingAdapter.Initialize();
@@ -214,13 +217,24 @@ namespace CoolapkUNO
 
         private void Application_UnhandledException(object sender, Windows.UI.Xaml.UnhandledExceptionEventArgs e)
         {
-            if (!(!SettingsHelper.Get<bool>(SettingsHelper.ShowOtherException) || e.Exception is TaskCanceledException || e.Exception is OperationCanceledException))
+            if (e.Exception is Exception ex)
             {
-                ResourceLoader loader = ResourceLoader.GetForViewIndependentUse();
-                UIHelper.ShowMessage($"{(string.IsNullOrEmpty(e.Exception.Message) ? loader.GetString("ExceptionThrown") : e.Exception.Message)} (0x{e.Exception.HResult:X})");
+                if (!(!SettingsHelper.Get<bool>(SettingsHelper.ShowOtherException) || ex is TaskCanceledException or OperationCanceledException))
+                {
+                    ResourceLoader loader = ResourceLoader.GetForViewIndependentUse();
+                    UIHelper.ShowMessageAsync($"{(string.IsNullOrEmpty(ex.Message) ? loader.GetString("ExceptionThrown") : ex.Message)} (0x{ex.HResult:X})");
+                }
+                LogExtensionPoint.AmbientLoggerFactory.CreateLogger("Unhandled Exception - Application").LogError(ex, "Unhandled exception. {message} (0x{hResult:X})", ex.GetMessage(), ex.HResult);
             }
-            SettingsHelper.LogManager.GetLogger("Unhandled Exception - Application").Error(e.Exception.ExceptionToMessage(), e.Exception);
             e.Handled = true;
+        }
+
+        private static void CurrentDomain_UnhandledException(object sender, System.UnhandledExceptionEventArgs e)
+        {
+            if (e.ExceptionObject is Exception ex)
+            {
+                LogExtensionPoint.AmbientLoggerFactory.CreateLogger("Unhandled Exception - CurrentDomain").LogError(ex, "Unhandled exception. {message} (0x{hResult:X})", ex.GetMessage(), ex.HResult);
+            }
         }
 
         /// <summary>
@@ -233,25 +247,28 @@ namespace CoolapkUNO
                 .UnhandledException += SynchronizationContext_UnhandledException;
         }
 
-        private void SynchronizationContext_UnhandledException(object sender, Helpers.UnhandledExceptionEventArgs e)
+        private void SynchronizationContext_UnhandledException(object sender, Common.UnhandledExceptionEventArgs e)
         {
-            if (e.Exception is not TaskCanceledException && e.Exception is not OperationCanceledException)
+            if (e.Exception is Exception ex)
             {
-                ResourceLoader loader = ResourceLoader.GetForViewIndependentUse();
-                if (e.Exception is HttpRequestException || (e.Exception.HResult <= -2147012721 && e.Exception.HResult >= -2147012895))
+                if (ex is not TaskCanceledException and not OperationCanceledException)
                 {
-                    UIHelper.ShowMessage($"{loader.GetString("NetworkError")}(0x{e.Exception.HResult:X})");
+                    ResourceLoader loader = ResourceLoader.GetForViewIndependentUse();
+                    if (ex is HttpRequestException or { HResult: <= -2147012721 and >= -2147012895 })
+                    {
+                        UIHelper.ShowMessageAsync($"{loader.GetString("NetworkError")}(0x{ex.HResult:X})");
+                    }
+                    //else if (e.Exception is CoolapkMessageException)
+                    //{
+                    //    UIHelper.ShowMessage(e.Exception.Message);
+                    //}
+                    else if (SettingsHelper.Get<bool>(SettingsHelper.ShowOtherException))
+                    {
+                        UIHelper.ShowMessageAsync($"{(string.IsNullOrEmpty(ex.Message) ? loader.GetString("ExceptionThrown") : ex.Message)} (0x{Convert.ToString(ex.HResult, 16)})");
+                    }
                 }
-                //else if (e.Exception is CoolapkMessageException)
-                //{
-                //    UIHelper.ShowMessage(e.Exception.Message);
-                //}
-                else if (SettingsHelper.Get<bool>(SettingsHelper.ShowOtherException))
-                {
-                    UIHelper.ShowMessage($"{(string.IsNullOrEmpty(e.Exception.Message) ? loader.GetString("ExceptionThrown") : e.Exception.Message)} (0x{Convert.ToString(e.Exception.HResult, 16)})");
-                }
+                LogExtensionPoint.AmbientLoggerFactory.CreateLogger("Unhandled Exception - SynchronizationContext").LogError(ex, "Unhandled exception. {message} (0x{hResult:X})", ex.GetMessage(), ex.HResult);
             }
-            SettingsHelper.LogManager.GetLogger("Unhandled Exception - SynchronizationContext").Error(e.Exception.ExceptionToMessage(), e.Exception);
             e.Handled = true;
         }
     }

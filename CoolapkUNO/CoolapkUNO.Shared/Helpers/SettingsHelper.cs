@@ -1,12 +1,17 @@
-﻿using MetroLog;
+﻿using CoolapkUNO.Common;
+using CoolapkUNO.Models;
+using CoolapkUNO.Models.Network;
+using CoolapkUNO.Models.Users;
 using Microsoft.Toolkit.Uwp.Helpers;
-using Newtonsoft.Json;
 using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Text.Json.Serialization.Metadata;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.UI.Xaml;
-using Windows.Web.Http;
-using Windows.Web.Http.Filters;
 using IObjectSerializer = Microsoft.Toolkit.Helpers.IObjectSerializer;
 
 namespace CoolapkUNO.Helpers
@@ -17,9 +22,14 @@ namespace CoolapkUNO.Helpers
         public const string Token = nameof(Token);
         public const string TileUrl = nameof(TileUrl);
         public const string UserName = nameof(UserName);
+        public const string CustomUA = nameof(CustomUA);
         public const string IsUseAPI2 = nameof(IsUseAPI2);
+        public const string CustomAPI = nameof(CustomAPI);
+        public const string IsFullLoad = nameof(IsFullLoad);
         public const string IsFirstRun = nameof(IsFirstRun);
+        public const string IsCustomUA = nameof(IsCustomUA);
         public const string APIVersion = nameof(APIVersion);
+        public const string DeviceInfo = nameof(DeviceInfo);
         public const string UpdateDate = nameof(UpdateDate);
         public const string IsNoPicsMode = nameof(IsNoPicsMode);
         public const string TokenVersion = nameof(TokenVersion);
@@ -55,27 +65,47 @@ namespace CoolapkUNO.Helpers
             {
                 LocalObject.Save(UserName, string.Empty);
             }
+            if (!LocalObject.KeyExists(CustomUA))
+            {
+                LocalObject.Save(CustomUA, UserAgent.Default);
+            }
             if (!LocalObject.KeyExists(IsUseAPI2))
             {
                 LocalObject.Save(IsUseAPI2, true);
+            }
+            if (!LocalObject.KeyExists(CustomAPI))
+            {
+                LocalObject.Save(CustomAPI, new APIVersion("9.2.2", "1905301"));
+            }
+            if (!LocalObject.KeyExists(IsFullLoad))
+            {
+                LocalObject.Save(IsFullLoad, true);
             }
             if (!LocalObject.KeyExists(IsFirstRun))
             {
                 LocalObject.Save(IsFirstRun, true);
             }
+            if (!LocalObject.KeyExists(IsCustomUA))
+            {
+                LocalObject.Save(IsCustomUA, false);
+            }
             if (!LocalObject.KeyExists(APIVersion))
             {
-                LocalObject.Save(APIVersion, Common.APIVersion.V13);
+                LocalObject.Save(APIVersion, APIVersions.V13);
+            }
+            if (!LocalObject.KeyExists(DeviceInfo))
+            {
+                LocalObject.Save(DeviceInfo, Models.Network.DeviceInfo.Default);
             }
             if (!LocalObject.KeyExists(UpdateDate))
             {
-                LocalObject.Save(UpdateDate, new DateTime());
+                LocalObject.Save(UpdateDate, new DateTimeOffset());
             }
             if (!LocalObject.KeyExists(IsNoPicsMode))
             {
                 LocalObject.Save(IsNoPicsMode, false);
             }
-            if (!LocalObject.KeyExists(TokenVersion))
+            //if (!LocalObject.KeyExists(TokenVersion))
             {
                 LocalObject.Save(TokenVersion, Common.TokenVersion.TokenV2);
             }
@@ -116,13 +146,23 @@ namespace CoolapkUNO.Helpers
 
     internal static partial class SettingsHelper
     {
-        public static event TypedEventHandler<string, bool> LoginChanged;
         public static readonly ApplicationDataStorageHelper LocalObject = ApplicationDataStorageHelper.GetCurrent(new SystemTextJsonObjectSerializer());
-        public static readonly ILogManager LogManager = LogManagerFactory.CreateLogManager();
 
         static SettingsHelper() => SetDefaultSettings();
 
-        public static void InvokeLoginChanged(string sender, bool args) => LoginChanged?.Invoke(sender, args);
+        #region LoginChanged
+
+        private static readonly WeakEvent<bool> actions = [];
+
+        public static event Action<bool> LoginChanged
+        {
+            add => actions.Add(value);
+            remove => actions.Remove(value);
+        }
+
+        public static void InvokeLoginChanged(bool args) => actions?.Invoke(args);
+
+        #endregion
 
         //public static async Task<bool> Login()
         //{
@@ -243,11 +283,54 @@ namespace CoolapkUNO.Helpers
 
     public class SystemTextJsonObjectSerializer : IObjectSerializer
     {
-        // Specify your serialization settings
-        private readonly JsonSerializerSettings settings = new JsonSerializerSettings() { DefaultValueHandling = DefaultValueHandling.Ignore };
+        public string Serialize<T>(T value) => value switch
+        {
+            int => JsonSerializer.Serialize(value, SourceGenerationContext.Default.Int32),
+            bool => JsonSerializer.Serialize(value, SourceGenerationContext.Default.Boolean),
+            string => JsonSerializer.Serialize(value, SourceGenerationContext.Default.String),
+            UserAgent => JsonSerializer.Serialize(value, SourceGenerationContext.Default.UserAgent),
+            APIVersion => JsonSerializer.Serialize(value, SourceGenerationContext.Default.APIVersion),
+            DeviceInfo => JsonSerializer.Serialize(value, SourceGenerationContext.Default.DeviceInfo),
+            APIVersions => JsonSerializer.Serialize(value, SourceGenerationContext.Default.APIVersions),
+            TokenVersion => JsonSerializer.Serialize(value, SourceGenerationContext.Default.TokenVersion),
+            ElementTheme => JsonSerializer.Serialize(value, SourceGenerationContext.Default.ElementTheme),
+            DateTimeOffset => JsonSerializer.Serialize(value, SourceGenerationContext.Default.DateTimeOffset),
+            _ => JsonSerializer.Serialize(value, typeof(T), SourceGenerationContext.Default)
+        };
 
-        string IObjectSerializer.Serialize<T>(T value) => JsonConvert.SerializeObject(value, typeof(T), Formatting.Indented, settings);
-
-        public T Deserialize<T>(string value) => JsonConvert.DeserializeObject<T>(value, settings);
+        public T Deserialize<T>([StringSyntax(StringSyntaxAttribute.Json)] string value)
+        {
+            if (string.IsNullOrEmpty(value)) { return default; }
+            Type type = typeof(T);
+            return type == typeof(int) ? Deserialize(value, SourceGenerationContext.Default.Int32)
+                : type == typeof(bool) ? Deserialize(value, SourceGenerationContext.Default.Boolean)
+                : type == typeof(string) ? Deserialize(value, SourceGenerationContext.Default.String)
+                : type == typeof(UserAgent) ? Deserialize(value, SourceGenerationContext.Default.UserAgent)
+                : type == typeof(APIVersion) ? Deserialize(value, SourceGenerationContext.Default.APIVersion)
+                : type == typeof(DeviceInfo) ? Deserialize(value, SourceGenerationContext.Default.DeviceInfo)
+                : type == typeof(APIVersions) ? Deserialize(value, SourceGenerationContext.Default.APIVersions)
+                : type == typeof(TokenVersion) ? Deserialize(value, SourceGenerationContext.Default.TokenVersion)
+                : type == typeof(ElementTheme) ? Deserialize(value, SourceGenerationContext.Default.ElementTheme)
+                : type == typeof(DateTimeOffset) ? Deserialize(value, SourceGenerationContext.Default.DateTimeOffset)
+                : JsonSerializer.Deserialize(value, type, SourceGenerationContext.Default) is T result ? result : default;
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            static T Deserialize<TValue>([StringSyntax(StringSyntaxAttribute.Json)] string json, JsonTypeInfo<TValue> jsonTypeInfo) =>
+                JsonSerializer.Deserialize(json, jsonTypeInfo) is T value ? value : default;
+        }
     }
+
+    [JsonSerializable(typeof(int))]
+    [JsonSerializable(typeof(bool))]
+    [JsonSerializable(typeof(string))]
+    [JsonSerializable(typeof(UserAgent))]
+    [JsonSerializable(typeof(APIVersion))]
+    [JsonSerializable(typeof(DeviceInfo))]
+    [JsonSerializable(typeof(APIVersions))]
+    [JsonSerializable(typeof(TokenVersion))]
+    [JsonSerializable(typeof(ElementTheme))]
+    [JsonSerializable(typeof(DateTimeOffset))]
+    [JsonSerializable(typeof(Entity))]
+    [JsonSerializable(typeof(DataContainer<JsonElement>))]
+    [JsonSerializable(typeof(WebDataContainer<UserInfoModel>))]
+    public partial class SourceGenerationContext : JsonSerializerContext;
 }

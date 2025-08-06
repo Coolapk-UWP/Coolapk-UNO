@@ -2,11 +2,14 @@
 using CoolapkUNO.Pages;
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.ApplicationModel.Core;
 using Windows.Foundation.Metadata;
+using Windows.UI.Core;
 using Windows.UI.ViewManagement;
+using Windows.UI.Xaml;
 
 namespace CoolapkUNO.Helpers
 {
@@ -15,12 +18,14 @@ namespace CoolapkUNO.Helpers
         public const int Duration = 3000;
         public static bool IsShowingProgressBar, IsShowingMessage;
         public static bool HasStatusBar => ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar");
-        private static readonly List<string> MessageList = new List<string>();
+        private static readonly List<string> MessageList = [];
+
+        public static object GetMessage(this Exception ex) => ex.Message is { Length: > 0 } message ? message : ex.GetType();
     }
 
     internal static partial class UIHelper
     {
-        public static async void ShowProgressBar()
+        public static async Task ShowProgressBarAsync()
         {
             await MainPage.Dispatcher.ResumeForegroundAsync();
             IsShowingProgressBar = true;
@@ -36,7 +41,7 @@ namespace CoolapkUNO.Helpers
             }
         }
 
-        public static async void ShowProgressBar(double value = 0)
+        public static async Task ShowProgressBarAsync(double value = 0)
         {
             await MainPage.Dispatcher.ResumeForegroundAsync();
             IsShowingProgressBar = true;
@@ -52,7 +57,7 @@ namespace CoolapkUNO.Helpers
             }
         }
 
-        public static async void PausedProgressBar()
+        public static async Task PausedProgressBarAsync()
         {
             await MainPage.Dispatcher.ResumeForegroundAsync();
             IsShowingProgressBar = true;
@@ -63,7 +68,7 @@ namespace CoolapkUNO.Helpers
             MainPage.PausedProgressBar();
         }
 
-        public static async void ErrorProgressBar()
+        public static async Task ErrorProgressBarAsync()
         {
             await MainPage.Dispatcher.ResumeForegroundAsync();
             IsShowingProgressBar = true;
@@ -74,7 +79,7 @@ namespace CoolapkUNO.Helpers
             MainPage.ErrorProgressBar();
         }
 
-        public static async void HideProgressBar()
+        public static async Task HideProgressBarAsync()
         {
             await MainPage.Dispatcher.ResumeForegroundAsync();
             IsShowingProgressBar = false;
@@ -85,7 +90,7 @@ namespace CoolapkUNO.Helpers
             MainPage.HideProgressBar();
         }
 
-        public static async void ShowMessage(string message)
+        public static async Task ShowMessageAsync(string message)
         {
             MessageList.Add(message);
             if (!IsShowingMessage)
@@ -127,6 +132,15 @@ namespace CoolapkUNO.Helpers
             }
         }
 
+        public static Task ShowHttpExceptionMessageAsync(HttpRequestException e)
+        {
+            return e.Message.IndexOfAny(['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']) != -1
+                ? ShowMessageAsync($"服务器错误： {e.Message.Replace("Response status code does not indicate success: ", string.Empty)}")
+                : e.Message == "An error occurred while sending the request."
+                    ? ShowMessageAsync("无法连接网络。")
+                    : ShowMessageAsync($"请检查网络连接。 {e.Message}");
+        }
+
         public static string ExceptionToMessage(this Exception ex)
         {
             StringBuilder builder = new();
@@ -142,5 +156,8 @@ namespace CoolapkUNO.Helpers
     internal static partial class UIHelper
     {
         public static MainPage MainPage;
+
+        public static CoreDispatcher TryGetForCurrentCoreDispatcher() =>
+            CoreWindow.GetForCurrentThread()?.Dispatcher ?? Window.Current?.Dispatcher ?? CoreApplication.MainView.Dispatcher;
     }
 }
