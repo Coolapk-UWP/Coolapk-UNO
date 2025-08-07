@@ -55,7 +55,7 @@ namespace CoolapkUNO.Pages.SettingsPages
             {
                 if (APIVersion != value)
                 {
-                    SettingsHelper.Set(SettingsHelper.APIVersion, value + 5);
+                    SettingsHelper.Set(SettingsHelper.APIVersion, (APIVersions)(value + 5));
                     //NetworkHelper.SetRequestHeaders();
                 }
             }
@@ -63,12 +63,12 @@ namespace CoolapkUNO.Pages.SettingsPages
 
         internal int TokenVersion
         {
-            get => (int)SettingsHelper.Get<TokenVersion>(SettingsHelper.TokenVersion);
+            get => (int)SettingsHelper.Get<TokenVersion>(SettingsHelper.TokenVersion) - 1;
             set
             {
                 if (TokenVersion != value)
                 {
-                    SettingsHelper.Set(SettingsHelper.TokenVersion, value);
+                    SettingsHelper.Set(SettingsHelper.TokenVersion, (TokenVersion)(value + 1));
                     //NetworkHelper.SetRequestHeaders();
                 }
             }

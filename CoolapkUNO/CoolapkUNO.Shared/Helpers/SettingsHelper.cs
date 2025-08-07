@@ -1,5 +1,6 @@
 ﻿using CoolapkUNO.Common;
 using CoolapkUNO.Models;
+using CoolapkUNO.Models.Feeds;
 using CoolapkUNO.Models.Network;
 using CoolapkUNO.Models.Users;
 using Microsoft.Toolkit.Uwp.Helpers;
@@ -10,7 +11,6 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.Json.Serialization.Metadata;
 using System.Threading.Tasks;
-using Windows.Foundation;
 using Windows.UI.Xaml;
 using IObjectSerializer = Microsoft.Toolkit.Helpers.IObjectSerializer;
 
@@ -105,7 +105,7 @@ namespace CoolapkUNO.Helpers
             {
                 LocalObject.Save(IsNoPicsMode, false);
             }
-            //if (!LocalObject.KeyExists(TokenVersion))
+            if (!LocalObject.KeyExists(TokenVersion))
             {
                 LocalObject.Save(TokenVersion, Common.TokenVersion.TokenV2);
             }
@@ -329,7 +329,7 @@ namespace CoolapkUNO.Helpers
     [JsonSerializable(typeof(TokenVersion))]
     [JsonSerializable(typeof(ElementTheme))]
     [JsonSerializable(typeof(DateTimeOffset))]
-    [JsonSerializable(typeof(Entity))]
+    [JsonSerializable(typeof(FeedModel))]
     [JsonSerializable(typeof(DataContainer<JsonElement>))]
     [JsonSerializable(typeof(WebDataContainer<UserInfoModel>))]
     public partial class SourceGenerationContext : JsonSerializerContext;

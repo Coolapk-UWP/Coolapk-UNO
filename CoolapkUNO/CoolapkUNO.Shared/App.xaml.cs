@@ -141,7 +141,7 @@ namespace CoolapkUNO
         /// <param name="e">Details about the suspend request.</param>
         private void OnSuspending(object sender, SuspendingEventArgs e)
         {
-            var deferral = e.SuspendingOperation.GetDeferral();
+            SuspendingDeferral deferral = e.SuspendingOperation.GetDeferral();
             //TODO: Save application state and stop any background activity
             deferral.Complete();
         }
@@ -222,7 +222,7 @@ namespace CoolapkUNO
                 if (!(!SettingsHelper.Get<bool>(SettingsHelper.ShowOtherException) || ex is TaskCanceledException or OperationCanceledException))
                 {
                     ResourceLoader loader = ResourceLoader.GetForViewIndependentUse();
-                    UIHelper.ShowMessageAsync($"{(string.IsNullOrEmpty(ex.Message) ? loader.GetString("ExceptionThrown") : ex.Message)} (0x{ex.HResult:X})");
+                    _ = UIHelper.ShowMessageAsync($"{(string.IsNullOrEmpty(ex.Message) ? loader.GetString("ExceptionThrown") : ex.Message)} (0x{ex.HResult:X})");
                 }
                 LogExtensionPoint.AmbientLoggerFactory.CreateLogger("Unhandled Exception - Application").LogError(ex, "Unhandled exception. {message} (0x{hResult:X})", ex.GetMessage(), ex.HResult);
             }
@@ -256,15 +256,15 @@ namespace CoolapkUNO
                     ResourceLoader loader = ResourceLoader.GetForViewIndependentUse();
                     if (ex is HttpRequestException or { HResult: <= -2147012721 and >= -2147012895 })
                     {
-                        UIHelper.ShowMessageAsync($"{loader.GetString("NetworkError")}(0x{ex.HResult:X})");
+                        _ = UIHelper.ShowMessageAsync($"{loader.GetString("NetworkError")}(0x{ex.HResult:X})");
                     }
                     //else if (e.Exception is CoolapkMessageException)
                     //{
-                    //    UIHelper.ShowMessage(e.Exception.Message);
+                    //    _ = UIHelper.ShowMessageAsync(e.Exception.Message);
                     //}
                     else if (SettingsHelper.Get<bool>(SettingsHelper.ShowOtherException))
                     {
-                        UIHelper.ShowMessageAsync($"{(string.IsNullOrEmpty(ex.Message) ? loader.GetString("ExceptionThrown") : ex.Message)} (0x{Convert.ToString(ex.HResult, 16)})");
+                        _ = UIHelper.ShowMessageAsync($"{(string.IsNullOrEmpty(ex.Message) ? loader.GetString("ExceptionThrown") : ex.Message)} (0x{Convert.ToString(ex.HResult, 16)})");
                     }
                 }
                 LogExtensionPoint.AmbientLoggerFactory.CreateLogger("Unhandled Exception - SynchronizationContext").LogError(ex, "Unhandled exception. {message} (0x{hResult:X})", ex.GetMessage(), ex.HResult);

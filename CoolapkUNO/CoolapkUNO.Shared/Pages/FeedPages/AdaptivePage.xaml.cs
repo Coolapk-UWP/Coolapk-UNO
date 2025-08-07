@@ -1,20 +1,11 @@
 ﻿using CoolapkUNO.Helpers;
 using CoolapkUNO.ViewModels.FeedPages;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
+using Microsoft.Toolkit.Uwp.UI;
 using System.Threading.Tasks;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using muxc = Microsoft.UI.Xaml.Controls;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
@@ -36,12 +27,33 @@ namespace CoolapkUNO.Pages.FeedPages
                 && Provider?.IsEqual(ViewModel) != true)
             {
                 Provider = ViewModel;
-                Provider.LoadMoreStarted += () => _ = UIHelper.ShowProgressBarAsync();
-                Provider.LoadMoreCompleted += () => _ = UIHelper.HideProgressBarAsync();
+                Provider.LoadMoreStarted += OnLoadMoreStarted;
+                Provider.LoadMoreCompleted += OnLoadMoreCompleted;
                 //await Refresh(true);
             }
         }
 
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            base.OnNavigatedFrom(e);
+            Provider.LoadMoreStarted -= OnLoadMoreStarted;
+            Provider.LoadMoreCompleted -= OnLoadMoreCompleted;
+        }
+
+        private static void OnLoadMoreStarted() => _ = UIHelper.ShowProgressBarAsync();
+
+        private static void OnLoadMoreCompleted() => _ = UIHelper.HideProgressBarAsync();
+
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            Page page = this.FindAscendant<Page>();
+            Provider.IsShowTitle = page is MainPage;
+        }
+
         public async Task Refresh(bool reset = false) => await Provider.Refresh(reset);
+
+        private void RefreshButton_Click(object sender, RoutedEventArgs e) => _ = Refresh(true);
+
+        private async void RefreshContainer_RefreshRequested(muxc.RefreshContainer sender, muxc.RefreshRequestedEventArgs args) => await Refresh(true);
     }
 }

@@ -37,11 +37,8 @@ namespace CoolapkUNO.Helpers
         /// Gets the current actual theme of the app based on the requested theme of the
         /// root element, or if that value is Default, the requested theme of the Application.
         /// </summary>
-        public static ElementTheme ActualTheme
-        {
-            get
-            {
-                return CurrentApplicationWindow == null
+        public static ElementTheme ActualTheme =>
+            CurrentApplicationWindow == null
                     ? SettingsHelper.Get<ElementTheme>(SettingsHelper.SelectedAppTheme)
                     : CurrentApplicationWindow.Dispatcher.HasThreadAccess
                         ? CurrentApplicationWindow.Content is FrameworkElement rootElement
@@ -49,24 +46,19 @@ namespace CoolapkUNO.Helpers
                                 ? rootElement.RequestedTheme
                                 : SettingsHelper.Get<ElementTheme>(SettingsHelper.SelectedAppTheme)
                         : SettingsHelper.Get<ElementTheme>(SettingsHelper.SelectedAppTheme);
-            }
-        }
 
         /// <summary>
         /// Gets or sets (with LocalSettings persistence) the RequestedTheme of the root element.
         /// </summary>
         public static ElementTheme RootTheme
         {
-            get
-            {
-                return CurrentApplicationWindow == null
-                    ? ElementTheme.Default
-                    : CurrentApplicationWindow.Dispatcher.HasThreadAccess
-                        ? CurrentApplicationWindow.Content is FrameworkElement rootElement
-                            ? rootElement.RequestedTheme
-                            : ElementTheme.Default
-                        : ElementTheme.Default;
-            }
+            get => CurrentApplicationWindow == null
+                ? ElementTheme.Default
+                : CurrentApplicationWindow.Dispatcher.HasThreadAccess
+                    ? CurrentApplicationWindow.Content is FrameworkElement rootElement
+                        ? rootElement.RequestedTheme
+                        : ElementTheme.Default
+                    : ElementTheme.Default;
             set
             {
                 if (CurrentApplicationWindow == null) { return; }
@@ -104,34 +96,30 @@ namespace CoolapkUNO.Helpers
             InvokeUISettingChanged(IsDarkTheme() ? UISettingChangedType.DarkMode : UISettingChangedType.LightMode);
         }
 
-        public static bool IsDarkTheme()
-        {
-            return Window.Current != null
+        public static bool IsDarkTheme() =>
+            Window.Current != null
                 ? ActualTheme == ElementTheme.Default
                     ? Application.Current.RequestedTheme == ApplicationTheme.Dark
                     : ActualTheme == ElementTheme.Dark
                 : ActualTheme == ElementTheme.Default
                     ? UISettings.GetColorValue(UIColorType.Foreground).IsColorLight()
                     : ActualTheme == ElementTheme.Dark;
-        }
 
-        public static bool IsDarkTheme(ElementTheme ActualTheme)
-        {
-            return Window.Current != null
+        public static bool IsDarkTheme(ElementTheme ActualTheme) =>
+            Window.Current != null
                 ? ActualTheme == ElementTheme.Default
                     ? Application.Current.RequestedTheme == ApplicationTheme.Dark
                     : ActualTheme == ElementTheme.Dark
                 : ActualTheme == ElementTheme.Default
                     ? UISettings.GetColorValue(UIColorType.Foreground).IsColorLight()
                     : ActualTheme == ElementTheme.Dark;
-        }
 
         public static bool IsColorLight(this Color color) => ((5 * color.G) + (2 * color.R) + color.B) > (8 * 128);
 
         public static void UpdateSystemCaptionButtonColors()
         {
             bool IsDark = IsDarkTheme();
-            bool IsHighContrast = new AccessibilitySettings().HighContrast;
+            bool IsHighContrast = AccessibilitySettings.HighContrast;
 
             Color ForegroundColor = IsDark || IsHighContrast ? Colors.White : Colors.Black;
             Color BackgroundColor = IsHighContrast ? Color.FromArgb(255, 0, 0, 0) : IsDark ? Color.FromArgb(255, 32, 32, 32) : Color.FromArgb(255, 243, 243, 243);

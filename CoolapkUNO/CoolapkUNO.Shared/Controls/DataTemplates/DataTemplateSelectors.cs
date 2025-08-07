@@ -1,5 +1,6 @@
 ﻿using CoolapkUNO.Helpers;
 using CoolapkUNO.Models;
+using CoolapkUNO.Models.Feeds;
 using System.Collections.Generic;
 using System.Text.Json;
 using Windows.UI.Xaml;
@@ -7,55 +8,55 @@ using Windows.UI.Xaml.Controls;
 
 namespace CoolapkUNO.Controls.DataTemplates
 {
-    //public class CardTemplateSelector : DataTemplateSelector
-    //{
-    //    public DataTemplate Feed { get; set; }
-    //    public DataTemplate User { get; set; }
-    //    public DataTemplate List { get; set; }
-    //    public DataTemplate Images { get; set; }
-    //    public DataTemplate Others { get; set; }
-    //    public DataTemplate FeedReply { get; set; }
-    //    public DataTemplate CommentMe { get; set; }
-    //    public DataTemplate LikeNotify { get; set; }
-    //    public DataTemplate AtCommentMe { get; set; }
-    //    public DataTemplate SubtitleList { get; set; }
-    //    public DataTemplate MessageNotify { get; set; }
+    public class CardTemplateSelector : DataTemplateSelector
+    {
+        public DataTemplate Feed { get; set; }
+        //public DataTemplate User { get; set; }
+        //public DataTemplate List { get; set; }
+        //public DataTemplate Images { get; set; }
+        public DataTemplate Others { get; set; }
+        //public DataTemplate FeedReply { get; set; }
+        //public DataTemplate CommentMe { get; set; }
+        //public DataTemplate LikeNotify { get; set; }
+        //public DataTemplate AtCommentMe { get; set; }
+        //public DataTemplate SubtitleList { get; set; }
+        //public DataTemplate MessageNotify { get; set; }
 
-    //    protected override DataTemplate SelectTemplateCore(object item)
-    //    {
-    //        switch (item)
-    //        {
-    //            case FeedModel _:
-    //                return Feed;
-    //            case IUserModel _:
-    //                return User;
-    //            case FeedReplyModel _:
-    //                return FeedReply;
-    //            case IndexPageHasEntitiesModel IndexPageHasEntitiesModel:
-    //                switch (IndexPageHasEntitiesModel.EntitiesType)
-    //                {
-    //                    case EntityType.Image: return Images;
-    //                    default: return Others;
-    //                }
-    //            case LikeNotificationModel _:
-    //                return LikeNotify;
-    //            case SimpleNotificationModel _:
-    //                return CommentMe;
-    //            case MessageNotificationModel _:
-    //                return MessageNotify;
-    //            case AtCommentMeNotificationModel _:
-    //                return AtCommentMe;
-    //            case IHasDescription _ when item is IHasSubtitle:
-    //                return SubtitleList;
-    //            case IHasDescription _:
-    //                return List;
-    //            default:
-    //                return Others;
-    //        }
-    //    }
+        protected override DataTemplate SelectTemplateCore(object item)
+        {
+            switch (item)
+            {
+                case FeedModel:
+                    return Feed;
+                //case IUserModel _:
+                //    return User;
+                //case FeedReplyModel _:
+                //    return FeedReply;
+                //case IndexPageHasEntitiesModel IndexPageHasEntitiesModel:
+                //    switch (IndexPageHasEntitiesModel.EntitiesType)
+                //    {
+                //        case EntityType.Image: return Images;
+                //        default: return Others;
+                //    }
+                //case LikeNotificationModel _:
+                //    return LikeNotify;
+                //case SimpleNotificationModel _:
+                //    return CommentMe;
+                //case MessageNotificationModel _:
+                //    return MessageNotify;
+                //case AtCommentMeNotificationModel _:
+                //    return AtCommentMe;
+                //case IHasDescription _ when item is IHasSubtitle:
+                //    return SubtitleList;
+                //case IHasDescription _:
+                //    return List;
+                default:
+                    return Others;
+            }
+        }
 
-    //    protected override DataTemplate SelectTemplateCore(object item, DependencyObject container) => SelectTemplateCore(item);
-    //}
+        protected override DataTemplate SelectTemplateCore(object item, DependencyObject container) => SelectTemplateCore(item);
+    }
 
     //public class ProfileCardTemplateSelector : DataTemplateSelector
     //{
@@ -162,7 +163,7 @@ namespace CoolapkUNO.Controls.DataTemplates
             switch (element.GetProperty("entityType").GetString())
             {
                 case "feed":
-                case "discovery": return element.Deserialize(SourceGenerationContext.Default.Entity);
+                case "discovery": return element.Deserialize(SourceGenerationContext.Default.FeedModel);
                 //case "history": return new HistoryModel(json);
                 //case "collection": return new CollectionModel(json);
                 //default:
