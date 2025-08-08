@@ -2,10 +2,16 @@
 using CoolapkUNO.Controls;
 using CoolapkUNO.Helpers;
 using CoolapkUNO.Models.Network;
+using CoolapkUNO.Pages.BrowserPages;
+using CoolapkUNO.ViewModels.BrowserPages;
 using System;
 using System.Globalization;
+using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
+using Windows.Foundation.Metadata;
 using Windows.Globalization;
+using Windows.System;
+using Windows.UI.ApplicationSettings;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -140,6 +146,7 @@ namespace CoolapkUNO.Pages.SettingsPages
                     _ = ApplicationView.GetForCurrentView().TryEnterViewModeAsync(ApplicationViewMode.Default);
                     break;
                 case "OpenURL":
+                    _ = Launcher.LaunchUriAsync(URLTextBox.Text.TryGetUri());
                     //_ = UIHelper.OpenLinkAsync(URLTextBox.Text);
                     break;
                 case "EnterPIP":
@@ -147,16 +154,18 @@ namespace CoolapkUNO.Pages.SettingsPages
                     { _ = ApplicationView.GetForCurrentView().TryEnterViewModeAsync(ApplicationViewMode.CompactOverlay); }
                     break;
                 case "OpenBrowser":
-                    //_ = Frame.Navigate(typeof(BrowserPage), new BrowserViewModel(URLTextBox.Text));
+                    _ = Frame.Navigate(typeof(BrowserPage), new BrowserViewModel(URLTextBox.Text, Dispatcher));
                     break;
                 case "GetURLContent":
-                    GetURLContent();
+                    _ = GetURLContentAsync();
                     break;
                 case "SettingsFlyout":
-                    //if (ApiInformation.IsTypePresent("Windows.UI.ApplicationSettings.SettingsPane"))
-                    //{
-                    //    SettingsPane.Show();
-                    //}
+                    if (ApiInformation.IsTypePresent("Windows.UI.ApplicationSettings.SettingsPane"))
+                    {
+#if WINDOWS_UWP
+                        SettingsPane.Show();
+#endif
+                    }
                     break;
                 default:
                     break;
@@ -197,34 +206,32 @@ namespace CoolapkUNO.Pages.SettingsPages
             }
         }
 
-        private void GetURLContent()
+        private async Task GetURLContentAsync()
         {
-            //Uri uri = URLTextBox.Text.ValidateAndGetUri();
-            //(bool isSucceed, string result) = await RequestHelper.GetStringAsync(uri, "XMLHttpRequest");
-            //if (!isSucceed)
-            //{
-            //    result = "网络错误";
-            //}
-            //ContentDialog GetJsonDialog = new ContentDialog
-            //{
-            //    Title = URLTextBox.Text,
-            //    Content = new ScrollViewer
-            //    {
-            //        Content = new MarkdownTextBlock
-            //        {
-            //            Text = $"```json\n{result.ConvertJsonString()}\n```",
-            //            Background = new SolidColorBrush(Colors.Transparent),
-            //            IsTextSelectionEnabled = true
-            //        },
-            //        VerticalScrollMode = ScrollMode.Enabled,
-            //        HorizontalScrollMode = ScrollMode.Enabled,
-            //        VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
-            //        HorizontalScrollBarVisibility = ScrollBarVisibility.Auto,
-            //    },
-            //    CloseButtonText = "好的",
-            //    DefaultButton = ContentDialogButton.Close
-            //};
-            //_ = await GetJsonDialog.ShowAsync();
+            Uri uri = URLTextBox.Text.TryGetUri();
+            (bool isSucceed, string result) = await RequestHelper.GetStringAsync(uri, "XMLHttpRequest");
+            if (!isSucceed)
+            {
+                result = "网络错误";
+            }
+            ContentDialog GetJsonDialog = new()
+            {
+                Title = URLTextBox.Text,
+                Content = new ScrollViewer
+                {
+                    Content = new TextBlock
+                    {
+                        Text = result,
+                        TextWrapping = TextWrapping.WrapWholeWords,
+                        IsTextSelectionEnabled = true
+                    },
+                    VerticalScrollMode = ScrollMode.Enabled,
+                    VerticalScrollBarVisibility = ScrollBarVisibility.Auto
+                },
+                CloseButtonText = "好的",
+                DefaultButton = ContentDialogButton.Close
+            };
+            _ = await GetJsonDialog.ShowAsync();
         }
     }
 }

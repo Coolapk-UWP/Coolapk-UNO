@@ -1,13 +1,20 @@
-﻿namespace CoolapkUNO.Wasm
+﻿using Uno.Foundation;
+using Windows.UI.Xaml;
+
+namespace CoolapkUNO.Wasm
 {
-    public sealed class Program
+    public static class Program
     {
-        private static App _app;
-
-        static int Main(string[] args)
+        private static int Main(string[] args)
         {
-            Windows.UI.Xaml.Application.Start(_ => _app = new App());
-
+            WebAssemblyRuntime.InvokeJS(
+                """
+                const meta = document.createElement("meta");
+                meta.name = "referrer";
+                meta.content = "same-origin";
+                document.head.appendChild(meta);
+                """);
+            Application.Start(x => _ = new App());
             return 0;
         }
     }

@@ -1,13 +1,18 @@
 ﻿using CoolapkUNO.Common;
 using CoolapkUNO.Controls;
 using CoolapkUNO.Helpers;
+using CoolapkUNO.Models.Users;
+using CoolapkUNO.Pages.BrowserPages;
 using CoolapkUNO.Pages.FeedPages;
 using CoolapkUNO.Pages.SettingsPages;
+using CoolapkUNO.ViewModels.BrowserPages;
+using Microsoft.Toolkit.Uwp.Helpers;
 using Microsoft.UI.Xaml.Controls;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.Core;
@@ -20,6 +25,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
+using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 using BackRequestedEventArgs = Windows.UI.Core.BackRequestedEventArgs;
 using muxc = Microsoft.UI.Xaml.Controls;
@@ -112,9 +118,9 @@ namespace CoolapkUNO.Pages
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-            //OnLoginChanged(string.Empty, true);
+            OnLoginChanged(true);
             Windows.UI.Xaml.Window.Current?.SetTitleBar(DragRegion);
-            //SettingsHelper.LoginChanged += OnLoginChanged;
+            SettingsHelper.LoginChanged += OnLoginChanged;
             if (ApiInformation.IsTypePresent("Windows.Phone.UI.Input.HardwareButtons"))
             { HardwareButtons.BackPressed += System_BackPressed; }
             SystemNavigationManager.GetForCurrentView().BackRequested += System_BackRequested;
@@ -154,7 +160,7 @@ namespace CoolapkUNO.Pages
         {
             //if (!await UIHelper.OpenActivatedEventArgs(args))
             {
-                NavigationView.SelectedItem = NavigationView.MenuItems[0];
+                NavigationView_Navigate("Home", new EntranceNavigationTransitionInfo());
             }
         }
 
@@ -191,11 +197,11 @@ namespace CoolapkUNO.Pages
 
         private void NavigationView_BackRequested(muxc.NavigationView sender, muxc.NavigationViewBackRequestedEventArgs args) => _ = TryGoBack();
 
-        private void NavigationView_SelectionChanged(muxc.NavigationView sender, muxc.NavigationViewSelectionChangedEventArgs args)
+        private void NavigationView_ItemInvoked(muxc.NavigationView sender, muxc.NavigationViewItemInvokedEventArgs args)
         {
-            if (args.SelectedItemContainer != null)
+            if (args.InvokedItemContainer != null)
             {
-                string NavItemTag = args.SelectedItemContainer.Tag.ToString();
+                string NavItemTag = args.InvokedItemContainer.Tag.ToString();
                 NavigationView_Navigate(NavItemTag, args.RecommendedNavigationTransitionInfo);
             }
         }
@@ -289,26 +295,26 @@ namespace CoolapkUNO.Pages
                         : new Thickness(16, 0, 16, 0);
         }
 
-        //private void OnLoginChanged(string sender, bool args) => _ = Dispatcher.AwaitableRunAsync(() => SetUserAvatar(args));
+        private void OnLoginChanged(bool args) => _ = Dispatcher.AwaitableRunAsync(() => SetUserAvatar(args));
 
-        private void SetUserAvatar(bool isLogin)
+        private async void SetUserAvatar(bool isLogin)
         {
-            //if (isLogin && await SettingsHelper.CheckLoginAsync())
-            //{
-            //    string UID = SettingsHelper.Get<string>(SettingsHelper.Uid);
-            //    if (!string.IsNullOrEmpty(UID))
-            //    {
-            //        (string UID, string UserName, string UserAvatar) results = await NetworkHelper.GetUserInfoByNameAsync(UID);
-            //        if (results.UID != UID) { return; }
-            //        UserName = results.UserName;
-            //        UserAvatar = new BitmapImage(new Uri(results.UserAvatar));
-            //    }
-            //}
-            //else
-            //{
-            //    UserName = null;
-            //    UserAvatar = null;
-            //}
+            if (isLogin && await SettingsHelper.CheckLoginAsync())
+            {
+                string UID = SettingsHelper.Get<string>(SettingsHelper.Uid);
+                if (!string.IsNullOrEmpty(UID))
+                {
+                    UserInfoModel result = await NetworkHelper.GetUserInfoByNameAsync(UID);
+                    if (result.UID.ToString() != UID) { return; }
+                    UserName = result.UserName;
+                    UserAvatar = new BitmapImage(new Uri(result.UserAvatar));
+                }
+            }
+            else
+            {
+                UserName = null;
+                UserAvatar = null;
+            }
         }
 
         private void UpdateAppTitle(CoreApplicationViewTitleBar coreTitleBar)
@@ -337,12 +343,12 @@ namespace CoolapkUNO.Pages
         {
             switch ((sender as FrameworkElement).Tag.ToString())
             {
-                //case "Login":
-                //    NavigationViewFrame.Navigate(typeof(BrowserPage), new BrowserViewModel(UriHelper.LoginUri));
-                //    break;
-                //case "Logout":
-                //    SettingsHelper.Logout();
-                //    break;
+                case "Login":
+                    NavigationViewFrame.Navigate(typeof(BrowserPage), new BrowserViewModel(UriHelper.LoginUri, Dispatcher));
+                    break;
+                case "Logout":
+                    SettingsHelper.Logout();
+                    break;
                 case "Settings":
                     NavigationView.SelectedItem = NavigationView.FooterMenuItems.LastOrDefault();
                     break;

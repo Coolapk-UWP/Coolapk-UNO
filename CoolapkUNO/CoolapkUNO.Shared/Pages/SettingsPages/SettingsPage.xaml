@@ -143,7 +143,7 @@
                                 </StackPanel>
                             </controls:SettingExpander.Description>
                             <controls:SettingExpander.ActionContent>
-                                <controls:StackPanel
+                                <StackPanel
                                     VerticalAlignment="Center"
                                     Orientation="Horizontal"
                                     Spacing="18">
@@ -167,7 +167,7 @@
                                         Click="Button_Click"
                                         Tag="CheckUpdate"
                                         Visibility="{x:Bind Provider.CheckingUpdate, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter='true', Mode=OneWay}" />
-                                </controls:StackPanel>
+                                </StackPanel>
                             </controls:SettingExpander.ActionContent>
                             <controls:SettingExpander.Items>
                                 <Grid Style="{StaticResource SettingExpanderContentGridStyle}">
@@ -291,7 +291,7 @@
                             <ToggleSwitch IsOn="{x:Bind Provider.ShowOtherException, Mode=TwoWay}" Style="{StaticResource ToggleSwitchSettingStyle}" />
                         </controls:Setting>
                         <controls:Setting x:Uid="/SettingsPage/CleanCacheSettings" Icon="&#xE74D;">
-                            <controls:StackPanel Orientation="Horizontal" Spacing="18">
+                            <StackPanel Orientation="Horizontal" Spacing="18">
                                 <Border Visibility="{x:Bind Provider.IsCleanCache, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}">
                                     <muxc:ProgressRing
                                         Width="24"
@@ -303,7 +303,7 @@
                                     Click="Button_Click"
                                     IsEnabled="{x:Bind Provider.IsCleanCache, Converter={StaticResource BoolNegationConverter}, Mode=OneWay}"
                                     Tag="CleanCache" />
-                            </controls:StackPanel>
+                            </StackPanel>
                         </controls:Setting>
                         <controls:Setting x:Uid="/SettingsPage/ResetSettings" Icon="&#xE777;">
                             <Button x:Name="Reset" x:Uid="/SettingsPage/ResetSettingsButton">

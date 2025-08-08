@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
-using muxc = Microsoft.UI.Xaml.Controls;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
@@ -29,7 +28,7 @@ namespace CoolapkUNO.Pages.FeedPages
                 Provider = ViewModel;
                 Provider.LoadMoreStarted += OnLoadMoreStarted;
                 Provider.LoadMoreCompleted += OnLoadMoreCompleted;
-                //await Refresh(true);
+                _ = Refresh(true);
             }
         }
 
@@ -44,16 +43,10 @@ namespace CoolapkUNO.Pages.FeedPages
 
         private static void OnLoadMoreCompleted() => _ = UIHelper.HideProgressBarAsync();
 
-        private void Page_Loaded(object sender, RoutedEventArgs e)
-        {
-            Page page = this.FindAscendant<Page>();
-            Provider.IsShowTitle = page is MainPage;
-        }
+        private void Page_Loaded(object sender, RoutedEventArgs e) => Provider.IsShowTitle = this.FindAscendant<Page>() is MainPage;
 
         public async Task Refresh(bool reset = false) => await Provider.Refresh(reset);
 
         private void RefreshButton_Click(object sender, RoutedEventArgs e) => _ = Refresh(true);
-
-        private async void RefreshContainer_RefreshRequested(muxc.RefreshContainer sender, muxc.RefreshRequestedEventArgs args) => await Refresh(true);
     }
 }

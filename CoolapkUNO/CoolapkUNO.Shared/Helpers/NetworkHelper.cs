@@ -40,13 +40,13 @@ namespace CoolapkUNO.Helpers
 
         public static void SetLoginCookie()
         {
-#if WINDOWS_UWP
             string Uid = SettingsHelper.Get<string>(SettingsHelper.Uid);
             string UserName = SettingsHelper.Get<string>(SettingsHelper.UserName);
             string Token = SettingsHelper.Get<string>(SettingsHelper.Token);
 
             if (!string.IsNullOrEmpty(Uid) && !string.IsNullOrEmpty(UserName) && !string.IsNullOrEmpty(Token))
             {
+#if WINDOWS_UWP
                 using (HttpBaseProtocolFilter filter = new())
                 {
                     HttpCookieManager cookieManager = filter.CookieManager;
@@ -60,10 +60,18 @@ namespace CoolapkUNO.Helpers
                     cookieManager.SetCookie(username);
                     cookieManager.SetCookie(token);
                 }
+#elif BROWSER
+                Uno.Web.Http.CookieManager cookieManager = Uno.Web.Http.CookieManager.GetDefault();
+                Uno.Web.Http.SetCookieRequest uid = new(new Uno.Web.Http.Cookie("uid", Uid));
+                Uno.Web.Http.SetCookieRequest username = new(new Uno.Web.Http.Cookie("username", UserName));
+                Uno.Web.Http.SetCookieRequest token = new(new Uno.Web.Http.Cookie("token", Token));
+                cookieManager.SetCookie(uid);
+                cookieManager.SetCookie(username);
+                cookieManager.SetCookie(token);
+#endif
                 SettingsHelper.InvokeLoginChanged(true);
             }
-#endif
-        }
+            }
 
         public static void SetRequestHeaders()
         {
@@ -119,6 +127,7 @@ namespace CoolapkUNO.Helpers
             if (request != null) { headers.Add(name, request); }
         }
 
+#if !BROWSER
         private static void ReplaceCoolapkCookie(this CookieContainer container, HttpCookieCollection cookies, Uri uri)
         {
             if (cookies == null) { return; }
@@ -128,10 +137,11 @@ namespace CoolapkUNO.Helpers
                 container.SetCookies(host, $"{cookie.Name}={cookie.Value}");
             }
         }
+#endif
 
         private static void BeforeGetOrPost(HttpCookieCollection coolapkCookies, Uri uri, string request)
         {
-#if WINDOWS_UWP
+#if !BROWSER
             ClientHandler.CookieContainer.ReplaceCoolapkCookie(coolapkCookies, uri);
 #endif
             HttpRequestHeaders headers = Client.DefaultRequestHeaders;

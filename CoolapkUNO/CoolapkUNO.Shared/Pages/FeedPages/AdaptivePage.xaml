@@ -50,18 +50,14 @@
                 </Button.KeyboardAccelerators>
             </Button>
         </controls:PageHeader>
-        <muxc:RefreshContainer
-            x:Name="RefreshContainer"
+        <ListView
+            x:Name="ListView"
             Grid.Row="1"
-            RefreshRequested="RefreshContainer_RefreshRequested">
-            <ListView
-                x:Name="ListView"
-                ui:ListViewExtensions.ItemContainerStretchDirection="Horizontal"
-                ItemContainerStyle="{StaticResource DefaultCardItemStyle}"
-                ItemTemplateSelector="{StaticResource CardTemplateSelector}"
-                ItemsSource="{x:Bind Provider}"
-                ShowsScrollingPlaceholders="False"
-                Style="{StaticResource DefaultCardListViewStyle}" />
-        </muxc:RefreshContainer>
+            ui:ListViewExtensions.ItemContainerStretchDirection="Horizontal"
+            ItemContainerStyle="{StaticResource DefaultCardItemStyle}"
+            ItemTemplateSelector="{StaticResource CardTemplateSelector}"
+            ItemsSource="{x:Bind Provider}"
+            ShowsScrollingPlaceholders="False"
+            Style="{StaticResource DefaultCardListViewStyle}" />
     </Grid>
 </Page>

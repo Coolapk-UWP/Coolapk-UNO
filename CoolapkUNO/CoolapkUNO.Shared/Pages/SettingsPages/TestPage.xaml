@@ -69,7 +69,7 @@
                             </ComboBox>
                         </controls:Setting>
                         <controls:Setting x:Uid="/TestPage/CompactOverlaySettings" Icon="&#xE944;">
-                            <controls:StackPanel
+                            <StackPanel
                                 Margin="0,2"
                                 Orientation="Horizontal"
                                 Spacing="4">
@@ -81,7 +81,7 @@
                                     x:Uid="/TestPage/OutPIP"
                                     Click="Button_Click"
                                     Tag="OutPIP" />
-                            </controls:StackPanel>
+                            </StackPanel>
                         </controls:Setting>
                         <controls:Setting
                             x:Uid="/TestPage/NewWindowSettings"
@@ -230,6 +230,7 @@
                                     Tag="GetURLContent" />
                                 <controls:Setting
                                     x:Uid="/TestPage/OpenBrowser"
+                                    Click="Button_Click"
                                     CornerRadius="0,0,4,4"
                                     IsClickEnabled="True"
                                     Style="{StaticResource ClickableSettingExpanderItemStyle}"

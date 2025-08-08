@@ -8,7 +8,7 @@
     <NoWarn>$(NoWarn);NU1504;NU1505;NU1701</NoWarn>
     <!--#if (wasm-pwa-manifest)
     <WasmPWAManifestFile>manifest.webmanifest</WasmPWAManifestFile>
-#endif -->
+    #endif -->
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)'=='Debug'">
     <MonoRuntimeDebuggerEnabled>true</MonoRuntimeDebuggerEnabled>
@@ -24,10 +24,9 @@
   <ItemGroup>
     <Content Include="Assets\SplashScreen.png" />
     <!--#if (wasm-pwa-manifest)
-
-    <Content Include="manifest.webmanifest" /><Content Include="Assets\AppIcon-*.png" />
-
-#endif -->
+    <Content Include="manifest.webmanifest" />
+    <Content Include="Assets\AppIcon-*.png" />
+    #endif -->
   </ItemGroup>
   <ItemGroup>
     <UpToDateCheckInput Include="..\CoolapkUNO.Shared\**\*.xaml" />

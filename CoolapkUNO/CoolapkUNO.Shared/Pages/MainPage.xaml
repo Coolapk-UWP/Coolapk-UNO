@@ -156,9 +156,9 @@
             IsBackEnabled="False"
             IsSettingsVisible="False"
             IsTitleBarAutoPaddingEnabled="False"
+            ItemInvoked="NavigationView_ItemInvoked"
             PaneClosing="NavigationViewControl_PaneClosing"
-            PaneOpening="NavigationViewControl_PaneOpening"
-            SelectionChanged="NavigationView_SelectionChanged">
+            PaneOpening="NavigationViewControl_PaneOpening">
             <muxc:NavigationView.MenuItems>
                 <muxc:NavigationViewItem x:Uid="/MainPage/Home" Tag="Home">
                     <muxc:NavigationViewItem.Icon>

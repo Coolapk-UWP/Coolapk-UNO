@@ -14,7 +14,7 @@ namespace CoolapkUNO.Droid
     public class Application : Windows.UI.Xaml.NativeApplication
     {
         public Application(nint javaReference, JniHandleOwnership transfer)
-            : base(() => new App(), javaReference, transfer)
+            : base(() => _ = new App(), javaReference, transfer)
         {
             ConfigureUniversalImageLoader();
         }

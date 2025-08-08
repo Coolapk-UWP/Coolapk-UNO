@@ -3,15 +3,15 @@ using Uno.UI.Runtime.Skia.Linux.FrameBuffer;
 
 namespace CoolapkUNO
 {
-    public sealed class Program
+    public static class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             try
             {
                 Console.CursorVisible = false;
 
-                var host = new FrameBufferHost(() => new App());
+                FrameBufferHost host = new(() => _ = new App());
                 host.Run();
             }
             finally

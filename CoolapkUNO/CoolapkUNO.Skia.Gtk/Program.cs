@@ -4,17 +4,17 @@ using Uno.UI.Runtime.Skia.Gtk;
 
 namespace CoolapkUNO.Skia.Gtk
 {
-    public sealed class Program
+    public static class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
-            ExceptionManager.UnhandledException += delegate (UnhandledExceptionArgs expArgs)
+            ExceptionManager.UnhandledException += expArgs =>
             {
-                Console.WriteLine("GLIB UNHANDLED EXCEPTION" + expArgs.ExceptionObject.ToString());
+                Console.WriteLine($"GLIB UNHANDLED EXCEPTION {expArgs.ExceptionObject}");
                 expArgs.ExitApplication = true;
             };
 
-            var host = new GtkHost(() => new App());
+            GtkHost host = new(() => _ = new App());
 
             host.Run();
         }

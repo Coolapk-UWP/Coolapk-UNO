@@ -45,17 +45,17 @@ namespace CoolapkUNO.Helpers
             else { return (true, results.Data); }
         }
 
-        //        public static async Task<(bool isSucceed, string result)> GetStringAsync(Uri uri, string request = "com.coolapk.market", bool isBackground = false)
-        //        {
-        //            if (uri == null) { return (false, null); }
-        //            string results = await NetworkHelper.GetStringAsync(uri, GetCoolapkCookies(uri), request, isBackground).ConfigureAwait(false);
-        //            if (string.IsNullOrWhiteSpace(results))
-        //            {
-        //                _ = UIHelper.ShowMessageAsync("加载失败");
-        //                return (false, results);
-        //            }
-        //            else { return (true, results); }
-        //        }
+        public static async Task<(bool isSucceed, string result)> GetStringAsync(Uri uri, string request = "com.coolapk.market", bool isBackground = false)
+        {
+            if (uri == null) { return (false, null); }
+            string results = await NetworkHelper.GetStringAsync(uri, GetCoolapkCookies(uri), request, isBackground).ConfigureAwait(false);
+            if (string.IsNullOrWhiteSpace(results))
+            {
+                _ = UIHelper.ShowMessageAsync("加载失败");
+                return (false, results);
+            }
+            else { return (true, results); }
+        }
 
         //        public static async Task<(bool isSucceed, JToken result)> PostDataAsync(Uri uri, HttpContent content = null, bool isBackground = false)
         //        {
@@ -248,10 +248,10 @@ namespace CoolapkUNO.Helpers
         //        }
         //#endif
 
-        //        public static async Task<bool> CheckLoginAsync()
-        //        {
-        //            (bool isSucceed, _) = await GetDataAsync(UriHelper.GetUri(UriType.CheckLoginInfo), true).ConfigureAwait(false);
-        //            return isSucceed;
-        //        }
+        public static async Task<bool> CheckLoginAsync()
+        {
+            (bool isSucceed, _) = await GetDataAsync(UriHelper.GetUri(UriType.CheckLoginInfo), true).ConfigureAwait(false);
+            return isSucceed;
+        }
     }
 }
