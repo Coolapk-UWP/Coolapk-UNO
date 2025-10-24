@@ -1,4 +1,5 @@
-﻿using Android.App;
+﻿#if ANDROID
+using Android.App;
 using Android.Views;
 
 namespace CoolapkUNO
@@ -10,4 +11,4 @@ namespace CoolapkUNO
         )]
     public class MainActivity : Windows.UI.Xaml.ApplicationActivity;
 }
-
+#endif

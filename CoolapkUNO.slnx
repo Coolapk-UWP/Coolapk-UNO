@@ -1,0 +1,27 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="ARM" />
+    <Platform Name="ARM64" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Folder Name="/Platforms/">
+    <Project Path="CoolapkUNO/CoolapkUNO.Mobile/CoolapkUNO.Mobile.csproj">
+      <Deploy />
+    </Project>
+    <Project Path="CoolapkUNO/CoolapkUNO.Skia.Gtk/CoolapkUNO.Skia.Gtk.csproj" />
+    <Project Path="CoolapkUNO/CoolapkUNO.Skia.Linux.FrameBuffer/CoolapkUNO.Skia.Linux.FrameBuffer.csproj" />
+    <Project Path="CoolapkUNO/CoolapkUNO.Skia.WPF/CoolapkUNO.Skia.Wpf.csproj" />
+    <Project Path="CoolapkUNO/CoolapkUNO.UWP/CoolapkUNO.Uwp.csproj" Id="9bc97dd4-d595-4209-9ccf-89b60ea11f6b">
+      <Platform Solution="*|Any CPU" Project="x64" />
+      <Platform Solution="*|ARM" Project="ARM" />
+      <Platform Solution="*|ARM64" Project="ARM64" />
+      <Platform Solution="*|x64" Project="x64" />
+      <Platform Solution="*|x86" Project="x86" />
+      <Deploy />
+    </Project>
+    <Project Path="CoolapkUNO/CoolapkUNO.Wasm/CoolapkUNO.Wasm.csproj" />
+  </Folder>
+  <Project Path="CoolapkUNO/CoolapkUNO.Shared/CoolapkUNO.Shared.shproj" />
+</Solution>

@@ -1,4 +1,5 @@
-﻿using UIKit;
+﻿#if MACCATALYST
+using UIKit;
 
 namespace CoolapkUNO
 {
@@ -13,3 +14,4 @@ namespace CoolapkUNO
         }
     }
 }
+#endif

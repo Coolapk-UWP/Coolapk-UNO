@@ -1,4 +1,5 @@
-﻿using Android.Runtime;
+﻿#if ANDROID
+using Android.Runtime;
 using Com.Nostra13.Universalimageloader.Core;
 using Windows.UI.Xaml.Media;
 
@@ -32,3 +33,4 @@ namespace CoolapkUNO.Droid
         }
     }
 }
+#endif

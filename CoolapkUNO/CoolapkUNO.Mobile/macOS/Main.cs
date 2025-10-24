@@ -1,4 +1,5 @@
-﻿using AppKit;
+﻿#if MACOS
+using AppKit;
 
 namespace CoolapkUNO.macOS
 {
@@ -12,4 +13,4 @@ namespace CoolapkUNO.macOS
         }
     }
 }
-
+#endif
