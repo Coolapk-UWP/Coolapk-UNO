@@ -3,21 +3,23 @@ name: build and deploy
 on:
   push:
     branches: [master]
+  pull_request:
+    branches: [master]
   workflow_dispatch:
 
 env:
-  DOTNET_VERSION: '9.0.x' # The .NET SDK version to use
+  DOTNET_VERSION: 10.0.x # The .NET SDK version to use
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    
+
     env:
       Solution_Name: CoolapkUNO/CoolapkUNO.Wasm/CoolapkUNO.Wasm.csproj
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
@@ -42,11 +44,12 @@ jobs:
         run: touch public/wwwroot/.nojekyll
 
       - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v4
         with:
           path: public/wwwroot
 
   deploy:
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
     needs: build
 
     permissions:

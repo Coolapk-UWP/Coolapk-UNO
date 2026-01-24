@@ -1,9 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <LangVersion>latest</LangVersion>
-    <TargetFrameworks>net9.0-android;net9.0-ios;net9.0-maccatalyst</TargetFrameworks>
+    <TargetFrameworks>net10.0-android;net10.0-ios;net10.0-maccatalyst</TargetFrameworks>
     <!-- Disabled because of https://github.com/xamarin/xamarin-macios/issues/16401-->
-    <!-- <TargetFrameworks>$(TargetFrameworks);net9.0-macos</TargetFrameworks> -->
+    <!-- <TargetFrameworks>$(TargetFrameworks);net10.0-macos</TargetFrameworks> -->
     <SingleProject>true</SingleProject>
     <OutputType>Exe</OutputType>
     <!-- Display name -->
@@ -25,7 +25,7 @@
   <ItemGroup>
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
     <PackageReference Include="MetroLog.Net6" Version="2.1.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="9.0.8" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="10.0.2" />
     <PackageReference Include="Uno.Microsoft.Toolkit.Uwp.Connectivity" Version="7.1.11" />
     <PackageReference Include="Uno.Microsoft.Toolkit.Uwp.UI.Controls.Markdown" Version="7.1.11" />
     <PackageReference Include="Uno.UI" Version="5.6.99" />
@@ -37,7 +37,7 @@
   <Choose>
     <When Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">
       <ItemGroup>
-        <PackageReference Include="Xamarin.Google.Android.Material" Version="1.13.0" />
+        <PackageReference Include="Xamarin.Google.Android.Material" Version="1.13.0.1" />
         <PackageReference Include="Uno.UniversalImageLoader" Version="1.9.37" />
       </ItemGroup>
       <ItemGroup>

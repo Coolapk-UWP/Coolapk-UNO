@@ -68,7 +68,7 @@ namespace CoolapkUNO.Models.Network
                 case APIVersions.V14:
                     return new APIVersion("14.6.0", "2411221");
                 case APIVersions.V15:
-                    return new APIVersion("15.5.0", "2508041");
+                    return new APIVersion("15.9.0", "2511271");
                 default:
                     goto case APIVersions.Custom;
             }
